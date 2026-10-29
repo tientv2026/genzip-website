@@ -1,0 +1,39 @@
+---
+import { formatNewsDate, newsPath, type NewsEntry } from './content';
+import type { Lang } from '../../i18n/ui';
+
+interface Props {
+  entry: NewsEntry;
+  lang: Lang;
+}
+
+const { entry, lang } = Astro.props;
+const { title, description, date, tags, cover, draft } = entry.data;
+const c = { vi: { draft: 'Bản nháp' }, en: { draft: 'Draft' } }[lang];
+---
+
+<article class="news-card card card-raised">
+  {cover && <img class="cover" src={cover} alt={title} loading="lazy" decoding="async" />}
+  <div class="card-body">
+    <div class="meta muted">
+      <time datetime={date.toISOString()}>{formatNewsDate(date, lang)}</time>
+      {draft && <span class="chip chip-soon">{c.draft}</span>}
+    </div>
+    <h2><a href={newsPath(entry, lang)}>{title}</a></h2>
+    <p class="muted">{description}</p>
+    {tags.length > 0 && <ul class="tags" role="list">{tags.map((tag) => <li class="chip">{tag}</li>)}</ul>}
+  </div>
+</article>
+
+<style>
+  .news-card { height: 100%; padding: 0; overflow: hidden; border-radius: var(--radius-lg); }
+  .cover { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; background: var(--subtle); }
+  .card-body { padding: 24px; overflow-wrap: anywhere; }
+  .meta { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 0.875rem; margin-bottom: 16px; }
+  h2 { font-size: 1.375rem; line-height: 1.35; }
+  h2 a { color: var(--text); }
+  h2 a:hover { color: var(--primary); }
+  p { margin-bottom: 20px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; margin: 0; padding: 0; }
+  @media (max-width: 600px) { .card-body { padding: 20px; } }
+</style>

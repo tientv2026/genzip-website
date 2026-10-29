@@ -1,0 +1,68 @@
+---
+import { render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import CtaCard from '../components/ui/CtaCard.astro';
+import NewsCard from '../components/news/NewsCard.astro';
+import { formatNewsDate, getNews, type NewsEntry } from '../components/news/content';
+import { getLangFromUrl, localePath } from '../i18n/ui';
+
+interface Props {
+  entry: NewsEntry;
+}
+
+const { entry } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+const c = {
+  vi: { back: 'Về trang tin tức', related: 'Bài viết khác', draft: 'Bản nháp' },
+  en: { back: 'Back to news', related: 'More posts', draft: 'Draft' },
+}[lang];
+const { title, description, date, tags, cover, draft } = entry.data;
+const { Content } = await render(entry);
+const related = (await getNews(lang)).filter((post) => post.id !== entry.id).slice(0, 3);
+---
+
+<Base title={title} description={description}>
+  <div class="container article-container">
+    <article>
+      <header class="article-header">
+        <a class="back" href={localePath('/news', lang)}><span aria-hidden="true">←</span> {c.back}</a>
+        <h1>{title}</h1>
+        <div class="meta muted">
+          <time datetime={date.toISOString()}>{formatNewsDate(date, lang)}</time>
+          {draft && <span class="chip chip-soon">{c.draft}</span>}
+        </div>
+        <p class="lead muted">{description}</p>
+        {tags.length > 0 && <ul class="tags" role="list">{tags.map((tag) => <li class="chip">{tag}</li>)}</ul>}
+      </header>
+      {cover && <img class="cover" src={cover} alt={title} decoding="async" />}
+      <div class="prose article-body"><Content /></div>
+    </article>
+    {related.length > 0 && (
+      <section class="related" aria-labelledby="related-heading">
+        <h2 id="related-heading">{c.related}</h2>
+        <ul class="news-grid" role="list">{related.map((post) => <li><NewsCard entry={post} lang={lang} /></li>)}</ul>
+      </section>
+    )}
+    <div class="article-cta"><CtaCard /></div>
+  </div>
+</Base>
+
+<style>
+  .article-container { padding-top: 40px; padding-bottom: 56px; }
+  .article-header, .article-body { max-width: 760px; margin-left: auto; margin-right: auto; overflow-wrap: anywhere; }
+  .back { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; margin-bottom: 24px; }
+  h1 { margin-bottom: 20px; }
+  .meta { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; font-size: 0.875rem; }
+  .lead { font-size: 1.125rem; margin: 24px 0; }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; margin: 0; padding: 0; }
+  .cover { width: 100%; max-width: 960px; max-height: 540px; object-fit: contain; margin: 32px auto; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--subtle); }
+  .article-body { margin-top: 40px; }
+  .article-body :global(pre) { max-width: 100%; }
+  .related { margin-top: 64px; padding-top: 40px; border-top: 1px solid var(--border); }
+  .related > h2 { margin-bottom: 24px; }
+  .news-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; list-style: none; margin: 0; padding: 0; }
+  .news-grid > li { min-width: 0; }
+  .article-cta { margin-top: 56px; }
+  @media (max-width: 1000px) { .news-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 640px) { .news-grid { grid-template-columns: minmax(0, 1fr); } .article-container { padding-top: 24px; padding-bottom: 36px; } }
+</style>

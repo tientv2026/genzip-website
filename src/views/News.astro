@@ -1,0 +1,97 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/ui/PageHero.astro';
+import NewsCard from '../components/news/NewsCard.astro';
+import { getNews } from '../components/news/content';
+import { getLangFromUrl, localePath } from '../i18n/ui';
+
+const lang = getLangFromUrl(Astro.url);
+const c = {
+  vi: {
+    eyebrow: 'TIN TỨC', title: 'Tin tức & cập nhật',
+    lead: 'Thông báo, cập nhật sản phẩm và những chia sẻ từ GenZip.',
+    filter: 'Lọc bài viết theo chủ đề', all: 'Tất cả', count: 'Bài viết:',
+    empty: 'Chưa có bài viết nào', emptyLead: 'Bạn có thể xem các thay đổi của GenZip trong lịch sử phiên bản.',
+    changelog: 'Xem lịch sử phiên bản', rss: 'Theo dõi qua RSS',
+  },
+  en: {
+    eyebrow: 'NEWS', title: 'News & updates',
+    lead: 'Announcements, product updates and stories from GenZip.',
+    filter: 'Filter posts by topic', all: 'All', count: 'Posts:',
+    empty: 'No posts yet', emptyLead: 'You can find changes to GenZip in the changelog.',
+    changelog: 'View changelog', rss: 'Follow via RSS',
+  },
+}[lang];
+const posts = await getNews(lang);
+const tags = [...new Set(posts.flatMap((entry) => entry.data.tags))].sort((a, b) => a.localeCompare(b, lang));
+---
+
+<Base title={c.title} description={c.lead}>
+  <PageHero eyebrow={c.eyebrow} title={c.title} lead={c.lead}>
+    <a class="rss-link" href={localePath('/news/rss.xml', lang)} type="application/rss+xml" aria-label={c.rss}>RSS <span aria-hidden="true">↗</span></a>
+  </PageHero>
+  <section class="section" aria-label={c.title}>
+    <div class="container" data-news-list>
+      {posts.length > 0 ? (
+        <>
+          {tags.length > 0 && (
+            <div class="filters" role="group" aria-label={c.filter} hidden>
+              <button class="chip" type="button" data-all aria-pressed="true">{c.all}</button>
+              {tags.map((tag) => <button class="chip" type="button" data-tag={tag} aria-pressed="false">{tag}</button>)}
+            </div>
+          )}
+          <p class="count muted" role="status" aria-live="polite" aria-atomic="true" data-count-label={c.count} hidden />
+          <ul class="news-grid" role="list">
+            {posts.map((entry) => <li data-news-tags={JSON.stringify(entry.data.tags)}><NewsCard entry={entry} lang={lang} /></li>)}
+          </ul>
+        </>
+      ) : (
+        <div class="empty card card-soft">
+          <h2>{c.empty}</h2>
+          <p class="muted">{c.emptyLead}</p>
+          <a class="btn btn-outline" href={localePath('/changelog', lang)}>{c.changelog}</a>
+        </div>
+      )}
+    </div>
+  </section>
+</Base>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-news-list]').forEach((list) => {
+    const filters = list.querySelector<HTMLElement>('.filters');
+    const status = list.querySelector<HTMLElement>('[data-count-label]');
+    if (!filters || !status) return;
+    const buttons = Array.from(filters.querySelectorAll<HTMLButtonElement>('button'));
+    const cards = Array.from(list.querySelectorAll<HTMLElement>('[data-news-tags]')).map((element) => ({
+      element, tags: JSON.parse(element.dataset.newsTags || '[]') as string[],
+    }));
+    buttons.forEach((button) => button.addEventListener('click', () => {
+      let count = 0;
+      cards.forEach(({ element, tags }) => {
+        const visible = button.hasAttribute('data-all') || tags.includes(button.dataset.tag || '');
+        element.hidden = !visible;
+        if (visible) count++;
+      });
+      buttons.forEach((other) => other.setAttribute('aria-pressed', String(other === button)));
+      status.textContent = `${status.dataset.countLabel} ${count}`;
+      status.hidden = false;
+    }));
+    filters.hidden = false;
+  });
+</script>
+
+<style>
+  .rss-link { display: inline-flex; gap: 8px; align-items: center; margin-top: 24px; min-height: 44px; font-weight: 600; }
+  .filters:not([hidden]) { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+  .filters button { min-height: 44px; border: 1px solid var(--border); background: var(--surface); color: var(--text-muted); font: inherit; cursor: pointer; overflow-wrap: anywhere; max-width: 100%; }
+  .filters button:hover { border-color: var(--primary); }
+  .filters button[aria-pressed='true'] { background: var(--accent-soft); color: var(--accent-soft-text); border-color: var(--primary); }
+  .count { margin-bottom: 20px; }
+  .news-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; list-style: none; margin: 0; padding: 0; }
+  .news-grid > li { min-width: 0; }
+  .empty { max-width: 760px; margin: 0 auto; padding: 48px 24px; text-align: center; }
+  .empty h2 { font-size: 1.75rem; }
+  .empty .btn { margin-top: 8px; }
+  @media (max-width: 1000px) { .news-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 640px) { .news-grid { grid-template-columns: minmax(0, 1fr); } }
+</style>

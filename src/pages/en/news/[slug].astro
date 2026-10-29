@@ -1,0 +1,13 @@
+---
+import { getNews, newsSlug } from '../../../components/news/content';
+import NewsPost from '../../../views/NewsPost.astro';
+
+export async function getStaticPaths() {
+  const posts = await getNews('en');
+  return posts.map((entry) => ({ params: { slug: newsSlug(entry) }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+---
+
+<NewsPost entry={entry} />
