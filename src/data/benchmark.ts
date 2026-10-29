@@ -4,12 +4,20 @@
 export interface BenchRow {
   /** Khoá thao tác: extract | test | create. */
   op: 'extract' | 'test' | 'create';
-  /** Bộ dữ liệu: big = 1 tệp 512 MiB, small = 20 000 tệp nhỏ. */
+  /** Bộ dữ liệu: big = 2 tệp, tổng 512 MiB; small = 20 000 tệp nhỏ. */
   data: 'big' | 'small';
   format: 'zip' | '7z';
   /** Thời gian, giây (trung vị 3 lần). */
   sevenZip: number;
   genzip: number;
+}
+
+export interface EditRow {
+  op: 'add' | 'delete' | 'rename';
+  format: 'zip' | '7z';
+  /** Thời gian, giây (trung vị 3 lần): GenZip trước tối ưu / bản beta. */
+  before: number;
+  beta: number;
 }
 
 export const benchmark = {
@@ -37,4 +45,15 @@ export const benchmark = {
     { op: 'create', data: 'small', format: 'zip', sevenZip: 2.43, genzip: 2.4 },
     { op: 'create', data: 'small', format: '7z', sevenZip: 51.48, genzip: 51.67 },
   ] satisfies BenchRow[],
+  /** Sửa tệp nén 400 MiB có sẵn (7z non-solid). Mục "Sửa tệp nén" trong PERF_REVIEW. */
+  editSizeMiB: 400,
+  editTempMiB: { before: 800, beta: 400 },
+  edit: [
+    { op: 'add', format: 'zip', before: 8.06, beta: 2.29 },
+    { op: 'delete', format: 'zip', before: 4.83, beta: 1.49 },
+    { op: 'rename', format: 'zip', before: 7.94, beta: 1.47 },
+    { op: 'add', format: '7z', before: 3.39, beta: 1.53 },
+    { op: 'delete', format: '7z', before: 3.91, beta: 1.52 },
+    { op: 'rename', format: '7z', before: 4.96, beta: 1.53 },
+  ] satisfies EditRow[],
 };

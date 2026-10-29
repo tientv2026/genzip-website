@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/ui/PageHero.astro';
-import { benchmark, type BenchRow } from '../data/benchmark';
+import { benchmark, type BenchRow, type EditRow } from '../data/benchmark';
 import { getLangFromUrl, useTranslations } from '../i18n/ui';
 
 const lang = getLangFromUrl(Astro.url);
@@ -9,6 +9,7 @@ const t = useTranslations(lang);
 const locale = lang === 'vi' ? 'vi-VN' : 'en-US';
 const number = new Intl.NumberFormat(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const integer = new Intl.NumberFormat(locale);
+const numberOne = new Intl.NumberFormat(locale, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 const c = {
   vi: {
     title: 'Tốc độ ngang 7-Zip',
@@ -23,15 +24,15 @@ const c = {
     results: 'Thời gian cho từng trường hợp',
     scaleNote: 'Thời gian tính bằng giây; thấp hơn là nhanh hơn. Mỗi cặp thanh có thang đo riêng, lấy thời gian dài hơn làm chiều rộng tối đa. Không so chiều dài thanh giữa các trường hợp.',
     operations: { extract: 'Giải nén', test: 'Kiểm tra', create: 'Tạo' },
-    datasets: { big: '1 tệp 512 MiB', small: '20 000 tệp nhỏ' },
+    datasets: { big: 'tệp lớn 512 MiB', small: '20 000 tệp nhỏ' },
     seconds: 'giây',
     table: 'Xem bảng số liệu',
     tableCaption: 'Thời gian trung vị theo trường hợp (giây) và tỉ lệ GenZip / 7z.exe',
     case: 'Trường hợp',
     methodology: 'Cách đo',
-    procedure: `Mỗi số đo là trung vị của ${integer.format(benchmark.runs)} lần chạy. Chạy xen kẽ 7z.exe và GenZip, cùng phiên bản engine ${benchmark.engine}, với engine đã được làm nóng.`,
+    procedure: `Mỗi số đo là trung vị của ${integer.format(benchmark.runs)} lần chạy, mức nén 5. So bản release của GenZip (7z.dll chạy trong process con như app thật) với 7z.exe dòng lệnh, cùng engine ${benchmark.engine}, chạy xen kẽ, engine đã được làm nóng.`,
     dataLabel: 'Bộ dữ liệu',
-    dataDescription: '1 × tệp 512 MiB và 20 000 tệp nhỏ',
+    dataDescription: 'Tệp lớn: 2 tệp, tổng 512 MiB (một nửa văn bản, một nửa dữ liệu ngẫu nhiên). Tệp nhỏ: 20 000 tệp văn bản 1–8 KB (107 MB) trong 350 thư mục.',
     measured: 'Ngày đo',
     version: 'Phiên bản GenZip',
     engine: 'Engine',
@@ -39,10 +40,19 @@ const c = {
     ram: 'RAM',
     disk: 'Ổ đĩa',
     os: 'Hệ điều hành',
-    caveat: 'Kết quả thay đổi theo máy và dữ liệu. GenZip không nhanh hơn trong mọi trường hợp — mục tiêu là ngang 7-Zip trong khi có thêm giao diện, an toàn và tiện ích.',
+    caveat: 'Kết quả thay đổi theo máy và dữ liệu. GenZip không nhanh hơn 7-Zip — mục tiêu là ngang 7-Zip trong khi có thêm giao diện, an toàn và tiện ích.',
+    why: 'Phần chênh nhỏ đến từ việc GenZip chạy engine trong một process riêng (một codec lỗi không làm sập app) và các kiểm tra an toàn khi ghi tệp: chặn đường dẫn nguy hiểm, giữ cảnh báo Mark of the Web của Windows.',
     update: 'Số liệu sẽ được cập nhật khi có tối ưu mới.',
-    soon: 'Sắp có',
-    optimization: 'Đang làm: tận dụng RAM để đọc trước.',
+    editTitle: 'Sửa tệp nén có sẵn',
+    editLead: `Thêm, xoá, đổi tên tệp trong một tệp nén ${benchmark.editSizeMiB} MiB. So GenZip trước khi tối ưu với bản beta.`,
+    editOps: { add: 'Thêm tệp', delete: 'Xoá tệp', rename: 'Đổi tên' },
+    editFormat: { zip: 'ZIP', '7z': '7Z (non-solid)' },
+    before: 'Trước',
+    beta: 'Bản beta',
+    faster: 'Nhanh hơn',
+    editCaption: 'Thời gian trung vị khi sửa tệp nén (giây)',
+    editTemp: `Dung lượng tạm khi sửa giảm từ ${benchmark.editTempMiB.before} MiB xuống ${benchmark.editTempMiB.beta} MiB.`,
+    editSafe: 'Khi sửa, GenZip ghi xong và đẩy hẳn dữ liệu xuống đĩa rồi mới thay tệp gốc. Nếu có lỗi, bạn huỷ, hay app bị tắt ngang, tệp gốc vẫn nguyên vẹn. Vì bước an toàn này, sửa tệp nén vẫn chậm hơn 7z.exe khoảng 1–2 giây với tệp 400 MiB.',
   },
   en: {
     title: 'Neck and neck with 7-Zip',
@@ -57,15 +67,15 @@ const c = {
     results: 'Time for each case',
     scaleNote: 'Times are in seconds; lower is faster. Each pair of bars uses its own scale, with the longer time filling the available width. Do not compare bar lengths across cases.',
     operations: { extract: 'Extract', test: 'Test', create: 'Create' },
-    datasets: { big: 'one 512 MiB file', small: '20,000 small files' },
+    datasets: { big: '512 MiB of large files', small: '20,000 small files' },
     seconds: 'seconds',
     table: 'View data table',
     tableCaption: 'Median time by case (seconds) and GenZip / 7z.exe ratio',
     case: 'Case',
     methodology: 'Methodology',
-    procedure: `Each measurement is the median of ${integer.format(benchmark.runs)} runs. 7z.exe and GenZip were alternated, using the same ${benchmark.engine} engine version, with the engine warmed up.`,
+    procedure: `Each measurement is the median of ${integer.format(benchmark.runs)} runs at compression level 5. The GenZip release build (7z.dll running in a child process, as in the real app) is compared with the 7z.exe command line, using the same ${benchmark.engine} engine, alternated, with the engine warmed up.`,
     dataLabel: 'Data sets',
-    dataDescription: '1 × 512 MiB file and 20,000 small files',
+    dataDescription: 'Large: 2 files, 512 MiB in total (half text, half random data). Small: 20,000 text files of 1–8 KB (107 MB) in 350 folders.',
     measured: 'Measured on',
     version: 'GenZip version',
     engine: 'Engine',
@@ -73,10 +83,19 @@ const c = {
     ram: 'RAM',
     disk: 'Disk',
     os: 'Operating system',
-    caveat: 'Results vary by machine and data. GenZip is not faster in every case — the goal is to match 7-Zip while adding a graphical interface, safety and convenience.',
+    caveat: 'Results vary by machine and data. GenZip is not faster than 7-Zip — the goal is to match it while adding a graphical interface, safety and convenience.',
+    why: 'The small gap comes from GenZip running the engine in a separate process (a faulty codec cannot crash the app) and from safety checks while writing files: blocking dangerous paths and keeping Windows’ Mark of the Web warning.',
     update: 'Measurements will be updated as new optimizations arrive.',
-    soon: 'Coming soon',
-    optimization: 'In progress: using RAM to read ahead.',
+    editTitle: 'Editing an existing archive',
+    editLead: `Adding, deleting and renaming files in a ${benchmark.editSizeMiB} MiB archive. GenZip before optimization compared with the beta.`,
+    editOps: { add: 'Add files', delete: 'Delete files', rename: 'Rename' },
+    editFormat: { zip: 'ZIP', '7z': '7Z (non-solid)' },
+    before: 'Before',
+    beta: 'Beta',
+    faster: 'Faster',
+    editCaption: 'Median time when editing an archive (seconds)',
+    editTemp: `Temporary space used while editing dropped from ${benchmark.editTempMiB.before} MiB to ${benchmark.editTempMiB.beta} MiB.`,
+    editSafe: 'When editing, GenZip finishes writing and flushes the data to disk before replacing the original. If something fails, you cancel, or the app is closed abruptly, the original stays intact. Because of this safety step, editing a 400 MiB archive is still 1–2 seconds slower than 7z.exe.',
   },
 }[lang];
 
@@ -182,6 +201,36 @@ const machine = [
       </details>
     </section>
 
+    <section class="section edit" aria-labelledby="benchmark-edit">
+      <h2 id="benchmark-edit">{c.editTitle}</h2>
+      <p class="muted">{c.editLead}</p>
+      <div class="edit-table card">
+        <table>
+          <caption>{c.editCaption}</caption>
+          <thead>
+            <tr>
+              <th scope="col">{c.case}</th>
+              <th scope="col">{c.before}</th>
+              <th scope="col">{c.beta}</th>
+              <th scope="col">{c.faster}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {benchmark.edit.map((row: EditRow) => (
+              <tr>
+                <th scope="row">{c.editOps[row.op]} — {c.editFormat[row.format]}</th>
+                <td>{number.format(row.before)}</td>
+                <td>{number.format(row.beta)}</td>
+                <td><strong>{numberOne.format(row.before / row.beta)}×</strong></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="muted">{c.editTemp}</p>
+      <p class="muted">{c.editSafe}</p>
+    </section>
+
     <section class="section methodology" aria-labelledby="benchmark-methodology">
       <h2 id="benchmark-methodology">{c.methodology}</h2>
       <p class="muted">{c.procedure}</p>
@@ -194,8 +243,8 @@ const machine = [
       </dl>
       <aside class="card card-soft notes">
         <p>{c.caveat}</p>
+        <p>{c.why}</p>
         <p>{c.update}</p>
-        <p><span class="chip chip-soon">{c.soon}</span> {c.optimization}</p>
       </aside>
     </section>
   </div>
@@ -241,7 +290,9 @@ const machine = [
   .method-facts dt { font-weight: 600; margin-bottom: 4px; }
   .method-facts dd { margin: 0; color: var(--text-muted); overflow-wrap: anywhere; }
   .notes p:last-child { margin-bottom: 0; }
-  .notes .chip { margin-right: 4px; }
+  .edit-table { padding: 0; overflow: hidden; margin: 24px 0 16px; }
+  .edit-table caption { border-top: 0; }
+  .edit p:last-child { margin-bottom: 0; }
   @media (max-width: 700px) {
     .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
     .method-facts { grid-template-columns: minmax(0, 1fr); gap: 20px; }
