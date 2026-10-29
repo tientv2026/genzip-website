@@ -61,4 +61,4 @@ Có dòng lệnh cơ bản, chủ yếu phục vụ menu chuột phải. Web ch�
 - Mã hoá: ZIP ZipCrypto/AES-256; 7Z AES-256 + ẩn tên tệp.
 
 ## 8. Chưa có trong 0.9.0 (chỉ được ghi "Sắp có")
-macOS, Linux, Mức dùng bộ nhớ (Tiết kiệm/Cân bằng/Tối đa — tận dụng RAM đọc trước), Benchmark trong app, sửa chữa archive hỏng, bản tải tự do.
+macOS, Linux, Mức dùng bộ nhớ (Tiết kiệm/Cân bằng/Tối đa — tận dụng RAM đọc trước), Benchmark trong app, sửa chữa archive hỏng, bản tải tự do (chưa có kế hoạch công bố).

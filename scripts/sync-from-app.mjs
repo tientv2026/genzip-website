@@ -58,7 +58,7 @@ copy('assets/icons/genzip.ico', 'public/favicon.ico');
 
 // Ảnh chụp app thật (harness `genzip --screenshot`).
 const shots = {
-  'docs/evidence/m3/ui3': ['main', 'home'],
+  'docs/evidence/m3/ui3': ['home'],
 };
 for (const [dir, names] of Object.entries(shots)) {
   for (const name of names) {
@@ -69,10 +69,24 @@ for (const [dir, names] of Object.entries(shots)) {
     }
   }
 }
+// Hộp thoại mới nhất: tên trên web -> ảnh <gốc>_<lang>_<theme>.png trong repo app.
+const dialogs = {
+  main: 'docs/evidence/preview-pane/main-preview-text',
+  create: 'docs/evidence/ui-chg-005/create-window',
+  extract: 'docs/evidence/fix-003/extract',
+  'test-result': 'docs/evidence/fix-003/test-result',
+  conflict: 'docs/evidence/fix-003/conflict',
+  queue: 'docs/evidence/batch-queue/queue-window',
+  'preview-image': 'docs/evidence/preview-pane/main-preview-image',
+  'preview-text': 'docs/evidence/preview-pane/main-preview-text',
+  support: 'docs/evidence/ui-chg-010c/support',
+};
 for (const lang of ['vi', 'en']) {
   for (const theme of ['light', 'dark']) {
-    copy(`docs/evidence/m3/ui3/extract-${theme}-${lang}.png`, `public/screenshots/extract-${lang}-${theme}.png`);
-    copy(`docs/evidence/m3/ui3/create-window-${lang}-${theme}.png`, `public/screenshots/create-${lang}-${theme}.png`);
+    for (const [name, from] of Object.entries(dialogs)) {
+      copy(`${from}_${lang}_${theme}.png`, `public/screenshots/${name}-${lang}-${theme}.png`);
+    }
+    copy(`docs/evidence/sfx/sfx_${lang}_${theme}_enabled.png`, `public/screenshots/sfx-${lang}-${theme}.png`);
   }
 }
 
