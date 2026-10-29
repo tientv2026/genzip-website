@@ -6,10 +6,10 @@ order: 9
 
 ## Updates through Microsoft Store
 
-Microsoft Store downloads and installs new GenZip versions. The Store build never connects to the network by itself.
+Microsoft Store provides GenZip updates.
 
-To update right away: open **Microsoft Store → Library** and click **Get updates**.
+In **Options → Settings… → Updates**, the Store build only shows **Updates are provided by Microsoft Store**. This page has no channel selection or update check button.
 
 ## What's new
 
-Every version has notes on the [Release notes](/en/changelog) page. In GenZip, the **View release notes** button opens the same page.
+See changes for each version on the [Release notes](/en/changelog) page.

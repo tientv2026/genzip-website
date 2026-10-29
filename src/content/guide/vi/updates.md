@@ -6,10 +6,10 @@ order: 9
 
 ## Cập nhật qua Microsoft Store
 
-Microsoft Store tự tải và cài phiên bản GenZip mới. Ở bản Store, GenZip không tự kết nối mạng.
+Microsoft Store cung cấp các bản cập nhật GenZip.
 
-Muốn cập nhật ngay: mở **Microsoft Store → Thư viện** (Library), bấm **Nhận bản cập nhật** (Get updates).
+Trong **Tuỳ chọn → Cài đặt… → Cập nhật**, bản Store chỉ hiển thị **Cập nhật do Microsoft Store cung cấp**. Trang này không có lựa chọn kênh hoặc nút kiểm tra bản mới.
 
 ## Xem có gì mới
 
-Mỗi phiên bản đều có ghi chú ở trang [Lịch sử phiên bản](/changelog). Trong GenZip, nút **Xem ghi chú phát hành** cũng mở trang này.
+Xem thay đổi của từng phiên bản tại trang [Lịch sử phiên bản](/changelog).

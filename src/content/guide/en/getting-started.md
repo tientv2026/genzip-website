@@ -1,27 +1,29 @@
 ---
 title: Install and first run
-description: Install GenZip from Microsoft Store and turn on the right-click menu.
+description: Install GenZip from Microsoft Store and choose the default app in Windows.
 order: 1
 ---
 
 ## Install from Microsoft Store
 
-GenZip is officially published on **Microsoft Store**. Open the GenZip page in the Store, click **Get** and wait for it to install. The Store keeps GenZip up to date; uninstall it from the Store or Windows **Settings → Apps**.
-
-<div class="callout callout-note"><strong>Note</strong>There is no free-floating GenZip installer. Be careful with other sites claiming to offer GenZip downloads.</div>
+GenZip is distributed through **Microsoft Store**. Use the GenZip Store page to install it; Microsoft Store also provides updates.
 
 ## First run
 
 1. Open GenZip from the Start menu.
-2. Read and accept the **Terms of use** (asked once).
-3. The **Home** screen appears: drop an archive on it, or click **Create archive** / **Open archive…**.
+2. On **Home**, drop an archive onto the selection area or click to choose a file.
+3. Use **Create archive…** to create ZIP, 7Z or TAR, or **Open archive…** to browse an existing archive. **Recent files** lets you reopen files you have used.
 
 <figure>
   <img class="shot-light" src="/screenshots/home-en-light.png" alt="GenZip Home screen with options to open and create an archive" width="1100" height="680" loading="lazy" decoding="async" />
   <img class="shot-dark" src="/screenshots/home-en-dark.png" alt="GenZip Home screen with options to open and create an archive" width="1100" height="680" loading="lazy" decoding="async" />
-  <figcaption>The Home screen on first run.</figcaption>
+  <figcaption>Home provides access to opening, creating and recent files.</figcaption>
 </figure>
 
-## Turn on the right-click menu
+## Right-click menu and default app
 
-Go to **Settings… → Integration**, enable the GenZip context menu and click **Apply**. You can then right-click an archive to extract it, or right-click files and folders to compress them.
+The right-click menu and file associations are included in the Store package. **Options → Settings… → Integration** says **Managed by Windows for the Microsoft Store build**.
+
+To choose GenZip as the default app for a format, open **Windows Settings → Apps → Default apps**. Windows does not let apps make themselves the default.
+
+See the commands in the [right-click menu guide](/en/guide/context-menu).

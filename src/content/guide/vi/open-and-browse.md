@@ -6,13 +6,11 @@ order: 2
 
 ## Mở tệp nén
 
-Có ba cách:
+- Thả tệp vào Trang chủ GenZip hoặc nhấn vùng chọn để chọn tệp.
+- Bấm **Mở file nén…** trên Trang chủ.
+- Dùng lệnh chuột phải **Mở bằng GenZip** trong Explorer.
 
-- Bấm đúp vào tệp nén (khi GenZip đã được liên kết với định dạng đó).
-- Kéo thả tệp vào cửa sổ GenZip.
-- Bấm **Mở file nén…** trên màn Home hoặc menu **Tệp**.
-
-GenZip mở được ZIP, 7z, RAR4/RAR5, TAR, GZ, BZ2, XZ, ZST, ISO, CAB, WIM và tệp chia phần như `.7z.001`. Nếu thiếu một phần, GenZip báo rõ phần nào bị thiếu.
+GenZip đọc và giải nén ZIP, 7Z, RAR/RAR5, TAR, GZ, BZ2, XZ, ZST, ISO, CAB, WIM, tệp chia phần như `.7z.001` và `.zip.001`, cùng tệp `.exe` tự giải nén từ 7Z.
 
 <figure>
   <img class="shot-light" src="/screenshots/main-vi-light.png" alt="Cửa sổ GenZip đang hiển thị nội dung của một tệp nén" width="1100" height="680" loading="lazy" decoding="async" />
@@ -22,15 +20,19 @@ GenZip mở được ZIP, 7z, RAR4/RAR5, TAR, GZ, BZ2, XZ, ZST, ISO, CAB, WIM v�
 
 ## Duyệt và tìm
 
-- Bấm đúp vào thư mục để vào trong; dùng **Back / Forward / Up** cạnh thanh địa chỉ để di chuyển.
-- Gõ vào ô tìm kiếm để lọc theo tên.
-- Ở thanh bên, mục **NỘI DUNG** lọc theo loại: Thư mục, Tài liệu, Ảnh, Video, Âm thanh, Khác.
-- Bấm tiêu đề cột để sắp xếp.
+- Dùng thanh đường dẫn trong tệp nén và ô **Tìm trong file nén**.
+- Thanh bên có **Truy cập nhanh**, **File nén đang mở** và bộ lọc theo loại: **Tất cả**, **Thư mục**, **Tài liệu**, **Hình ảnh**, **Video**, **Âm thanh**, **Khác**.
+- Bảng có các cột **Tên**, **Kích thước**, **Đã nén**, **Loại**, **Ngày sửa đổi**, cùng cột tuỳ chọn **Ratio**, **CRC32**.
+- Đầu trang tệp nén hiển thị tên, định dạng, dung lượng nén/gốc và số thư mục/tệp; có thẻ **Chú thích** khi tệp có chú thích.
 
-## Chọn nhiều mục
+Chọn các mục cần lấy trước khi bấm **Giải nén** để chỉ giải nén mục đang chọn.
 
-Giữ **Ctrl** để chọn từng mục, **Shift** để chọn một dải. Thanh trạng thái hiện số mục đã chọn.
+## Xem trước và mở tệp
 
-## Mở một tệp bên trong
+**F3** mở khung xem trước: ảnh tối đa 20 MB, văn bản hiển thị 64 KB đầu; loại khác có thẻ thông tin.
 
-Bấm đúp vào một tệp để mở bằng ứng dụng mặc định. Với tệp có thể thực thi (exe, script…), GenZip hỏi lại trước khi mở.
+Có thể mở tệp bên trong bằng ứng dụng mặc định. Với tệp có thể chạy mã như HTML, EXE hoặc JS, GenZip hỏi xác nhận trước khi mở.
+
+## Sửa tệp nén đang mở
+
+Với ZIP, 7Z và TAR, có thể **Thêm** tệp/thư mục, kéo thả vào cửa sổ (có xác nhận), **Xoá** bằng Delete hoặc **Đổi tên…** bằng F2. Dữ liệu cũ không bị nén lại; huỷ thao tác hoặc gặp lỗi sẽ giữ nguyên tệp gốc.

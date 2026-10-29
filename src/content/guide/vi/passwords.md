@@ -6,18 +6,18 @@ order: 5
 
 ## Đặt mật khẩu khi tạo nén
 
-1. Trong hộp thoại Tạo nén, nhập **Mật khẩu** và nhập lại để xác nhận.
-2. Chọn **Phương thức mã hóa** (AES-256).
-3. Với 7z, chọn **Mã hóa nội dung và tên tệp** để người khác không xem được cả danh sách tệp.
+Trong cột **Bảo mật** của hộp thoại **Tạo file nén**:
 
-Bấm biểu tượng con mắt hoặc **Hiện mật khẩu** để xem lại mật khẩu đang gõ.
+1. Chọn **Mã hoá**: ZIP có ZipCrypto hoặc AES-256; 7Z có AES-256.
+2. Nhập **Mật khẩu** và **Nhập lại**.
+3. Với 7Z, bật **Ẩn tên tệp (7Z)** nếu muốn bảo vệ cả danh sách tên tệp.
+
+Dùng nút mắt hoặc **Hiện mật khẩu** để kiểm tra nội dung đang nhập. TAR không có tuỳ chọn mã hoá.
 
 ## Mở tệp có mật khẩu
 
-GenZip hỏi mật khẩu khi cần. Nếu sai, bạn được nhập lại.
+GenZip hiển thị hộp thoại **Mật khẩu** khi cần mật khẩu để xử lý tệp nén.
 
-## Lưu ý
+## Xác minh sau khi nén
 
-- GenZip **không bao giờ** lưu mật khẩu xuống đĩa hay ghi vào nhật ký.
-- Nếu quên mật khẩu, bạn **không thể khôi phục bằng GenZip** — GenZip không phá mật khẩu.
-- Mật khẩu có dấu tiếng Việt: hãy dùng định dạng **7z**. Định dạng ZIP không hỗ trợ tốt ký tự có dấu trong mật khẩu.
+Bật **Xác minh sau khi nén** trong hộp thoại tạo nén để kiểm tra lại tệp vừa tạo bằng cùng mật khẩu.

@@ -4,33 +4,53 @@ description: Giải nén tất cả hoặc mục đã chọn, xử lý tệp tr�
 order: 3
 ---
 
-## Cách nhanh nhất
+## Giải nén từ Explorer
 
-Chuột phải vào tệp nén trong Explorer → **GenZip → Giải nén tại đây**. GenZip tạo thư mục con cùng tên cạnh tệp nén và giải nén vào đó.
+Chuột phải vào tệp nén và chọn:
+
+- **Giải nén tại đây**: giải nén ngay tại vị trí tệp nén.
+- **Giải nén vào "&lt;tên&gt;\\"**: giải nén vào thư mục cùng tên.
+- **Giải nén tệp…**: mở hộp thoại để chọn đích và các chế độ.
 
 ## Dùng hộp thoại Giải nén
 
-1. Mở tệp nén. Nếu chỉ cần một số mục, chọn các mục cần lấy.
+1. Mở tệp nén. Nếu chỉ cần một số mục, chọn các mục cần lấy; GenZip sẽ giải nén mục đang chọn.
 2. Bấm **Giải nén** trên thanh công cụ.
-3. Chọn **Thư mục đích** — có lịch sử các thư mục đã dùng; bật **Giải nén vào thư mục cùng tên** nếu muốn.
-4. Chọn cách xử lý tệp đã có: **Hỏi**, **Ghi đè**, **Bỏ qua** hoặc **Tự động đổi tên**.
-5. Bấm **Giải nén**.
+3. Chọn **Thư mục đích**: nhập đường dẫn, dùng **Duyệt…**, lịch sử đích hoặc cây thư mục (This PC, Desktop, Documents, Downloads…). Dùng **Thư mục mới** nếu cần tạo thư mục.
+4. Chọn **Chế độ cập nhật** và **Chế độ ghi đè** như bên dưới.
+5. Bấm **Giải nén**. Nhập mật khẩu khi hộp thoại **Mật khẩu** xuất hiện.
 
 <figure>
-  <img class="shot-light" src="/screenshots/extract-vi-light.png" alt="Hộp thoại Giải nén với thư mục đích và các tùy chọn xử lý tệp" width="1100" height="680" loading="lazy" decoding="async" />
-  <img class="shot-dark" src="/screenshots/extract-vi-dark.png" alt="Hộp thoại Giải nén với thư mục đích và các tùy chọn xử lý tệp" width="1100" height="680" loading="lazy" decoding="async" />
-  <figcaption>Chọn nơi lưu và cách xử lý tệp trùng trước khi giải nén.</figcaption>
+  <img class="shot-light" src="/screenshots/extract-vi-light.png" alt="Hộp thoại Giải nén với thư mục đích, chế độ cập nhật và ghi đè" width="720" height="512" loading="lazy" decoding="async" />
+  <img class="shot-dark" src="/screenshots/extract-vi-dark.png" alt="Hộp thoại Giải nén với thư mục đích, chế độ cập nhật và ghi đè" width="720" height="512" loading="lazy" decoding="async" />
+  <figcaption>Chọn đích, chế độ cập nhật và cách xử lý tệp đã có.</figcaption>
 </figure>
+
+## Chế độ cập nhật
+
+- **Giải nén và thay thế**.
+- **Giải nén và cập nhật**: chỉ giải nén tệp mới hơn hoặc tệp mới.
+- **Chỉ làm mới tệp đã có**.
+
+## Chế độ ghi đè
+
+- **Hỏi trước**.
+- **Ghi đè không hỏi**.
+- **Bỏ qua tệp đã có**.
+- **Tự đổi tên**.
 
 ## Tuỳ chọn thêm
 
+- **Giữ tệp hỏng**.
 - **Mở thư mục đích sau khi giải nén**.
-- **Kiểm tra sau khi giải nén** — chạy kiểm tra toàn vẹn ngay khi xong.
+- **Lưu thiết lập** để lưu các lựa chọn.
 
 ## Khi có tệp trùng
 
-Nếu chọn **Hỏi**, GenZip hiện hộp thoại cho từng tệp: Ghi đè, Bỏ qua hoặc **Giữ cả hai** (tự thêm số vào tên tệp mới), kèm tuỳ chọn áp dụng cho tất cả.
+Với **Hỏi trước**, hộp thoại **Tệp đã tồn tại** có các lựa chọn **Thay thế**, **Bỏ qua**, **Giữ cả hai**, **Đổi tên…**, **Dừng** và tuỳ chọn áp dụng cho tất cả.
 
-## An toàn
+## An toàn và tiến trình
 
-GenZip chặn các mục có đường dẫn nguy hiểm (`..\`, đường dẫn tuyệt đối, tên thiết bị Windows) để ngăn tệp nén ghi ra ngoài thư mục đích. Tệp tải từ Internet được giữ dấu nguồn (Mark-of-the-Web) để Windows vẫn cảnh báo khi mở.
+GenZip chặn đường dẫn nguy hiểm như `../` và tên thiết bị, áp dụng giới hạn số mục, tỉ lệ nở, dung lượng và độ sâu khi giải nén, đồng thời giữ Mark of the Web.
+
+Cửa sổ tiến trình có **Chạy nền**, **Tạm dừng/Tiếp tục** và **Huỷ**.

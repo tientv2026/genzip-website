@@ -6,29 +6,43 @@ order: 4
 
 ## Nén nhanh
 
-Chuột phải vào tệp hoặc thư mục → **GenZip → Thêm vào "Tên.zip"** hoặc **Thêm vào "Tên.7z"** để nén mà không cần mở hộp thoại.
+Chuột phải vào tệp hoặc thư mục trong Explorer, chọn **Thêm vào "&lt;tên&gt;.zip"** hoặc **Thêm vào "&lt;tên&gt;.7z"**.
 
-## Dùng hộp thoại Tạo nén
+## Hộp thoại Tạo file nén
 
-1. Bấm **Thêm** (hoặc chuột phải → **Thêm vào tệp nén…**).
-2. Đặt tên và thư mục lưu.
-3. Chọn định dạng:
-   - **ZIP** — định dạng phổ biến, tiện chia sẻ.
-   - **7Z** — hỗ trợ mã hóa cả tên tệp.
-   - **TAR** — gom tệp, phổ biến trên Linux/macOS.
-4. Chọn cấu hình có sẵn: **Thông thường**, **Tối đa**, **Nhanh** hoặc **Lưu trữ** (không nén).
-5. Bấm **Tạo**.
+Từ Trang chủ, chọn **Tạo file nén…**, hoặc dùng lệnh chuột phải **Thêm vào tệp nén…**. Hộp thoại nằm trên một trang, với hai cột thiết lập.
 
-<figure>
-  <img class="shot-light" src="/screenshots/create-vi-light.png" alt="Hộp thoại Tạo nén với các định dạng ZIP, 7z và TAR" width="1100" height="680" loading="lazy" decoding="async" />
-  <img class="shot-dark" src="/screenshots/create-vi-dark.png" alt="Hộp thoại Tạo nén với các định dạng ZIP, 7z và TAR" width="1100" height="680" loading="lazy" decoding="async" />
-  <figcaption>Đặt tên, chọn định dạng và cấu hình trước khi tạo tệp nén.</figcaption>
-</figure>
+1. Nhập **Tên file** và chọn đuôi trong ô bên cạnh: `.zip`, `.7z`, `.tar` hoặc `.exe` cho tệp tự giải nén từ 7Z.
+2. Chọn **Lưu tại**, dùng **Duyệt…** để chọn thư mục.
+3. Chọn một trong ba thẻ định dạng **ZIP**, **7Z**, **TAR**.
+4. Chọn **Cấu hình**: **Cân bằng**, **Nén tối đa**, **Nhanh** hoặc **Lưu trữ**.
+5. Điều chỉnh hai cột bên dưới nếu cần, rồi bấm **Tạo file nén**. Bấm **Huỷ** để đóng hộp thoại.
 
-## Tuỳ chỉnh nâng cao
+Mặc định là ZIP, mức nén 5, Deflate, không chia phần và không mã hoá.
 
-- **Mức nén** và **Phương thức nén**.
-- **Kích thước từ điển** và **Nén solid** (chỉ với 7z).
-- **Chia phần**: tách thành nhiều tệp theo KB/MB/GB, tiện gửi qua email hoặc chép vào USB.
+## Cột Thiết lập nén
 
-<div class="callout callout-note"><strong>Lưu ý về RAR</strong>GenZip không tạo tệp RAR. RAR là định dạng độc quyền; GenZip chỉ đọc và giải nén RAR.</div>
+- **Mức nén**: **Lưu trữ** hoặc 1–9; **Bình thường** là 5, **Tối đa** là 9.
+- **Phương pháp**: ZIP có Deflate/Store; 7Z có LZMA2/LZMA/Store; TAR dùng Store.
+- **Từ điển**: điều chỉnh theo phương pháp nén.
+- **Chia phần**: **Không chia**, **100 MB**, **700 MB**, **4 GB FAT32** hoặc **Tuỳ chỉnh** với một số và đơn vị MB/GB.
+- **Nén solid**: dành cho 7Z.
+- **Tự giải nén (.exe)**: chỉ dành cho 7Z không chia phần, dùng module SFX chính thức của 7-Zip.
+
+## Cột Bảo mật
+
+- **Mã hoá**: ZIP hỗ trợ ZipCrypto hoặc AES-256; 7Z hỗ trợ AES-256.
+- Nhập **Mật khẩu** và **Nhập lại** để xác nhận; dùng nút mắt hoặc **Hiện mật khẩu** để xem lại.
+- **Ẩn tên tệp (7Z)**: bảo vệ cả danh sách tên tệp trong tệp 7Z.
+
+## Ghi chú và xác minh
+
+**Ghi chú** mở cửa sổ soạn ghi chú, chỉ dùng cho ZIP một tệp, không chia phần.
+
+Bật **Xác minh sau khi nén** để kiểm tra lại tệp nén vừa tạo bằng cùng mật khẩu.
+
+## Theo dõi tiến trình
+
+Sau khi bắt đầu nén, cửa sổ tiến trình có các nút **Chạy nền**, **Tạm dừng/Tiếp tục** và **Huỷ**. **Chạy nền** thu nhỏ cửa sổ và hiển thị phần trăm trên biểu tượng taskbar. Nút này nằm trong cửa sổ tiến trình.
+
+<div class="callout callout-note"><strong>Định dạng RAR</strong>GenZip đọc và giải nén RAR/RAR5; khi tạo tệp nén, dùng ZIP, 7Z hoặc TAR.</div>

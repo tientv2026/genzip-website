@@ -4,27 +4,28 @@ description: Dùng GenZip ngay trong Explorer trên Windows 10/11.
 order: 7
 ---
 
-## Bật menu
+## Tích hợp trong bản Microsoft Store
 
-Vào **Cài đặt… → Tích hợp**, bật **Thêm GenZip vào menu ngữ cảnh**. Bạn có thể chọn menu gộp (một mục GenZip có menu con) hoặc menu phẳng.
+Liên kết tệp và menu chuột phải có sẵn trong gói Microsoft Store. Trang **Tích hợp** trong Cài đặt ghi **Windows quản lý cho bản Microsoft Store**.
 
-## Các lệnh
+## Các lệnh Windows 11
 
-Trên tệp nén:
+GenZip có các lệnh ở menu chuột phải cấp một của Windows 11:
 
+- **Mở bằng GenZip**
+- **Giải nén tệp…**
 - **Giải nén tại đây**
-- **Giải nén vào "Tên\\"**
-- **Giải nén tệp…** (mở hộp thoại)
-
-Trên tệp và thư mục thông thường:
-
-- **Thêm vào "Tên.zip"**, **Thêm vào "Tên.7z"**
+- **Giải nén vào "&lt;tên&gt;\\"**
 - **Thêm vào tệp nén…**
+- **Thêm vào "&lt;tên&gt;.zip"**
+- **Thêm vào "&lt;tên&gt;.7z"**
 
-## Windows 11
+**Giải nén tệp…** mở hộp thoại chọn đích và chế độ giải nén. **Giải nén tại đây** dùng vị trí tệp nén; **Giải nén vào "&lt;tên&gt;\\"** dùng thư mục cùng tên. **Thêm vào tệp nén…** mở hộp thoại tạo nén; hai lệnh thêm vào ZIP/7Z dùng để nén nhanh.
 
-GenZip có mặt trong menu chuột phải mới của Windows 11, không cần bấm **Show more options** (Hiển thị thêm tùy chọn).
+Menu cổ điển dùng tên **Nén nhanh thành tệp ZIP/7Z** và **Giải nén vào thư mục cùng tên**.
 
-## Liên kết định dạng
+## Chọn ứng dụng mặc định
 
-Trong **Tích hợp**, chọn các định dạng muốn mở bằng GenZip. Windows có thể hỏi lại ứng dụng mặc định — bấm **Mở cài đặt ứng dụng mặc định** để chọn GenZip. GenZip chỉ ghi vào tài khoản Windows của bạn, không ảnh hưởng người dùng khác.
+Mở **Cài đặt Windows → Ứng dụng → Ứng dụng mặc định** và chọn GenZip cho định dạng bạn muốn mở. Windows không cho ứng dụng tự đặt mình làm mặc định.
+
+Các định dạng liên kết trong gói: `.zip`, `.7z`, `.rar`, `.tar`, `.gz`, `.bz2`, `.xz`, `.zst`, `.iso`, `.cab`, `.wim`, `.001`.

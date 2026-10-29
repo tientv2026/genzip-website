@@ -6,18 +6,22 @@ order: 6
 
 ## When to test
 
-- Archives downloaded from the Internet, especially large or split ones.
-- Before deleting originals after making a backup.
+You can check integrity before extracting, sharing or using an archive as a backup.
 
 ## How to test
 
 1. Open the archive you want to test.
 2. Click **Test** on the toolbar.
+3. Follow the progress window; you can **Pause/Resume**, **Run in background** or **Cancel**.
 
-GenZip reads all data and checks each file's CRC without writing extracted data to disk.
+## Read the results
 
-## Results
+The test results window shows **Total files**, **Tested**, **Completed**, **Errors**, **Skipped** and **Time**.
 
-- **Test completed** — the archive is intact.
-- **Completed with errors** — some files are damaged; the error list names them.
-- Missing parts of a split archive are reported by name.
+Use **View details** to inspect the test information, or **Export report…** to save a `.txt` report.
+
+## Verify immediately after compression
+
+In the **Create archive** dialog, enable **Verify after compressing** to test the newly created archive using the same password.
+
+<div class="callout callout-note"><strong>Coming soon</strong>Repairing damaged archives is not available in GenZip 0.9.0-beta.1.</div>

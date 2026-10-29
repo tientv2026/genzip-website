@@ -4,20 +4,20 @@ description: Protect archives with AES-256 and encrypt file names.
 order: 5
 ---
 
-## Set a password
+## Set a password when creating an archive
 
-1. In the Create dialog, enter the **Password** and confirm it.
-2. Choose the **Encryption method** (AES-256).
-3. With 7z, choose to encrypt **content and file names** so nobody can even see the file list.
+In the **Security** column of the **Create archive** dialog:
 
-Use the eye icon or **Show password** to check what you typed.
+1. Choose **Encryption**: ZIP offers ZipCrypto or AES-256; 7Z offers AES-256.
+2. Enter the **Password** and **Confirm password**.
+3. For 7Z, enable **Hide file names (7Z)** to protect the file name list as well.
+
+Use the eye buttons or **Show password** to check your input. TAR has no encryption option.
 
 ## Open a protected archive
 
-GenZip asks for the password when needed and lets you retry if it is wrong.
+GenZip displays the **Password** dialog when a password is needed to process an archive.
 
-## Good to know
+## Verify after compressing
 
-- GenZip **never** stores passwords on disk or in logs.
-- A forgotten password **cannot be recovered by GenZip** — GenZip does not crack passwords.
-- For passwords with Vietnamese accents, use **7z**. ZIP does not handle accented characters in passwords well.
+Enable **Verify after compressing** in the creation dialog to test the new archive using the same password.
