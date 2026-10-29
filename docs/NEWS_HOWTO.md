@@ -41,6 +41,7 @@ Các trường:
 | `date` | Bắt buộc. Ngày theo dạng `YYYY-MM-DD`; danh sách sắp xếp mới nhất trước. |
 | `tags` | Danh sách chủ đề; có thể dùng `[]` hoặc bỏ qua. Viết bằng ngôn ngữ tương ứng và giữ cách viết nhất quán để bộ lọc gom đúng chủ đề. |
 | `cover` | Không bắt buộc. Đường dẫn ảnh bắt đầu từ `/news/`; bỏ cả dòng nếu chưa có ảnh. Tiêu đề bài được dùng làm văn bản thay thế của ảnh bìa. |
+| `pinned` | `true` để ghim bài lên đầu danh sách (mặc định `false`). |
 | `draft` | `true` để giữ bản nháp, `false` để xuất bản. Mặc định là `false` nếu bỏ qua, vì vậy nên ghi rõ trường này. |
 
 Nếu tiêu đề hoặc mô tả có ký tự đặc biệt của YAML như dấu `:`, hãy đặt giá trị trong dấu nháy. Bản tiếng Anh có cùng các trường, nội dung và chủ đề được dịch đầy đủ.

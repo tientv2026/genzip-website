@@ -43,6 +43,8 @@ const news = defineCollection({
     /** Ảnh bìa trong public/, ví dụ "/news/ra-mat.png". */
     cover: z.string().optional(),
     draft: z.boolean().default(false),
+    /** Ghim lên đầu danh sách tin. */
+    pinned: z.boolean().default(false),
   }),
 });
 

@@ -8,6 +8,7 @@ export async function getNews(lang: Lang, includeDrafts = import.meta.env.DEV) {
     entry.id.startsWith(`${lang}/`) && (includeDrafts || !entry.data.draft),
   );
   return posts.sort((a, b) =>
+    Number(b.data.pinned) - Number(a.data.pinned) ||
     b.data.date.getTime() - a.data.date.getTime() || a.id.localeCompare(b.id),
   );
 }
