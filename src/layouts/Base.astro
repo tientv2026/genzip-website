@@ -1,0 +1,56 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { getLangFromUrl, switchLangPath } from '../i18n/ui';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+const fullTitle = title === 'GenZip' ? title : `${title} — GenZip`;
+const desc =
+  description ??
+  (lang === 'vi'
+    ? 'GenZip — trình nén/giải nén miễn phí cho Windows 10/11, engine 7-Zip chính thức. Không quảng cáo, không thu thập dữ liệu.'
+    : 'GenZip — a free archive manager for Windows 10/11 powered by the official 7-Zip engine. No ads, no tracking.');
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={desc} />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="vi" href={new URL(switchLangPath(Astro.url, 'vi'), Astro.site)} />
+    <link rel="alternate" hreflang="en" href={new URL(switchLangPath(Astro.url, 'en'), Astro.site)} />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" href="/brand/genzip-64.png" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={desc} />
+    <meta property="og:image" content={new URL('/brand/genzip-512.png', Astro.site)} />
+    <meta name="theme-color" content="#1673E6" />
+    <script is:inline>
+      // Áp theme trước khi vẽ để không nháy: lựa chọn đã lưu > theo hệ thống.
+      (() => {
+        let saved = null;
+        try { saved = localStorage.getItem('theme'); } catch {}
+        const dark = saved ? saved === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+      })();
+    </script>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

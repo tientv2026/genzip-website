@@ -1,0 +1,100 @@
+---
+import { getLangFromUrl, localePath, useTranslations } from '../i18n/ui';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const p = (path: string) => localePath(path, lang);
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container grid">
+    <div class="about">
+      <a class="brand" href={p('/')}>
+        <img src="/brand/genzip-64.png" alt="" width="28" height="28" />
+        <span>GenZip</span>
+      </a>
+      <p class="muted">{t('site.tagline')}</p>
+    </div>
+    <div>
+      <h4>{t('footer.product')}</h4>
+      <a href={p('/features')}>{t('nav.features')}</a>
+      <a href={p('/download')}>{t('nav.download')}</a>
+      <a href={p('/changelog')}>{t('footer.changelog')}</a>
+    </div>
+    <div>
+      <h4>{t('footer.help')}</h4>
+      <a href={p('/guide')}>{t('nav.guide')}</a>
+      <a href={p('/faq')}>{t('nav.faq')}</a>
+      <a href={p('/support')}>{t('nav.support')}</a>
+      <a href={p('/contact')}>{t('footer.contact')}</a>
+    </div>
+    <div>
+      <h4>{t('footer.legal')}</h4>
+      <a href={p('/terms')}>{t('footer.terms')}</a>
+      <a href={p('/privacy')}>{t('footer.privacy')}</a>
+      <a href={p('/licenses')}>{t('footer.licenses')}</a>
+    </div>
+  </div>
+  <div class="container bottom muted">
+    <span>{t('footer.engine')}</span>
+    <span>© {year} GenZip</span>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+    margin-top: 48px;
+    padding-top: 48px;
+    font-size: 0.95rem;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 2fr repeat(3, 1fr);
+    gap: 32px;
+  }
+  .grid > div {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  h4 {
+    font-size: 0.95rem;
+    margin-bottom: 4px;
+  }
+  .grid a {
+    color: var(--text-muted);
+  }
+  .grid a:hover {
+    color: var(--primary);
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text) !important;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 40px;
+    padding-top: 20px;
+    padding-bottom: 28px;
+    border-top: 1px solid var(--border);
+    font-size: 0.85rem;
+  }
+  @media (max-width: 768px) {
+    .grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    .about {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

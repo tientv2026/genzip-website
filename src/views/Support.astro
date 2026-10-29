@@ -1,0 +1,112 @@
+---
+import Base from '../layouts/Base.astro';
+import { getLangFromUrl, useTranslations } from '../i18n/ui';
+import { support } from '../data/product';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const c = {
+  vi: {
+    title: 'Ủng hộ tác giả',
+    lead: 'GenZip miễn phí và không quảng cáo. Nếu GenZip giúp ích cho bạn, bạn có thể ủng hộ để dự án tiếp tục phát triển.',
+    bank: 'Chuyển khoản ngân hàng',
+    bankName: 'Ngân hàng',
+    holder: 'Chủ tài khoản',
+    account: 'Số tài khoản',
+    note: 'Nội dung: GenZip',
+    paypalText: 'Ủng hộ từ nước ngoài qua PayPal.',
+    paypalBtn: 'Ủng hộ qua PayPal',
+    thanks: 'Cảm ơn bạn đã dùng GenZip!',
+  },
+  en: {
+    title: 'Support the author',
+    lead: 'GenZip is free and ad-free. If it helps you, you can support its continued development.',
+    bank: 'Bank transfer (Vietnam)',
+    bankName: 'Bank',
+    holder: 'Account holder',
+    account: 'Account number',
+    note: 'Reference: GenZip',
+    paypalText: 'Support from anywhere with PayPal.',
+    paypalBtn: 'Support with PayPal',
+    thanks: 'Thank you for using GenZip!',
+  },
+}[lang];
+---
+
+<Base title={t('nav.support')}>
+  <section class="section">
+    <div class="container narrow">
+      <header class="head">
+        <img src="/brand/genzip-128.png" alt="" width="72" height="72" />
+        <h1>{c.title}</h1>
+        <p class="muted">{c.lead}</p>
+      </header>
+
+      <div class="options">
+        <div class="card">
+          <h2>{c.bank}</h2>
+          <dl>
+            <dt>{c.bankName}</dt><dd>{support.bank.name}</dd>
+            <dt>{c.holder}</dt><dd>{support.bank.holder}</dd>
+            <dt>{c.account}</dt><dd><code>{support.bank.account}</code></dd>
+          </dl>
+          <p class="muted small">{c.note}</p>
+        </div>
+        <div class="card">
+          <h2>PayPal</h2>
+          <p class="muted">{c.paypalText}</p>
+          <a class="btn btn-primary" href={support.paypal} rel="noopener">{c.paypalBtn}</a>
+        </div>
+      </div>
+      <p class="thanks">{c.thanks}</p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .narrow {
+    max-width: 860px;
+  }
+  .head {
+    text-align: center;
+    max-width: 640px;
+    margin: 0 auto 40px;
+  }
+  .head img {
+    margin: 0 auto 16px;
+  }
+  .options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .options h2 {
+    font-size: 1.25rem;
+  }
+  dl {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 8px 16px;
+    margin: 0 0 12px;
+  }
+  dt {
+    color: var(--text-muted);
+  }
+  dd {
+    margin: 0;
+    font-weight: 600;
+  }
+  .small {
+    font-size: 0.9rem;
+  }
+  .thanks {
+    text-align: center;
+    margin-top: 32px;
+  }
+  @media (max-width: 768px) {
+    .options {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

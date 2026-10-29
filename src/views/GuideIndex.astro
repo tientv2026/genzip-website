@@ -1,0 +1,65 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { getLangFromUrl, localePath, useTranslations } from '../i18n/ui';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const docs = (await getCollection('guide', (e) => e.id.startsWith(`${lang}/`))).sort((a, b) => a.data.order - b.data.order);
+const lead =
+  lang === 'vi'
+    ? 'Từng bước dùng GenZip, từ cài đặt đến dòng lệnh.'
+    : 'Step-by-step help for GenZip, from installation to the command line.';
+---
+
+<Base title={t('nav.guide')}>
+  <section class="section">
+    <div class="container">
+      <header class="section-title">
+        <h1>{t('nav.guide')}</h1>
+        <p class="muted">{lead}</p>
+      </header>
+      <div class="grid">
+        {
+          docs.map((d, i) => (
+            <a class="card tile" href={localePath(`/guide/${d.id.split('/')[1]}`, lang)}>
+              <span class="num">{String(i + 1).padStart(2, '0')}</span>
+              <h2>{d.data.title}</h2>
+              {d.data.description && <p class="muted">{d.data.description}</p>}
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+  }
+  .tile {
+    color: var(--text);
+    text-decoration: none !important;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .tile:hover {
+    border-color: var(--primary);
+    box-shadow: var(--shadow);
+  }
+  .num {
+    color: var(--primary);
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  .tile h2 {
+    font-size: 1.15rem;
+    margin: 6px 0;
+  }
+  .tile p {
+    margin: 0;
+    font-size: 0.95rem;
+  }
+</style>

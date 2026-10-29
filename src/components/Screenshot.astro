@@ -1,0 +1,32 @@
+---
+// Ảnh chụp app thật, tự đổi bản sáng/tối theo theme của trang.
+// Ảnh nằm ở public/screenshots/<name>-<lang>-<light|dark>.png (sinh bởi `npm run sync`).
+import { getLangFromUrl } from '../i18n/ui';
+
+interface Props {
+  name: 'main' | 'home' | 'extract' | 'create';
+  alt: string;
+  frame?: boolean;
+}
+
+const { name, alt, frame = true } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+const base = `/screenshots/${name}-${lang}`;
+---
+
+<figure class:list={['shot', { frame }]}>
+  <img class="shot-light" src={`${base}-light.png`} alt={alt} loading="lazy" decoding="async" />
+  <img class="shot-dark" src={`${base}-dark.png`} alt={alt} loading="lazy" decoding="async" />
+</figure>
+
+<style>
+  .shot {
+    margin: 0;
+  }
+  .frame img {
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-lg);
+    background: var(--surface);
+  }
+</style>

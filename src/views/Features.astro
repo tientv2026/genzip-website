@@ -1,0 +1,166 @@
+---
+import Base from '../layouts/Base.astro';
+import { getLangFromUrl, useTranslations } from '../i18n/ui';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+type Group = { id: string; title: string; items: string[] };
+
+const c = {
+  vi: {
+    title: 'Mọi thứ bạn cần để làm việc với tệp nén',
+    lead: 'Danh sách dưới đây chỉ gồm những gì GenZip đã làm được. Tính năng chưa xong được ghi rõ “Sắp có”.',
+    noRar: 'GenZip đọc và giải nén được RAR nhưng không tạo tệp RAR (RAR là định dạng độc quyền).',
+    soonTitle: 'Sắp có',
+    soon: ['macOS', 'Linux', 'Hàng đợi nhiều tác vụ', 'Xem trước tệp', 'Tạo tệp tự giải nén (SFX)'],
+    groups: [
+      { id: 'open', title: 'Mở & xem', items: ['ZIP, 7z, RAR4/RAR5 (kể cả header mã hoá), TAR, GZ, BZ2, XZ, ZST, ISO, CAB, WIM', 'Tệp chia phần .7z.001, .part1.rar — báo rõ khi thiếu phần', 'Màn Home: kéo-thả, tệp gần đây, Tạo/Mở nhanh', 'Thanh địa chỉ, Back/Forward/Up, tìm trong tệp nén', 'Lọc theo loại: Thư mục, Tài liệu, Ảnh, Video, Âm thanh, Khác', 'Thống kê: số thư mục/tệp, tỉ lệ nén, trạng thái mã hoá', 'Bảng nhiều cột sắp xếp được, chọn nhiều mục', 'Hỏi lại trước khi mở tệp có rủi ro (exe, script…)'] },
+      { id: 'extract', title: 'Giải nén', items: ['Tất cả / mục đã chọn / thư mục con', 'Thư mục đích có lịch sử, tạo thư mục theo tên tệp nén', 'Tệp trùng: Hỏi / Ghi đè / Bỏ qua / Tự đổi tên', 'Giữ cấu trúc thư mục, mở thư mục đích khi xong', 'Kiểm tra lại sau khi giải nén', '“Giải nén tại đây” ra thư mục con cạnh tệp nén'] },
+      { id: 'create', title: 'Tạo nén', items: ['Định dạng ZIP, 7z, TAR', 'Mức nén, phương thức, kích thước từ điển, solid (7z)', 'Chia volume theo KB/MB/GB', 'Preset: Thông thường, Tối đa, Nhanh, Lưu trữ', 'Thêm/xoá mục trong tệp nén có sẵn'] },
+      { id: 'security', title: 'Bảo mật', items: ['Mật khẩu AES-256, mã hoá cả tên tệp với 7z', 'Mật khẩu không bao giờ ghi xuống đĩa hay nhật ký', 'Chặn đường dẫn độc hại (../, đường dẫn tuyệt đối, tên thiết bị Windows)', 'Engine 7-Zip chạy trong tiến trình riêng, kiểm tra mã băm', 'Giữ cảnh báo “tệp tải từ Internet” (Mark-of-the-Web) cho tệp giải nén'] },
+      { id: 'progress', title: 'Tiến trình', items: ['% theo dung lượng thật, tốc độ, thời gian còn lại', 'Tạm dừng thật — không đọc/ghi, không tốn CPU', 'Chạy nền, tiến độ trên thanh taskbar', 'Huỷ tức thì, màn kết quả có nút Mở thư mục'] },
+      { id: 'windows', title: 'Tích hợp Windows', items: ['Menu chuột phải Windows 11 và Windows 10, dạng gộp hoặc phẳng', 'Liên kết định dạng tệp, mở bằng double-click', 'Chỉ một cửa sổ chạy (single-instance)', 'DPI 100–200%, High Contrast, trình đọc màn hình'] },
+      { id: 'personal', title: 'Cá nhân hoá', items: ['Sáng / Tối / Theo hệ thống', '9 màu nhấn', 'Chọn cột hiển thị, giới hạn lịch sử', 'Tiếng Việt và tiếng Anh'] },
+      { id: 'updates', title: 'Cập nhật', items: ['Bản Microsoft Store: cập nhật qua Store', 'Bản tải trực tiếp: tự kiểm tra tối đa 1 lần/ngày, tắt được', 'Tệp mô tả phiên bản có chữ ký số Ed25519', 'Kênh Ổn định và Beta'] },
+      { id: 'cli', title: 'Dòng lệnh', items: ['genzip <tệp> — mở tệp nén', 'genzip x / e — giải nén', 'genzip a [--quick zip|7z] — tạo nén', 'genzip t — kiểm tra', 'genzip --version'] },
+    ] as Group[],
+  },
+  en: {
+    title: 'Everything you need to handle archives',
+    lead: 'This list only contains what GenZip already does. Unfinished features are marked “Coming soon”.',
+    noRar: 'GenZip opens and extracts RAR but does not create RAR files (RAR is a proprietary format).',
+    soonTitle: 'Coming soon',
+    soon: ['macOS', 'Linux', 'Batch queue', 'File preview', 'Self-extracting archives (SFX)'],
+    groups: [
+      { id: 'open', title: 'Open & browse', items: ['ZIP, 7z, RAR4/RAR5 (including encrypted headers), TAR, GZ, BZ2, XZ, ZST, ISO, CAB, WIM', 'Split archives .7z.001, .part1.rar — tells you when a part is missing', 'Home screen: drag & drop, recent files, quick Create/Open', 'Address bar, Back/Forward/Up, search inside the archive', 'Filter by type: Folders, Documents, Images, Video, Audio, Other', 'Stats: folders/files, compression ratio, encryption state', 'Sortable multi-column table, multi-select', 'Asks before opening risky files (exe, scripts…)'] },
+      { id: 'extract', title: 'Extract', items: ['All / selected / subfolder', 'Destination history, folder named after the archive', 'Existing files: Ask / Overwrite / Skip / Auto-rename', 'Keep folder structure, open destination when done', 'Verify after extraction', '“Extract here” into a subfolder next to the archive'] },
+      { id: 'create', title: 'Create', items: ['ZIP, 7z, TAR', 'Level, method, dictionary size, solid (7z)', 'Split into KB/MB/GB volumes', 'Presets: Normal, Maximum, Fast, Store', 'Add/delete items in an existing archive'] },
+      { id: 'security', title: 'Security', items: ['AES-256 passwords, file-name encryption with 7z', 'Passwords are never written to disk or logs', 'Blocks malicious paths (../, absolute paths, Windows device names)', 'The 7-Zip engine runs in a separate, hash-pinned process', 'Keeps the “downloaded from the Internet” mark (Mark-of-the-Web) on extracted files'] },
+      { id: 'progress', title: 'Progress', items: ['Real byte-based %, speed, time left', 'Real pause — no reads/writes, no CPU', 'Background mode with taskbar progress', 'Instant cancel, result screen with Open folder'] },
+      { id: 'windows', title: 'Windows integration', items: ['Windows 11 and Windows 10 right-click menus, cascaded or flat', 'File associations, double-click to open', 'Single instance', 'DPI 100–200%, High Contrast, screen readers'] },
+      { id: 'personal', title: 'Personalize', items: ['Light / Dark / System', '9 accent colors', 'Choose columns, history limit', 'Vietnamese and English'] },
+      { id: 'updates', title: 'Updates', items: ['Microsoft Store build: updated by the Store', 'Direct download: checks at most once a day, can be turned off', 'Release manifest signed with Ed25519', 'Stable and Beta channels'] },
+      { id: 'cli', title: 'Command line', items: ['genzip <file> — open an archive', 'genzip x / e — extract', 'genzip a [--quick zip|7z] — create', 'genzip t — test', 'genzip --version'] },
+    ] as Group[],
+  },
+}[lang];
+---
+
+<Base title={t('nav.features')}>
+  <section class="section">
+    <div class="container">
+      <header class="page-head">
+        <h1>{c.title}</h1>
+        <p class="muted">{c.lead}</p>
+      </header>
+
+      <div class="layout">
+        <nav class="toc" aria-label={t('nav.features')}>
+          {c.groups.map((g) => <a href={`#${g.id}`}>{g.title}</a>)}
+          <a href="#soon">{c.soonTitle}</a>
+        </nav>
+
+        <div class="groups">
+          <div class="callout callout-note">{c.noRar}</div>
+          {
+            c.groups.map((g) => (
+              <section id={g.id} class="card group">
+                <h2>{g.title}</h2>
+                <ul>
+                  {g.items.map((item) => (
+                    <li>{item}</li>
+                  ))}
+                </ul>
+              </section>
+            ))
+          }
+          <section id="soon" class="card group">
+            <h2>{c.soonTitle}</h2>
+            <div class="soon">{c.soon.map((s) => <span class="chip chip-soon">{s}</span>)}</div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .page-head {
+    max-width: 760px;
+    margin-bottom: 40px;
+  }
+  .layout {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+  .toc {
+    position: sticky;
+    top: 88px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .toc a {
+    color: var(--text-muted);
+    padding: 6px 12px;
+    border-left: 2px solid var(--border);
+  }
+  .toc a:hover {
+    color: var(--primary);
+    border-color: var(--primary);
+    text-decoration: none;
+  }
+  .groups {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .group {
+    scroll-margin-top: 88px;
+  }
+  .group h2 {
+    font-size: 1.35rem;
+  }
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 24px;
+  }
+  li {
+    position: relative;
+    padding-left: 26px;
+  }
+  li::before {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 0.45em;
+    width: 12px;
+    height: 7px;
+    border-left: 2px solid var(--primary);
+    border-bottom: 2px solid var(--primary);
+    transform: rotate(-45deg);
+  }
+  .soon {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  @media (max-width: 900px) {
+    .layout {
+      grid-template-columns: 1fr;
+    }
+    .toc {
+      display: none;
+    }
+    ul {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

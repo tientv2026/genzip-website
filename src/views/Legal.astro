@@ -1,0 +1,30 @@
+---
+// Trang pháp lý / changelog: nội dung lấy từ src/content/legal (đồng bộ từ repo app).
+import { getCollection, render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { getLangFromUrl } from '../i18n/ui';
+
+interface Props {
+  doc: 'terms' | 'privacy' | 'changelog' | 'licenses';
+}
+
+const { doc } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+// changelog chỉ có tiếng Việt, licenses chỉ có tiếng Anh: rơi về bản còn lại.
+const all = await getCollection('legal');
+const find = (l: string) => all.find((e) => e.id === `${l}/${doc}`);
+const entry = find(lang) ?? find(lang === 'vi' ? 'en' : 'vi');
+if (!entry) {
+  throw new Error(`Thiếu nội dung legal/${lang}/${doc}. Chạy: npm run sync`);
+}
+const { Content } = await render(entry);
+---
+
+<Base title={entry.data.title}>
+  <section class="section">
+    <article class="container prose">
+      <h1>{entry.data.title}</h1>
+      <Content />
+    </article>
+  </section>
+</Base>

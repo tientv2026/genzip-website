@@ -1,0 +1,275 @@
+---
+import Base from '../layouts/Base.astro';
+import Screenshot from '../components/Screenshot.astro';
+import { getLangFromUrl, localePath, useTranslations } from '../i18n/ui';
+import { formats, storeUrl } from '../data/product';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const p = (path: string) => localePath(path, lang);
+
+const c = {
+  vi: {
+    title: 'Nén và giải nén nhanh, gọn, an toàn.',
+    lead: 'Trình nén miễn phí cho Windows 10/11, chạy trên engine 7-Zip chính thức. Mở RAR, ZIP, 7z, TAR… Không quảng cáo, không thu thập dữ liệu.',
+    meta: 'Windows 10/11 · 64-bit · Miễn phí',
+    opens: 'Mở được',
+    creates: 'Tạo được',
+    shotAlt: 'Cửa sổ GenZip đang mở một tệp ZIP',
+    benefitsTitle: 'Gọn như một tiện ích, mạnh như 7-Zip',
+    benefits: [
+      { icon: 'bolt', title: 'Nhanh', text: 'Engine 7-Zip chính thức, nén đa luồng. Tạm dừng thật, chạy nền, huỷ tức thì.' },
+      { icon: 'shield', title: 'An toàn', text: 'Chặn đường dẫn độc hại khi giải nén, engine chạy trong tiến trình riêng, mật khẩu không bao giờ ghi xuống đĩa.' },
+      { icon: 'hand', title: 'Quen tay', text: 'Thao tác quen thuộc, menu chuột phải Windows 11, kéo-thả, giao diện tiếng Việt.' },
+    ],
+    rows: [
+      { shot: 'main', title: 'Xem mọi tệp nén', text: 'Duyệt thư mục, tìm kiếm, lọc theo Tài liệu, Ảnh, Video… Xem tỉ lệ nén, số tệp và trạng thái mã hoá ngay đầu trang.' },
+      { shot: 'extract', title: 'Giải nén đúng ý', text: 'Giải nén tất cả hoặc mục đã chọn, chọn cách xử lý tệp trùng, tự kiểm tra sau khi xong. Hoặc chuột phải → “Giải nén tại đây”.' },
+      { shot: 'create', title: 'Tạo ZIP, 7z với preset', text: 'Chọn Thông thường, Tối đa, Nhanh hay Lưu trữ. Chia volume, đặt mật khẩu AES-256, mã hoá cả tên tệp với 7z.' },
+    ],
+    privacy: ['0 tài khoản', '0 quảng cáo', '0 theo dõi'],
+    privacyText: 'GenZip chạy hoàn toàn trên máy bạn. Không gửi tệp, tên tệp hay thông tin sử dụng đi đâu cả.',
+    privacyLink: 'Đọc chính sách quyền riêng tư',
+    ctaTitle: 'Sẵn sàng dùng thử GenZip?',
+  },
+  en: {
+    title: 'Compress and extract. Fast, clean, safe.',
+    lead: 'A free archive manager for Windows 10/11, powered by the official 7-Zip engine. Opens RAR, ZIP, 7z, TAR and more. No ads. No tracking.',
+    meta: 'Windows 10/11 · 64-bit · Free',
+    opens: 'Opens',
+    creates: 'Creates',
+    shotAlt: 'GenZip window with a ZIP archive open',
+    benefitsTitle: 'Light as a utility, strong as 7-Zip',
+    benefits: [
+      { icon: 'bolt', title: 'Fast', text: 'Official 7-Zip engine, multi-threaded compression. Real pause, background mode, instant cancel.' },
+      { icon: 'shield', title: 'Safe', text: 'Blocks malicious paths on extraction, runs the engine in a separate process, never writes passwords to disk.' },
+      { icon: 'hand', title: 'Familiar', text: 'The workflow you know, the Windows 11 right-click menu, drag & drop.' },
+    ],
+    rows: [
+      { shot: 'main', title: 'Browse any archive', text: 'Navigate folders, search, filter by Documents, Images, Video… See ratio, file count and encryption at a glance.' },
+      { shot: 'extract', title: 'Extract your way', text: 'Extract everything or just the selection, choose how to handle existing files, verify afterwards. Or right-click → “Extract here”.' },
+      { shot: 'create', title: 'Create ZIP or 7z with presets', text: 'Pick Normal, Maximum, Fast or Store. Split into volumes, protect with AES-256, encrypt file names with 7z.' },
+    ],
+    privacy: ['0 accounts', '0 ads', '0 tracking'],
+    privacyText: 'GenZip runs entirely on your PC. Your files, file names and usage never leave it.',
+    privacyLink: 'Read the privacy policy',
+    ctaTitle: 'Ready to try GenZip?',
+  },
+}[lang];
+
+const icons: Record<string, string> = {
+  bolt: 'M13 2 4 14h7l-1 8 9-12h-7z',
+  shield: 'M12 3 4 6v6c0 4.5 3.4 8.3 8 9 4.6-.7 8-4.5 8-9V6zM9 12l2 2 4-4',
+  hand: 'M8 13V5.5a1.5 1.5 0 0 1 3 0V12m0-1.5V4a1.5 1.5 0 0 1 3 0v7m0-5.5a1.5 1.5 0 0 1 3 0V14a7 7 0 0 1-7 7h-.5A6.5 6.5 0 0 1 5 16.5L3.6 13a1.5 1.5 0 0 1 2.6-1.4L8 14',
+};
+---
+
+<Base title="GenZip">
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <h1>{c.title}</h1>
+        <p class="lead muted">{c.lead}</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href={storeUrl}>{t('cta.store')}</a>
+          <a class="btn btn-outline" href={p('/download')}>{t('cta.installer')}</a>
+        </div>
+        <p class="meta muted">{c.meta}</p>
+      </div>
+      <div class="hero-shot">
+        <div class="glow" aria-hidden="true"></div>
+        <Screenshot name="main" alt={c.shotAlt} />
+      </div>
+    </div>
+  </section>
+
+  <section class="formats">
+    <div class="container formats-row">
+      <div>
+        <span class="label">{c.opens}</span>
+        {formats.read.map((f) => <span class="chip">{f}</span>)}
+      </div>
+      <div>
+        <span class="label">{c.creates}</span>
+        {formats.create.map((f) => <span class="chip">{f}</span>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">{c.benefitsTitle}</h2>
+      <div class="benefits">
+        {
+          c.benefits.map((b) => (
+            <div class="card benefit">
+              <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true">
+                <path d={icons[b.icon]} fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              <h3>{b.title}</h3>
+              <p class="muted">{b.text}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  {
+    c.rows.map((row, i) => (
+      <section class="section row-section">
+        <div class:list={['container', 'feature-row', { reverse: i % 2 === 1 }]}>
+          <div class="feature-copy">
+            <h2>{row.title}</h2>
+            <p class="muted">{row.text}</p>
+            <a href={p('/features')}>{t('nav.features')} →</a>
+          </div>
+          <Screenshot name={row.shot as 'main' | 'extract' | 'create'} alt={row.title} />
+        </div>
+      </section>
+    ))
+  }
+
+  <section class="section">
+    <div class="container privacy card">
+      <div class="zeros">{c.privacy.map((z) => <strong>{z}</strong>)}</div>
+      <p class="muted">{c.privacyText}</p>
+      <a href={p('/privacy')}>{c.privacyLink} →</a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="cta-band">
+        <h2>{c.ctaTitle}</h2>
+        <a class="btn cta-btn" href={p('/download')}>{t('cta.download')}</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero {
+    padding: 64px 0 40px;
+    overflow: hidden;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 5fr 7fr;
+    gap: 48px;
+    align-items: center;
+  }
+  .lead {
+    font-size: 1.15rem;
+    max-width: 520px;
+  }
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 28px 0 12px;
+  }
+  .meta {
+    font-size: 0.9rem;
+  }
+  .hero-shot {
+    position: relative;
+  }
+  .glow {
+    position: absolute;
+    inset: 10% -5% -5% 10%;
+    background: var(--brand-gradient);
+    filter: blur(80px);
+    opacity: 0.18;
+    z-index: -1;
+  }
+  :global(:root[data-theme='dark']) .glow {
+    opacity: 0.3;
+  }
+  .formats {
+    border-block: 1px solid var(--border);
+    background: var(--surface);
+  }
+  .formats-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px 40px;
+    padding-block: 20px;
+  }
+  .formats-row > div {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+  .label {
+    font-weight: 600;
+    margin-right: 4px;
+  }
+  .benefits {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .benefit svg {
+    color: var(--primary);
+    margin-bottom: 12px;
+  }
+  .row-section {
+    padding-block: 48px;
+  }
+  .feature-row {
+    display: grid;
+    grid-template-columns: 4fr 7fr;
+    gap: 56px;
+    align-items: center;
+  }
+  .feature-row.reverse {
+    grid-template-columns: 7fr 4fr;
+  }
+  .feature-row.reverse .feature-copy {
+    order: 2;
+  }
+  .privacy {
+    text-align: center;
+    padding: 48px 24px;
+  }
+  .zeros {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px 48px;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+  .cta-band {
+    background: var(--brand-gradient);
+    color: #fff;
+    border-radius: var(--radius-lg);
+    padding: 56px 24px;
+    text-align: center;
+  }
+  .cta-btn {
+    background: #fff;
+    color: var(--brand-purple);
+    margin-top: 8px;
+  }
+  .cta-btn:hover {
+    background: #f3eaff;
+  }
+  @media (max-width: 900px) {
+    .hero-grid,
+    .feature-row,
+    .feature-row.reverse {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+    .feature-row.reverse .feature-copy {
+      order: 0;
+    }
+    .benefits {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

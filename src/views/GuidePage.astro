@@ -1,0 +1,137 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { getLangFromUrl, localePath, useTranslations } from '../i18n/ui';
+
+interface Props {
+  entry: CollectionEntry<'guide'>;
+}
+
+const { entry } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const docs = (await getCollection('guide', (e) => e.id.startsWith(`${lang}/`))).sort((a, b) => a.data.order - b.data.order);
+const href = (e: CollectionEntry<'guide'>) => localePath(`/guide/${e.id.split('/')[1]}`, lang);
+const index = docs.findIndex((d) => d.id === entry.id);
+const prev = docs[index - 1];
+const next = docs[index + 1];
+const { Content, headings } = await render(entry);
+const toc = headings.filter((h) => h.depth === 2);
+const labels = lang === 'vi' ? { prev: 'Bài trước', next: 'Bài tiếp', onPage: 'Trong bài này' } : { prev: 'Previous', next: 'Next', onPage: 'On this page' };
+---
+
+<Base title={entry.data.title} description={entry.data.description}>
+  <div class="container docs">
+    <nav class="side" aria-label={t('nav.guide')}>
+      <a class="side-title" href={localePath('/guide', lang)}>{t('nav.guide')}</a>
+      {docs.map((d) => <a href={href(d)} aria-current={d.id === entry.id ? 'page' : undefined}>{d.data.title}</a>)}
+    </nav>
+
+    <article class="prose">
+      <p class="crumb muted"><a href={localePath('/guide', lang)}>{t('nav.guide')}</a> / {entry.data.title}</p>
+      <h1>{entry.data.title}</h1>
+      <Content />
+      <div class="pager">
+        {prev ? <a class="card" href={href(prev)}><span class="muted">← {labels.prev}</span>{prev.data.title}</a> : <span />}
+        {next && <a class="card next" href={href(next)}><span class="muted">{labels.next} →</span>{next.data.title}</a>}
+      </div>
+    </article>
+
+    {
+      toc.length > 1 && (
+        <aside class="toc">
+          <strong>{labels.onPage}</strong>
+          {toc.map((h) => <a href={`#${h.slug}`}>{h.text}</a>)}
+        </aside>
+      )
+    }
+  </div>
+</Base>
+
+<style>
+  .docs {
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr) 200px;
+    gap: 40px;
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+  .side,
+  .toc {
+    position: sticky;
+    top: 88px;
+    align-self: start;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: 0.95rem;
+  }
+  .side-title {
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .side a:not(.side-title) {
+    color: var(--text-muted);
+    padding: 6px 12px;
+    border-left: 2px solid var(--border);
+  }
+  .side a[aria-current='page'] {
+    color: var(--primary);
+    border-color: var(--primary);
+    background: var(--accent-soft);
+  }
+  .toc a {
+    color: var(--text-muted);
+    padding: 4px 0;
+  }
+  .toc strong {
+    margin-bottom: 8px;
+  }
+  .crumb {
+    font-size: 0.9rem;
+  }
+  .pager {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 48px;
+  }
+  .pager a {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    color: var(--text);
+    font-weight: 600;
+    text-decoration: none;
+    padding: 16px 20px;
+  }
+  .pager a:hover {
+    border-color: var(--primary);
+  }
+  .pager span {
+    font-weight: 400;
+    font-size: 0.85rem;
+  }
+  .next {
+    text-align: right;
+  }
+  @media (max-width: 1100px) {
+    .docs {
+      grid-template-columns: 200px minmax(0, 1fr);
+    }
+    .toc {
+      display: none;
+    }
+  }
+  @media (max-width: 768px) {
+    .docs {
+      grid-template-columns: 1fr;
+    }
+    .side {
+      position: static;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 16px;
+    }
+  }
+</style>
