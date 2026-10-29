@@ -3,28 +3,42 @@
   --primary: #1673e6;
   --primary-hover: #1262c4;
   --on-primary: #ffffff;
-  --canvas: #fafcff;
+  --canvas: #ffffff;
   --surface: #ffffff;
-  --subtle: #eff5fc;
-  --border: #d9e2ec;
+  --subtle: #f5f8fc;
+  --border: #dfe8f3;
   --text: #111936;
   --text-muted: #4e6078;
   --accent-soft: #e8f1fd;
   --accent-soft-text: #125cb8;
+  --band: #f0f7ff;
+  --hero-gradient: linear-gradient(120deg, var(--canvas) 15%, var(--band) 100%);
+  --wallpaper: #dcefff;
+  --wallpaper-wave: #87c9ff;
+  --accent-blue: #1673e6;
+  --accent-indigo: #4261ed;
+  --accent-purple: #9b3cda;
+  --accent-pink: #e83eaa;
+  --accent-red: #e74049;
+  --accent-orange: #f87532;
+  --accent-amber: #f5ad29;
+  --accent-green: #329b7a;
+  --accent-slate: #64748b;
   --success: #238a4b;
   --warning: #b76a00;
   --error: #c83a42;
   /* Màu thương hiệu từ logo — chỉ dùng làm điểm nhấn. */
   --brand-magenta: #e0168c;
   --brand-purple: #7a2bd6;
+  --brand-link: #7a2bd6;
   --brand-gradient: linear-gradient(135deg, var(--brand-magenta), var(--brand-purple));
 
-  --radius-sm: 6px;
+  --radius-sm: 8px;
   --radius: 10px;
   --radius-lg: 16px;
   --shadow: 0 1px 2px rgb(17 25 54 / 6%), 0 8px 24px rgb(17 25 54 / 8%);
   --shadow-lg: 0 24px 64px rgb(17 25 54 / 16%);
-  --container: 1200px;
+  --container: 1240px;
   --font: 'Segoe UI Variable Text', 'Segoe UI', Inter, system-ui, -apple-system, sans-serif;
   --font-display: 'Segoe UI Variable Display', 'Segoe UI', Inter, system-ui, sans-serif;
   --font-mono: 'Cascadia Code', Consolas, ui-monospace, monospace;
@@ -32,7 +46,9 @@
 }
 
 :root[data-theme='dark'] {
-  --primary-hover: #3a8bee;
+  --primary: #6aafff;
+  --primary-hover: #8fc3ff;
+  --on-primary: #0c213d;
   --canvas: #141b26;
   --surface: #1d2938;
   --subtle: #1a2a3b;
@@ -41,6 +57,11 @@
   --text-muted: #becddf;
   --accent-soft: #1b3655;
   --accent-soft-text: #73abf0;
+  --band: #192b40;
+  --hero-gradient: linear-gradient(120deg, var(--canvas) 15%, var(--band) 100%);
+  --wallpaper: #183b60;
+  --wallpaper-wave: #245d94;
+  --brand-link: #c79bff;
   --shadow: 0 1px 2px rgb(0 0 0 / 30%), 0 8px 24px rgb(0 0 0 / 30%);
   --shadow-lg: 0 24px 64px rgb(0 0 0 / 50%);
   color-scheme: dark;
@@ -55,6 +76,11 @@
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition: none !important; }
 }
 
 body {
@@ -86,6 +112,7 @@ p { margin: 0 0 1em; }
 a { color: var(--primary); text-decoration: none; }
 a:hover { text-decoration: underline; }
 img { max-width: 100%; height: auto; display: block; }
+svg { flex-shrink: 0; vertical-align: middle; }
 code, pre { font-family: var(--font-mono); font-size: 0.9em; }
 :not(pre) > code {
   background: var(--subtle);
@@ -116,10 +143,34 @@ pre {
   .container { padding: 0 32px; }
 }
 
-.section { padding: 72px 0; }
+/* .section : khoảng cách dọc dùng chung cho các khối nội dung. */
+.section { padding: 56px 0; }
 .section-title { text-align: center; max-width: 720px; margin: 0 auto 40px; }
 .muted { color: var(--text-muted); }
 
+/* .eyebrow : nhãn xanh nhỏ phía trên tiêu đề. */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 13px;
+  margin-bottom: 16px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent-soft-text);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+/* .page-hero : phần mở đầu trang con với nền xanh dịu. */
+.page-hero { padding: 64px 0 56px; background: var(--hero-gradient); border-bottom: 1px solid var(--border); }
+.page-hero h1 { max-width: 900px; }
+.page-hero .lead { max-width: 740px; margin: 16px 0 0; font-size: 1.125rem; color: var(--text-muted); }
+/* .band : dải nền xanh nhạt trải hết chiều ngang. */
+.band { background: var(--band); }
+
+/* .btn / .btn-primary / .btn-outline : nút cơ bản, nút xanh và nút có viền. */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -139,13 +190,60 @@ pre {
 .btn-primary:hover { background: var(--primary-hover); }
 .btn-outline { background: var(--surface); color: var(--text); border-color: var(--border); }
 .btn-outline:hover { border-color: var(--primary); }
+/* .btn-sm / .btn-lg : kích thước nút nhỏ / lớn, vẫn đủ vùng bấm. */
+.btn-sm { min-height: 40px; padding: 0 16px; font-size: 0.875rem; }
+.btn-lg { min-height: 54px; padding: 12px 22px; }
+/* .pill-btn : liên kết bo tròn có biểu tượng và đường viền nhẹ. */
+.pill-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 10px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--band);
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+.pill-btn svg { color: var(--primary); }
+.pill-btn:hover { border-color: var(--primary); text-decoration: none; }
 
+/* .card : thẻ nội dung có viền mảnh và góc bo dùng chung. */
 .card {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 24px;
 }
+/* .card-raised : thẻ có bóng đổ mềm cho nội dung nổi bật. */
+.card-raised { box-shadow: var(--shadow); }
+/* .card-soft : thẻ có nền xanh dịu. */
+.card-soft { background: var(--band); border-color: transparent; }
+/* .card-interactive : thẻ liên kết có phản hồi khi rê chuột hoặc dùng bàn phím. */
+.card-interactive { display: block; color: inherit; transition: border-color 0.15s, box-shadow 0.15s; }
+.card-interactive:hover, .card-interactive:focus-visible { border-color: var(--primary); box-shadow: var(--shadow); text-decoration: none; }
+/* .icon-badge : biểu tượng nét lớn trên nền tròn xanh dịu. */
+.icon-badge {
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 80px;
+  height: 80px;
+  border-radius: 40%;
+  background: var(--band);
+  color: var(--primary);
+}
+.icon-badge svg { width: 42px; height: 42px; }
+/* .faq-item : mục details có chỉ báo cộng / trừ và hỗ trợ bàn phím gốc. */
+.faq-item { border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); }
+.faq-item + .faq-item { margin-top: 8px; }
+.faq-item summary { position: relative; padding: 13px 20px 13px 52px; cursor: pointer; font-weight: 600; list-style: none; }
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::before { content: '+'; position: absolute; left: 16px; top: 14px; width: 22px; height: 22px; border-radius: 50%; background: var(--subtle); color: var(--text-muted); text-align: center; line-height: 21px; }
+.faq-item[open] summary::before { content: '−'; background: var(--primary); color: var(--on-primary); }
+.faq-item > p { padding: 0 20px 16px 52px; margin: 0; color: var(--text-muted); }
 
 .chip {
   display: inline-flex;
@@ -178,3 +276,9 @@ pre {
 .prose table { border-collapse: collapse; width: 100%; display: block; overflow-x: auto; }
 .prose th, .prose td { border: 1px solid var(--border); padding: 8px 12px; text-align: left; }
 .prose img { border-radius: var(--radius); border: 1px solid var(--border); margin: 1rem 0; }
+
+@media (max-width: 600px) {
+  .section { padding: 36px 0; }
+  .page-hero { padding: 40px 0; }
+  .card { padding: 20px; }
+}

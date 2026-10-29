@@ -1,0 +1,21 @@
+---
+interface Props {
+  eyebrow?: string;
+  title: string;
+  lead?: string;
+  align?: 'left' | 'center';
+}
+const { eyebrow, title, lead, align = 'center' } = Astro.props;
+---
+
+<div class:list={['section-heading', { centered: align === 'center' }]}>
+  {eyebrow && <span class="eyebrow">{eyebrow}</span>}
+  <h2>{title}</h2>
+  {lead && <p class="muted">{lead}</p>}
+</div>
+
+<style>
+  .section-heading { margin-bottom: 32px; max-width: 760px; }
+  .centered { text-align: center; margin-inline: auto; }
+  p { margin: 12px 0 0; }
+</style>
