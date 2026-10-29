@@ -1,12 +1,12 @@
 ---
 title: Updates
-description: How GenZip stays up to date.
+description: How to update the Microsoft Store and direct-download builds.
 order: 9
 ---
 
 ## Microsoft Store build
 
-The Microsoft Store updates GenZip. GenZip itself never connects to the network.
+The Microsoft Store updates GenZip. In this build, GenZip itself does not connect to the network.
 
 ## Direct-download build
 

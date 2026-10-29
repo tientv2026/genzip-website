@@ -1,5 +1,5 @@
 ---
-title: Passwords & encryption
+title: Passwords and encryption
 description: Protect archives with AES-256 and encrypt file names.
 order: 5
 ---
@@ -19,5 +19,5 @@ GenZip asks for the password when needed and lets you retry if it is wrong.
 ## Good to know
 
 - GenZip **never** stores passwords on disk or in logs.
-- A forgotten password **cannot be recovered** — GenZip does not crack passwords.
-- Passwords with accented characters work best with **7z**.
+- A forgotten password **cannot be recovered by GenZip** — GenZip does not crack passwords.
+- For passwords with Vietnamese accents, use **7z**. ZIP does not handle accented characters in passwords well.

@@ -1,6 +1,6 @@
 ---
-title: Mật khẩu & mã hoá
-description: Đặt mật khẩu AES-256 và mã hoá tên tệp.
+title: Mật khẩu và mã hóa
+description: Đặt mật khẩu AES-256 và mã hóa tên tệp.
 order: 5
 ---
 
@@ -19,5 +19,5 @@ GenZip hỏi mật khẩu khi cần. Nếu sai, bạn được nhập lại.
 ## Lưu ý
 
 - GenZip **không bao giờ** lưu mật khẩu xuống đĩa hay ghi vào nhật ký.
-- Quên mật khẩu thì **không có cách khôi phục** — GenZip không phá mật khẩu.
+- Nếu quên mật khẩu, bạn **không thể khôi phục bằng GenZip** — GenZip không phá mật khẩu.
 - Mật khẩu có dấu tiếng Việt: hãy dùng định dạng **7z**. Định dạng ZIP không hỗ trợ tốt ký tự có dấu trong mật khẩu.

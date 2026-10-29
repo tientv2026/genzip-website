@@ -1,12 +1,12 @@
 ---
 title: Cập nhật
-description: GenZip cập nhật như thế nào.
+description: Cách cập nhật bản Microsoft Store và bản tải trực tiếp.
 order: 9
 ---
 
 ## Bản Microsoft Store
 
-Microsoft Store tự cập nhật GenZip. GenZip không tự kết nối mạng.
+Microsoft Store tự cập nhật GenZip. Ở bản này, GenZip không tự kết nối mạng.
 
 ## Bản tải trực tiếp
 

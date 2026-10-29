@@ -1,65 +1,166 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
-import { getLangFromUrl, localePath, useTranslations } from '../i18n/ui';
+import Icon from '../components/ui/Icon.astro';
+import PageHero from '../components/ui/PageHero.astro';
+import { getLangFromUrl, localePath } from '../i18n/ui';
 
 const lang = getLangFromUrl(Astro.url);
-const t = useTranslations(lang);
+const c = {
+  vi: {
+    eyebrow: 'HƯỚNG DẪN',
+    title: 'Dùng GenZip, từng bước một.',
+    lead: 'Từ lần cài đặt đầu tiên đến dòng lệnh. Chọn việc bạn muốn làm và bắt đầu với hướng dẫn ngắn gọn, dễ theo dõi.',
+    search: 'Tìm trong hướng dẫn',
+    placeholder: 'Tìm cài đặt, giải nén, mật khẩu…',
+    articles: 'bài hướng dẫn',
+    all: 'Tất cả hướng dẫn',
+    quick: 'Bắt đầu nhanh',
+    read: 'Xem hướng dẫn',
+    step: 'Bài',
+    empty: 'Không tìm thấy bài phù hợp. Thử từ khóa khác hoặc xóa ô tìm kiếm để xem tất cả hướng dẫn.',
+  },
+  en: {
+    eyebrow: 'GUIDE',
+    title: 'GenZip, one step at a time.',
+    lead: 'From your first installation to the command line. Pick what you want to do and follow a short, practical guide.',
+    search: 'Search the guide',
+    placeholder: 'Search installation, extraction, passwords…',
+    articles: 'guides',
+    all: 'All guides',
+    quick: 'Quick start',
+    read: 'Read the guide',
+    step: 'Guide',
+    empty: 'No matching guides. Try another search or clear the search box to see all guides.',
+  },
+}[lang];
 const docs = (await getCollection('guide', (e) => e.id.startsWith(`${lang}/`))).sort((a, b) => a.data.order - b.data.order);
-const lead =
-  lang === 'vi'
-    ? 'Từng bước dùng GenZip, từ cài đặt đến dòng lệnh.'
-    : 'Step-by-step help for GenZip, from installation to the command line.';
+const icons: Record<string, string> = {
+  'getting-started': 'download',
+  'open-and-browse': 'folder',
+  extract: 'folder',
+  create: 'file',
+  passwords: 'lock',
+  test: 'check',
+  'context-menu': 'windows',
+  settings: 'gear',
+  updates: 'download',
+  'command-line': 'file',
+};
 ---
 
-<Base title={t('nav.guide')}>
-  <section class="section">
+<Base title={c.eyebrow} description={c.lead}>
+  <PageHero eyebrow={c.eyebrow} title={c.title} lead={c.lead} />
+  <section class="section" aria-labelledby="guide-list-title">
     <div class="container">
-      <header class="section-title">
-        <h1>{t('nav.guide')}</h1>
-        <p class="muted">{lead}</p>
-      </header>
-      <div class="grid">
-        {
-          docs.map((d, i) => (
-            <a class="card tile" href={localePath(`/guide/${d.id.split('/')[1]}`, lang)}>
-              <span class="num">{String(i + 1).padStart(2, '0')}</span>
-              <h2>{d.data.title}</h2>
-              {d.data.description && <p class="muted">{d.data.description}</p>}
-            </a>
-          ))
-        }
+      <div class="guide-toolbar">
+        <div>
+          <h2 id="guide-list-title">{c.all}</h2>
+          <p class="guide-count" role="status" aria-live="polite" aria-atomic="true">
+            <span data-guide-count>{docs.length}</span> {c.articles}
+          </p>
+        </div>
+        <div class="search" data-guide-search hidden>
+          <label for="guide-search">{c.search}</label>
+          <div class="search-field">
+            <Icon name="search" size={20} />
+            <input id="guide-search" type="search" placeholder={c.placeholder} aria-controls="guide-list" autocomplete="off" />
+          </div>
+        </div>
       </div>
+      <ul class="guide-grid" id="guide-list" role="list">
+        {
+          docs.map((doc) => {
+            const slug = doc.id.split('/')[1];
+            const quick = slug === 'getting-started';
+            return (
+              <li class:list={['guide-item', { featured: quick }]} data-guide-card data-search={`${doc.data.title} ${doc.data.description ?? ''}`}>
+                <a class="card card-interactive guide-card" href={localePath(`/guide/${slug}`, lang)}>
+                  <span class="guide-icon"><Icon name={icons[slug] ?? 'file'} size={28} /></span>
+                  <div class="card-copy">
+                    <div class="card-meta">
+                      <span>{c.step} {String(doc.data.order).padStart(2, '0')}</span>
+                      {quick && <span class="quick-label">{c.quick}</span>}
+                    </div>
+                    <h3>{doc.data.title}</h3>
+                    {doc.data.description && <p>{doc.data.description}</p>}
+                  </div>
+                  <span class="read-link">{c.read}<Icon name="arrow-right" size={18} /></span>
+                </a>
+              </li>
+            );
+          })
+        }
+      </ul>
+      <p class="empty card" data-guide-empty hidden>{c.empty}</p>
     </div>
   </section>
+  <script is:inline>
+    (() => {
+      const search = document.querySelector('[data-guide-search]');
+      const input = document.getElementById('guide-search');
+      const cards = [...document.querySelectorAll('[data-guide-card]')];
+      const count = document.querySelector('[data-guide-count]');
+      const empty = document.querySelector('[data-guide-empty]');
+      if (!search || !input || !count || !empty) return;
+      const normalize = (value) => value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd');
+      const filter = () => {
+        const terms = normalize(input.value).trim().split(/\s+/).filter(Boolean);
+        let visible = 0;
+        cards.forEach((card) => {
+          card.hidden = !terms.every((term) => normalize(card.dataset.search || '').includes(term));
+          if (!card.hidden) visible += 1;
+        });
+        count.textContent = String(visible);
+        empty.hidden = visible !== 0;
+      };
+      input.addEventListener('input', filter);
+      search.hidden = false;
+      filter();
+    })();
+  </script>
 </Base>
 
 <style>
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 20px;
+  .guide-toolbar { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 28px; }
+  .guide-toolbar h2 { font-size: 1.5rem; margin-bottom: 6px; }
+  .guide-count { margin: 0; font-size: 0.9rem; color: var(--text-muted); }
+  .search { width: min(100%, 420px); }
+  .search label { display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: 8px; }
+  .search-field { display: flex; align-items: center; gap: 12px; padding: 0 14px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); color: var(--text-muted); }
+  .search-field:focus-within { border-color: var(--primary); outline: 2px solid var(--primary); outline-offset: 2px; }
+  .search input { min-width: 0; width: 100%; min-height: 48px; border: 0; background: transparent; color: var(--text); font: inherit; }
+  .search input:focus-visible { outline: none; }
+  .search input::placeholder { color: var(--text-muted); opacity: 1; }
+  .guide-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; padding: 0; margin: 0; list-style: none; }
+  .guide-item { min-width: 0; }
+  .guide-card { display: flex; flex-direction: column; align-items: start; gap: 20px; height: 100%; border-radius: var(--radius-lg); }
+  .guide-icon { display: inline-grid; place-items: center; width: 52px; height: 52px; border-radius: var(--radius-lg); color: var(--primary); background: var(--accent-soft); flex-shrink: 0; }
+  .card-copy { min-width: 0; }
+  .card-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 10px; color: var(--text-muted); font-size: 0.8rem; font-weight: 600; }
+  .quick-label { color: var(--accent-soft-text); background: var(--accent-soft); padding: 3px 10px; border-radius: 999px; }
+  .guide-card h3 { font-size: 1.2rem; margin-bottom: 10px; overflow-wrap: anywhere; }
+  .guide-card p { color: var(--text-muted); margin: 0; font-size: 0.95rem; }
+  .read-link { display: inline-flex; align-items: center; gap: 8px; color: var(--primary); font-size: 0.875rem; font-weight: 600; margin-top: auto; }
+  .featured { grid-column: 1 / -1; }
+  .featured .guide-card { flex-direction: row; align-items: center; gap: 24px; background: var(--hero-gradient); border-color: color-mix(in srgb, var(--primary) 30%, var(--border)); box-shadow: var(--shadow); padding: 32px; }
+  .featured .guide-icon { width: 64px; height: 64px; background: var(--surface); }
+  .featured .read-link { margin: 0 0 0 auto; flex-shrink: 0; }
+  .empty { color: var(--text-muted); text-align: center; background: var(--subtle); }
+  [hidden] { display: none !important; }
+  @media (max-width: 1000px) {
+    .guide-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .featured .guide-card { flex-wrap: wrap; }
+    .featured .card-copy { flex: 1; }
+    .featured .read-link { width: 100%; margin-left: 0; }
   }
-  .tile {
-    color: var(--text);
-    text-decoration: none !important;
-    transition: border-color 0.15s, box-shadow 0.15s;
-  }
-  .tile:hover {
-    border-color: var(--primary);
-    box-shadow: var(--shadow);
-  }
-  .num {
-    color: var(--primary);
-    font-weight: 600;
-    font-size: 0.9rem;
-  }
-  .tile h2 {
-    font-size: 1.15rem;
-    margin: 6px 0;
-  }
-  .tile p {
-    margin: 0;
-    font-size: 0.95rem;
+  @media (max-width: 600px) {
+    .guide-toolbar { flex-direction: column; align-items: stretch; }
+    .search { width: 100%; }
+    .guide-grid { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+    .guide-card { gap: 16px; }
+    .featured .guide-card { padding: 24px; gap: 16px; }
+    .featured .guide-icon { width: 48px; height: 48px; }
+    .featured .read-link { margin-left: 0; }
   }
 </style>

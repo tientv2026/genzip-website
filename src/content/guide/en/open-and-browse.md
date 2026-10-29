@@ -1,5 +1,5 @@
 ---
-title: Open & browse
+title: Open and browse
 description: Navigate folders, search, filter by type and select multiple items.
 order: 2
 ---
@@ -12,7 +12,11 @@ order: 2
 
 GenZip opens ZIP, 7z, RAR4/RAR5, TAR, GZ, BZ2, XZ, ZST, ISO, CAB, WIM and split archives such as `.7z.001`. If a part is missing, GenZip tells you which one.
 
-![GenZip window](/screenshots/main-en-light.png)
+<figure>
+  <img class="shot-light" src="/screenshots/main-en-light.png" alt="GenZip window displaying the contents of an archive" width="1100" height="680" loading="lazy" decoding="async" />
+  <img class="shot-dark" src="/screenshots/main-en-dark.png" alt="GenZip window displaying the contents of an archive" width="1100" height="680" loading="lazy" decoding="async" />
+  <figcaption>Browse the contents of an archive in GenZip.</figcaption>
+</figure>
 
 ## Browse and search
 
@@ -27,4 +31,4 @@ Hold **Ctrl** to pick items, **Shift** to pick a range. The status bar shows how
 
 ## Open a file inside
 
-Double-click a file to open it with its default app. For runnable files (exe, scripts…) GenZip asks first.
+Double-click a file to open it with its default app. For executable files (exe, scripts…), GenZip asks before opening it.

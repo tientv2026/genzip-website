@@ -11,7 +11,10 @@ order: 6
 
 ## Cách kiểm tra
 
-Mở tệp nén rồi bấm **Kiểm tra** trên thanh công cụ. GenZip đọc toàn bộ dữ liệu và so mã kiểm tra (CRC) của từng tệp, không ghi gì ra đĩa.
+1. Mở tệp nén cần kiểm tra.
+2. Bấm **Kiểm tra** trên thanh công cụ.
+
+GenZip đọc toàn bộ dữ liệu và đối chiếu mã kiểm tra (CRC) của từng tệp, không ghi dữ liệu giải nén ra đĩa.
 
 ## Đọc kết quả
 

@@ -1,0 +1,38 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { localePath, type Lang } from '../../i18n/ui';
+
+interface Props {
+  docs: CollectionEntry<'guide'>[];
+  current: string;
+  lang: Lang;
+}
+const { docs, current, lang } = Astro.props;
+const c = {
+  vi: { title: 'Hướng dẫn sử dụng', all: 'Tất cả hướng dẫn' },
+  en: { title: 'User guide', all: 'All guides' },
+}[lang];
+---
+
+<nav aria-label={c.title}>
+  <a class="all-guides" href={localePath('/guide', lang)}>{c.all}</a>
+  <ol role="list">
+    {docs.map((doc) => (
+      <li>
+        <a href={localePath(`/guide/${doc.id.split('/')[1]}`, lang)} aria-current={doc.id === current ? 'page' : undefined}>
+          <span class="number" aria-hidden="true">{String(doc.data.order).padStart(2, '0')}</span>
+          <span>{doc.data.title}</span>
+        </a>
+      </li>
+    ))}
+  </ol>
+</nav>
+
+<style>
+  .all-guides { display: block; color: var(--text); font-weight: 600; margin: 0 10px 14px; font-size: 0.9rem; }
+  ol { list-style: none; padding: 0; margin: 0; display: grid; gap: 4px; }
+  li a { display: flex; align-items: baseline; gap: 10px; padding: 10px; border: 1px solid transparent; border-radius: var(--radius-sm); color: var(--text-muted); font-size: 0.875rem; line-height: 1.5; text-decoration: none; }
+  li a:hover { background: var(--subtle); color: var(--text); }
+  li a[aria-current='page'] { background: var(--accent-soft); color: var(--accent-soft-text); border-color: color-mix(in srgb, var(--primary) 25%, var(--border)); font-weight: 600; }
+  .number { flex-shrink: 0; font-size: 0.75rem; font-variant-numeric: tabular-nums; }
+</style>

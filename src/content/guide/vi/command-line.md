@@ -4,6 +4,8 @@ description: Gọi GenZip từ PowerShell, script hoặc lối tắt.
 order: 10
 ---
 
+## Các lệnh
+
 | Lệnh | Tác dụng |
 |---|---|
 | `genzip` | Mở Home |
@@ -23,4 +25,4 @@ genzip x "D:\Tài liệu\Bản sao.7z" --to "D:\Khôi phục"
 genzip a --quick 7z "D:\Tài liệu" "D:\Ảnh"
 ```
 
-Đường dẫn có dấu cách hoặc tiếng Việt cần đặt trong dấu ngoặc kép.
+<div class="callout"><strong>Mẹo</strong>Đặt đường dẫn có dấu cách hoặc ký tự tiếng Việt trong dấu ngoặc kép.</div>

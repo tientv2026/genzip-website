@@ -1,5 +1,5 @@
 ---
-title: Right-click menu & file associations
+title: Right-click menu and file associations
 description: Use GenZip right inside Explorer on Windows 10/11.
 order: 7
 ---
@@ -23,8 +23,8 @@ On regular files and folders:
 
 ## Windows 11
 
-GenZip appears in the new Windows 11 context menu — no need for "Show more options".
+GenZip appears in the new Windows 11 context menu — no need to click **Show more options**.
 
 ## File associations
 
-In **Integration**, pick the formats GenZip should open. Windows may ask you to confirm the default app. GenZip only writes to your own Windows account.
+In **Integration**, pick the formats GenZip should open. Windows may ask you to confirm the default app; open the Windows default app settings to select GenZip. GenZip only writes to your own Windows account and does not affect other users.

@@ -4,9 +4,13 @@ description: Tám trang cài đặt và ý nghĩa của từng trang.
 order: 8
 ---
 
-Mở **Cài đặt…** từ thanh công cụ hoặc menu **Tuỳ chọn**. Thay đổi có hiệu lực khi bấm **Áp dụng** hoặc **OK**; **Đặt lại mặc định** đưa về như lúc mới cài.
+## Mở và áp dụng cài đặt
 
-| Trang | Có gì |
+Mở **Cài đặt…** từ thanh công cụ hoặc menu **Tuỳ chọn**. Thay đổi có hiệu lực khi bấm **Áp dụng** hoặc **OK**; **Đặt lại mặc định** khôi phục các giá trị ban đầu.
+
+## Các trang cài đặt
+
+| Trang | Nội dung |
 |---|---|
 | **Chung** | Ngôn ngữ, lịch sử tệp gần đây |
 | **Giao diện** | Sáng / Tối / Theo hệ thống, 9 màu nhấn, các cột trong bảng |

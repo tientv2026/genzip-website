@@ -9,9 +9,12 @@ order: 6
 - Archives downloaded from the Internet, especially large or split ones.
 - Before deleting originals after making a backup.
 
-## How
+## How to test
 
-Open the archive and click **Test** on the toolbar. GenZip reads all data and checks each file's CRC without writing anything to disk.
+1. Open the archive you want to test.
+2. Click **Test** on the toolbar.
+
+GenZip reads all data and checks each file's CRC without writing extracted data to disk.
 
 ## Results
 
