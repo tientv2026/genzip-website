@@ -22,5 +22,5 @@ export const support = {
   paypal: 'https://paypal.me/tientv',
   bank: { name: 'ACB', bin: '970416', holder: 'TRUONG VIET TIEN', account: '168798149' },
   /** Mã VietQR tĩnh (NAPAS, không số tiền), sinh cùng thuật toán với app. */
-  qr: '/support/vietqr.svg',
+  qr: '/qr/vietqr.svg',
 };
