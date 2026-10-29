@@ -72,7 +72,7 @@ for (const [dir, names] of Object.entries(shots)) {
 // Hộp thoại mới nhất: tên trên web -> ảnh <gốc>_<lang>_<theme>.png trong repo app.
 const dialogs = {
   main: 'docs/evidence/preview-pane/main-preview-text',
-  create: 'docs/evidence/ui-chg-005/create-window',
+  create: 'docs/evidence/website-create/create-window',
   extract: 'docs/evidence/fix-003/extract',
   'test-result': 'docs/evidence/fix-003/test-result',
   conflict: 'docs/evidence/fix-003/conflict',
@@ -86,7 +86,6 @@ for (const lang of ['vi', 'en']) {
     for (const [name, from] of Object.entries(dialogs)) {
       copy(`${from}_${lang}_${theme}.png`, `public/screenshots/${name}-${lang}-${theme}.png`);
     }
-    copy(`docs/evidence/sfx/sfx_${lang}_${theme}_enabled.png`, `public/screenshots/sfx-${lang}-${theme}.png`);
   }
 }
 

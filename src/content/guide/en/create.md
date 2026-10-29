@@ -15,7 +15,7 @@ From Home, choose **Create archive…**, or use the **Add to archive…** right-
 1. Enter the **File name** and choose an extension in the adjacent box: `.zip`, `.7z`, `.tar` or `.exe` for a self-extracting archive made from 7Z.
 2. Choose **Save to**, using **Browse…** to select a folder.
 3. Select one of the three format cards: **ZIP**, **7Z**, **TAR**.
-4. Choose a **Preset**: **Balanced**, **Maximum compression**, **Fast** or **Store**.
+4. Choose a **Profile**: **General**, **Maximum compression**, **Fast** or **Store**.
 5. Adjust the two columns below if needed, then click **Create archive**. Click **Cancel** to close the dialog.
 
 The defaults are ZIP, compression level 5, Deflate, no splitting and no encryption.
@@ -33,7 +33,7 @@ The defaults are ZIP, compression level 5, Deflate, no splitting and no encrypti
 
 - **Encryption**: ZIP supports ZipCrypto or AES-256; 7Z supports AES-256.
 - Enter the **Password** and **Confirm password**; use the eye buttons or **Show password** to check them.
-- **Hide file names (7Z)**: protects the file name list in a 7Z archive.
+- **Encrypt file names (7Z)**: protects the file name list in a 7Z archive.
 
 ## Comment and verification
 

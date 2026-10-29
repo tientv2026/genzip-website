@@ -10,7 +10,7 @@ In the **Security** column of the **Create archive** dialog:
 
 1. Choose **Encryption**: ZIP offers ZipCrypto or AES-256; 7Z offers AES-256.
 2. Enter the **Password** and **Confirm password**.
-3. For 7Z, enable **Hide file names (7Z)** to protect the file name list as well.
+3. For 7Z, enable **Encrypt file names (7Z)** to protect the file name list as well.
 
 Use the eye buttons or **Show password** to check your input. TAR has no encryption option.
 
