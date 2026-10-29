@@ -5,8 +5,11 @@ export const formats = {
   create: ['ZIP', '7z', 'TAR'],
 };
 
-// TODO(chủ dự án): thay bằng link Store thật khi có Product ID từ Partner Center.
-export const storeUrl = 'https://apps.microsoft.com/';
+// Microsoft Store là kênh phát hành chính thức duy nhất cho người dùng (identity ThtD.GenZip, nhà phát hành "Dạ Trư").
+// Bản beta đang ở chế độ Private audience. Để trống = nút hiện "Sắp có trên Microsoft Store".
+// Khi Store duyệt: điền dạng 'https://apps.microsoft.com/detail/<ProductID>'.
+export const storeUrl = '';
+export const publisher = 'Dạ Trư';
 
 // Khớp crates/genzip-ui/src/support_info.rs trong repo app.
 export const support = {

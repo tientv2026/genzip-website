@@ -5,7 +5,7 @@ source: "THIRD_PARTY_NOTICES.md"
 
 > Phải rà soát điều kiện giấy phép và văn bản thông báo kèm bản phát hành; bảng metadata bên dưới không thay thế văn bản giấy phép gốc.
 
-## 7-Zip (engine — `engine/7z.dll`, phân phối kèm, không sửa đổi)
+## 7-Zip (engine — `engine/7z.dll` và `engine/7z.sfx`, phân phối kèm, không sửa đổi)
 
 - Tác giả: Igor Pavlov — https://www.7-zip.org/
 - Giấy phép: GNU LGPL (phần lớn mã), BSD 3-clause (một số phần), và **hạn chế giấy phép unRAR** cho mã giải nén RAR.
@@ -13,6 +13,8 @@ source: "THIRD_PARTY_NOTICES.md"
 - Mã nguồn tương ứng phiên bản đi kèm (7-Zip 26.05, hash trong `engine/7zip.lock.json`): https://github.com/ip7z/7zip/releases/download/26.05/7z2605-src.7z (trang tải: https://www.7-zip.org/download.html). Tác giả GenZip cung cấp bản sao mã nguồn này theo yêu cầu, qua thông tin liên hệ trong mục Giới thiệu, trong ít nhất 3 năm kể từ lần phát hành cuối.
 - unRAR restriction (tóm tắt, không thay thế văn bản gốc): mã unRAR chỉ được dùng để giải nén RAR; không được dùng để tái tạo thuật toán nén RAR hay phát triển trình nén tương thích RAR. **GenZip không tạo RAR.**
 - GenZip nạp `7z.dll` động và không sửa đổi. Theo LGPL, người dùng được thay DLL bằng bản tự build/sửa: Cài đặt → Nâng cao → "7z.dll tuỳ chỉnh" (mọi bản cài, kể cả Microsoft Store), hoặc với bản cài thường/portable thay `engine/7z.dll` và cập nhật `engine/7zip.lock.json`. EULA của GenZip (mục 4.2) không cấm dịch ngược ở mức cần để gỡ lỗi việc thay thế này.
+
+- Module GUI `7z.sfx` (LGPL, cùng bộ nguồn 7-Zip 26.05 ở trên) lấy từ MSI chính thức, pin SHA-256 trong mục `sfx` của lock. GenZip ghép nguyên bytes module với archive 7z để tạo `.exe`; không chạy tệp sinh ra. Khi phân phối SFX, kèm thông báo LGPL, văn bản giấy phép và quyền tiếp cận mã nguồn tương ứng của 7-Zip. Module có thể được thay trong bản dựng từ source bằng cách cập nhật pin rồi build lại GenZip.
 
 ## Slint (UI toolkit)
 

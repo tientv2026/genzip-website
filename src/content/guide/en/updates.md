@@ -1,17 +1,15 @@
 ---
 title: Updates
-description: How to update the Microsoft Store and direct-download builds.
+description: GenZip is updated through Microsoft Store.
 order: 9
 ---
 
-## Microsoft Store build
+## Updates through Microsoft Store
 
-The Microsoft Store updates GenZip. In this build, GenZip itself does not connect to the network.
+Microsoft Store downloads and installs new GenZip versions. The Store build never connects to the network by itself.
 
-## Direct-download build
+To update right away: open **Microsoft Store → Library** and click **Get updates**.
 
-- With automatic checks on, GenZip checks **at most once a day**.
-- The request carries no machine ID, user name or current version.
-- The release manifest is **signed with Ed25519**; anything with a bad signature is rejected.
-- Click **Check now** in **Settings… → Updates** to check manually.
-- The **Beta** channel gets test builds earlier.
+## What's new
+
+Every version has notes on the [Release notes](/en/changelog) page. In GenZip, the **View release notes** button opens the same page.

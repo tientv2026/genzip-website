@@ -1,16 +1,14 @@
 ---
 title: Cài đặt và lần chạy đầu
-description: Chọn bản phù hợp, cài đặt và bật menu chuột phải.
+description: Cài GenZip từ Microsoft Store và bật menu chuột phải.
 order: 1
 ---
 
-## Chọn bản cài
+## Cài từ Microsoft Store
 
-| Bản | Dành cho |
-|---|---|
-| **Microsoft Store** | Hầu hết người dùng — tự cập nhật, được Microsoft ký số. |
-| **Bộ cài .exe** | Cài cho tài khoản hiện tại, không cần quyền quản trị. |
-| **Portable .zip** | Chạy từ USB hoặc thư mục bất kỳ, không đăng ký menu chuột phải. |
+GenZip phát hành chính thức trên **Microsoft Store**. Mở trang GenZip trên Store, bấm **Tải** (Get) và chờ cài xong. Store sẽ tự cập nhật GenZip về sau; gỡ cài đặt cũng qua Store hoặc **Cài đặt → Ứng dụng** của Windows.
+
+<div class="callout callout-note"><strong>Lưu ý</strong>GenZip không có bộ cài tải tự do. Hãy cẩn thận với các trang khác tự nhận là nơi tải GenZip.</div>
 
 ## Lần chạy đầu
 
@@ -27,5 +25,3 @@ order: 1
 ## Bật menu chuột phải
 
 Vào **Cài đặt… → Tích hợp**, bật **Thêm GenZip vào menu ngữ cảnh** rồi bấm **Áp dụng**. Từ giờ bạn có thể chuột phải vào tệp nén để giải nén, hoặc chuột phải vào tệp/thư mục để nén.
-
-<div class="callout"><strong>Lưu ý</strong>Bản portable không ghi vào registry, nên không có menu chuột phải.</div>

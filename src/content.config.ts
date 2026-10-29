@@ -20,10 +20,11 @@ const legal = defineCollection({
   }),
 });
 
-// Ghi chú phát hành: src/content/releases/<lang>/<version>.md (id: "vi/1.0.0").
+// Ghi chú phát hành: src/content/releases/<lang>/<version>.md (id: "vi/0.9.0-beta.1").
 // Số phiên bản, ngày, link tải nằm ở src/data/releases.ts.
 const releases = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/releases' }),
+  // Giữ nguyên tên tệp làm id (mặc định Astro bỏ dấu chấm: "0.9.0-beta.1" -> "090-beta1").
+  loader: glob({ pattern: '**/*.md', base: './src/content/releases', generateId: ({ entry }) => entry.replace(/\.md$/, '') }),
   schema: z.object({
     title: z.string(),
     /** Một câu tóm tắt hiện trên thẻ phiên bản. */

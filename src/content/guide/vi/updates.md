@@ -1,17 +1,15 @@
 ---
 title: Cập nhật
-description: Cách cập nhật bản Microsoft Store và bản tải trực tiếp.
+description: GenZip được cập nhật qua Microsoft Store.
 order: 9
 ---
 
-## Bản Microsoft Store
+## Cập nhật qua Microsoft Store
 
-Microsoft Store tự cập nhật GenZip. Ở bản này, GenZip không tự kết nối mạng.
+Microsoft Store tự tải và cài phiên bản GenZip mới. Ở bản Store, GenZip không tự kết nối mạng.
 
-## Bản tải trực tiếp
+Muốn cập nhật ngay: mở **Microsoft Store → Thư viện** (Library), bấm **Nhận bản cập nhật** (Get updates).
 
-- Khi bật **Tự động kiểm tra bản mới**, GenZip kiểm tra tối đa **một lần mỗi ngày**.
-- Yêu cầu kiểm tra không gửi mã định danh máy, tên người dùng hay phiên bản đang dùng.
-- Tệp mô tả phiên bản mới có **chữ ký số Ed25519**; tệp sai chữ ký bị từ chối.
-- Bấm **Kiểm tra ngay** trong **Cài đặt… → Cập nhật** để kiểm tra thủ công.
-- Kênh **Beta** nhận bản thử nghiệm sớm hơn.
+## Xem có gì mới
+
+Mỗi phiên bản đều có ghi chú ở trang [Lịch sử phiên bản](/changelog). Trong GenZip, nút **Xem ghi chú phát hành** cũng mở trang này.

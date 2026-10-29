@@ -1,16 +1,14 @@
 ---
 title: Install and first run
-description: Pick the right build, install it and turn on the right-click menu.
+description: Install GenZip from Microsoft Store and turn on the right-click menu.
 order: 1
 ---
 
-## Pick a build
+## Install from Microsoft Store
 
-| Build | Best for |
-|---|---|
-| **Microsoft Store** | Most people — automatic updates, signed by Microsoft. |
-| **Installer .exe** | Installs for the current user, no admin rights needed. |
-| **Portable .zip** | Runs from a USB stick or any folder, no right-click menu. |
+GenZip is officially published on **Microsoft Store**. Open the GenZip page in the Store, click **Get** and wait for it to install. The Store keeps GenZip up to date; uninstall it from the Store or Windows **Settings → Apps**.
+
+<div class="callout callout-note"><strong>Note</strong>There is no free-floating GenZip installer. Be careful with other sites claiming to offer GenZip downloads.</div>
 
 ## First run
 
@@ -27,5 +25,3 @@ order: 1
 ## Turn on the right-click menu
 
 Go to **Settings… → Integration**, enable the GenZip context menu and click **Apply**. You can then right-click an archive to extract it, or right-click files and folders to compress them.
-
-<div class="callout"><strong>Note</strong>The portable build does not write to the registry, so it has no right-click menu.</div>

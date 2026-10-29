@@ -2,8 +2,9 @@
 // Ghi chú phát hành (có gì mới) nằm ở src/content/releases/{vi,en}/<version>.md.
 // Khi phát hành: thêm một mục lên ĐẦU mảng, điền date + downloads, viết ghi chú VI/EN, commit, push.
 //
-// Lưu ý: app tự cập nhật qua feed Velopack có chữ ký (docs/UPDATE_MECHANISM.md ở repo app),
-// KHÔNG đọc file này. Website chỉ hiển thị thông tin và link tải.
+// Lưu ý: người dùng nhận bản cập nhật qua Microsoft Store; bản công ty (hoãn) cập nhật qua repo
+// công khai tientv2026/genzip-releases. Không ai đọc file này để cập nhật — website chỉ hiển thị.
+// `downloads` để trống: website không đặt link tải bộ cài công khai.
 
 export type Channel = 'stable' | 'beta';
 
@@ -27,8 +28,9 @@ export interface Release {
 
 export const releases: Release[] = [
   {
-    version: '1.0.0',
-    channel: 'stable',
+    // Beta trên Microsoft Store (Private audience) — chưa công khai nên chưa có ngày.
+    version: '0.9.0-beta.1',
+    channel: 'beta',
   },
 ];
 

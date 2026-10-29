@@ -14,7 +14,7 @@ const c = {
     badge: 'Dành cho Windows 10 / 11',
     title: 'Nén và giải nén nhanh, gọn,', highlight: 'an toàn.',
     lead: 'Mở RAR, ZIP, 7z và nhiều định dạng khác. Miễn phí, không quảng cáo, không thu thập dữ liệu.',
-    store: 'Tải từ Microsoft Store', installer: 'Tải bộ cài .exe',
+    store: 'Tải từ Microsoft Store', storeSoon: 'Sắp có trên Microsoft Store', installer: 'Xem tính năng',
     meta: 'Windows 10/11 · 64-bit · Miễn phí', shotAlt: 'GenZip đang duyệt nội dung một tệp nén',
     opens: 'Mở tệp', creates: 'Tạo tệp', moreFormats: 'Xem tất cả định dạng',
     rarNote: 'Đọc và giải nén RAR · Không tạo tệp RAR',
@@ -43,14 +43,14 @@ const c = {
     faq: [
       { q: 'GenZip có thực sự miễn phí?', a: 'Có. GenZip miễn phí và không có quảng cáo.' },
       { q: 'GenZip có tạo được tệp RAR không?', a: 'Không. GenZip chỉ đọc và giải nén RAR; bạn có thể tạo tệp ZIP, 7z và TAR.' },
-      { q: 'Tôi nên tải bản cài đặt nào?', a: 'Microsoft Store được khuyên dùng để nhận cập nhật tự động. Bộ cài .exe cài cho người dùng hiện tại, không cần quyền quản trị. Bản portable .zip cho phép chạy mà không cần cài đặt.' },
+      { q: 'Tải GenZip ở đâu?', a: 'GenZip phát hành chính thức trên Microsoft Store. Store tự cập nhật GenZip và gỡ cài đặt sạch sẽ.' },
     ],
     love: 'Yêu thích GenZip?', support: 'Ủng hộ tác giả',
   },
   en: {
     badge: 'For Windows 10 / 11', title: 'Compress and extract. Fast, clean,', highlight: 'safe.',
     lead: 'Open RAR, ZIP, 7z and many other formats. Free, with no ads and no data collection.',
-    store: 'Get it from Microsoft Store', installer: 'Download .exe installer',
+    store: 'Get it from Microsoft Store', storeSoon: 'Coming soon to Microsoft Store', installer: 'Explore features',
     meta: 'Windows 10/11 · 64-bit · Free', shotAlt: 'GenZip browsing the contents of an archive',
     opens: 'Open', creates: 'Create', moreFormats: 'See all formats', rarNote: 'Read and extract RAR · No RAR creation',
     benefitsTitle: 'Everything you need. Simply uncluttered.',
@@ -77,7 +77,7 @@ const c = {
     faq: [
       { q: 'Is GenZip really free?', a: 'Yes. GenZip is free and has no ads.' },
       { q: 'Can GenZip create RAR files?', a: 'No. GenZip only reads and extracts RAR archives; it can create ZIP, 7z and TAR files.' },
-      { q: 'Which download should I choose?', a: 'Microsoft Store is recommended for automatic updates. The .exe installer installs for your user account without administrator rights. The portable .zip runs without installation.' },
+      { q: 'Where do I get GenZip?', a: 'GenZip is officially published on Microsoft Store, which keeps it up to date and uninstalls it cleanly.' },
     ],
     love: 'Enjoying GenZip?', support: 'Support the author',
   },
@@ -93,8 +93,8 @@ const accentTokens = ['blue', 'indigo', 'purple', 'pink', 'red', 'orange', 'ambe
         <h1>{c.title} <span>{c.highlight}</span></h1>
         <p class="lead muted">{c.lead}</p>
         <div class="hero-actions">
-          <a class="btn btn-primary btn-lg" href={storeUrl}><Icon name="windows" />{c.store}</a>
-          <a class="btn btn-outline btn-lg" href={p('/download')}><Icon name="download" />{c.installer}</a>
+          <a class="btn btn-primary btn-lg" href={storeUrl || p('/download')}><Icon name="windows" />{storeUrl ? c.store : c.storeSoon}</a>
+          <a class="btn btn-outline btn-lg" href={p('/features')}>{c.installer}<Icon name="arrow-right" /></a>
         </div>
         <p class="meta muted">{c.meta}</p>
       </div>

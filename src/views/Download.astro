@@ -1,61 +1,49 @@
 ---
+// GenZip chỉ phát hành cho người dùng qua Microsoft Store — không có bộ cài/portable tải tự do.
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/ui/PageHero.astro';
 import Icon from '../components/ui/Icon.astro';
-import DownloadHash from '../components/download/DownloadHash.astro';
-import ReleaseDownloads from '../components/download/ReleaseDownloads.astro';
-import { compareVersions, formatReleaseDate } from '../components/download/releases';
+import { formatReleaseDate } from '../components/download/releases';
 import { getLangFromUrl, localePath } from '../i18n/ui';
-import { storeUrl } from '../data/product';
+import { publisher, storeUrl } from '../data/product';
 import { getCurrentRelease, getLatestRelease, isReleased } from '../data/releases';
 
 const lang = getLangFromUrl(Astro.url);
-const current = getCurrentRelease('stable');
-const latest = getLatestRelease('stable');
-const beta = getLatestRelease('beta');
-const newerBeta = beta && (!latest || compareVersions(beta.version, latest.version) > 0) ? beta : undefined;
+const current = getLatestRelease('stable') ?? getCurrentRelease('beta');
 const c = {
   vi: {
-    title: 'Tải GenZip', lead: 'Miễn phí cho Windows 10 và 11 (64-bit).',
-    version: 'Phiên bản', pending: 'Sắp phát hành', recommended: 'Khuyên dùng',
-    store: 'Bản chính thức. Microsoft ký số và tự cập nhật qua Store.', storeButton: 'Mở Microsoft Store',
-    installer: 'Bộ cài .exe — cho công ty', installerText: 'Dành cho máy không dùng Microsoft Store (máy công ty, máy bị chặn Store). Cài cho người dùng hiện tại, không cần quyền quản trị, có menu chuột phải và tự cập nhật từ máy chủ phát hành của GenZip.', installerButton: 'Tải .exe',
-    portable: 'Portable .zip', portableText: 'Giải nén và chạy, không cần cài đặt. Không đăng ký menu chuột phải.', portableButton: 'Tải .zip',
-    size: 'Dung lượng', beta: 'Bản Beta', betaText: 'Dùng thử phiên bản mới hơn trên kênh Beta.',
-    updates: 'Cập nhật tự động',
-    updateItems: [
-      'Bản Microsoft Store được cập nhật bởi Microsoft Store.',
-      'Bản tải trực tiếp kiểm tra cập nhật tối đa một lần mỗi ngày. Bạn có thể tắt trong Cài đặt → Cập nhật.',
-      'Bản kê phát hành được ký bằng Ed25519. Có hai kênh Ổn định và Beta.',
-      'Không gửi mã định danh máy khi kiểm tra cập nhật.',
+    title: 'Tải GenZip', lead: 'Miễn phí cho Windows 10 và 11 (64-bit), phát hành chính thức trên Microsoft Store.',
+    version: 'Phiên bản', pending: 'Sắp phát hành',
+    store: 'Bản chính thức của GenZip. Cài, cập nhật và gỡ đều qua Microsoft Store.',
+    storeButton: 'Tải từ Microsoft Store', storeSoon: 'Sắp có trên Microsoft Store',
+    publisher: 'Nhà phát hành',
+    whyTitle: 'Vì sao chỉ phát hành qua Microsoft Store?',
+    why: [
+      'Gói cài đặt được Microsoft kiểm tra và ký số — không lo tải nhầm bản giả mạo.',
+      'Microsoft Store tự cập nhật GenZip; ở bản Store, GenZip không tự kết nối mạng.',
+      'Cài và gỡ sạch sẽ, kể cả menu chuột phải và liên kết định dạng tệp.',
+      'Không cần quyền quản trị, không cần tài khoản GenZip.',
     ],
-    requirements: 'Yêu cầu hệ thống', requirementItems: ['Windows 10 hoặc Windows 11, 64-bit (x64)', 'Không cần quyền quản trị'],
-    verify: 'Kiểm tra tệp tải về', verifyText: 'Chạy lệnh sau trong PowerShell, rồi so sánh kết quả với mã SHA-256 của tệp ở trên:',
-    other: 'macOS và Linux', otherText: 'Sắp phát hành cho macOS và Linux.', notes: 'Xem lịch sử phiên bản',
+    requirements: 'Yêu cầu hệ thống', requirementItems: ['Windows 10 hoặc Windows 11, 64-bit (x64)', 'Có ứng dụng Microsoft Store'],
+    other: 'macOS và Linux', otherText: 'Đang phát triển.', notes: 'Xem lịch sử phiên bản',
   },
   en: {
-    title: 'Download GenZip', lead: 'Free for Windows 10 and 11 (64-bit).',
-    version: 'Version', pending: 'Coming soon', recommended: 'Recommended',
-    store: 'The official build. Signed by Microsoft and updated through the Store.', storeButton: 'Open Microsoft Store',
-    installer: 'Installer .exe — for organizations', installerText: 'For PCs without Microsoft Store (company PCs, Store blocked). Installs for the current user without admin rights, includes the right-click menu and updates itself from GenZip’s release server.', installerButton: 'Download .exe',
-    portable: 'Portable .zip', portableText: 'Unzip and run, no installation needed. Does not register the right-click menu.', portableButton: 'Download .zip',
-    size: 'File size', beta: 'Beta release', betaText: 'Try a newer version on the Beta channel.',
-    updates: 'Automatic updates',
-    updateItems: [
-      'The Microsoft Store build is updated by Microsoft Store.',
-      'The direct-download build checks for updates at most once a day. You can turn this off in Settings → Updates.',
-      'The release manifest is signed with Ed25519. Stable and Beta channels are available.',
-      'No machine ID is sent when checking for updates.',
+    title: 'Download GenZip', lead: 'Free for Windows 10 and 11 (64-bit), officially published on Microsoft Store.',
+    version: 'Version', pending: 'Coming soon',
+    store: 'The official GenZip release. Install, update and uninstall through Microsoft Store.',
+    storeButton: 'Get it from Microsoft Store', storeSoon: 'Coming soon to Microsoft Store',
+    publisher: 'Publisher',
+    whyTitle: 'Why only Microsoft Store?',
+    why: [
+      'The package is checked and signed by Microsoft — no risk of fake downloads.',
+      'Microsoft Store keeps GenZip up to date; the Store build never connects to the network by itself.',
+      'Clean install and uninstall, including the right-click menu and file associations.',
+      'No admin rights and no GenZip account needed.',
     ],
-    requirements: 'System requirements', requirementItems: ['Windows 10 or Windows 11, 64-bit (x64)', 'No admin rights required'],
-    verify: 'Verify your download', verifyText: 'Run this command in PowerShell, then compare the result with the file’s SHA-256 above:',
-    other: 'macOS and Linux', otherText: 'Coming soon for macOS and Linux.', notes: 'See release notes',
+    requirements: 'System requirements', requirementItems: ['Windows 10 or Windows 11, 64-bit (x64)', 'Microsoft Store app'],
+    other: 'macOS and Linux', otherText: 'In development.', notes: 'See release notes',
   },
 }[lang];
-const cards = [
-  { name: c.installer, text: c.installerText, button: c.installerButton, file: latest?.downloads?.installer },
-  { name: c.portable, text: c.portableText, button: c.portableButton, file: latest?.downloads?.portable },
-];
 ---
 
 <Base title={c.title} description={c.lead}>
@@ -67,49 +55,30 @@ const cards = [
   </PageHero>
   <section class="section" aria-label={c.title}>
     <div class="container">
-      <div class="download-cards">
-        <article class="card card-raised download-card featured">
-          <div class="card-heading"><Icon name="store" size={32} /><span class="chip">{c.recommended}</span></div>
+      <div class="store-layout">
+        <article class="card card-raised store-card">
+          <div class="card-heading"><Icon name="store" size={36} /></div>
           <h2>Microsoft Store</h2>
           <p class="muted">{c.store}</p>
-          <a class="btn btn-primary" href={storeUrl}><Icon name="windows" size={20} />{c.storeButton}</a>
+          <dl class="facts">
+            <dt>{c.version}</dt><dd>{current.version}</dd>
+            <dt>{c.publisher}</dt><dd>{publisher}</dd>
+          </dl>
+          {storeUrl ? (
+            <a class="btn btn-primary btn-lg" href={storeUrl} rel="noopener"><Icon name="windows" size={20} />{c.storeButton}</a>
+          ) : (
+            <button class="btn btn-primary btn-lg" disabled><Icon name="windows" size={20} />{c.storeSoon}</button>
+          )}
         </article>
-        {cards.map((card) => (
-          <article class="card download-card">
-            <div class="card-heading"><Icon name="download" size={32} /></div>
-            <h2>{card.name}</h2>
-            <p class="muted">{card.text}</p>
-            <dl class="facts">
-              <dt>{c.version}</dt><dd>{(latest ?? current).version}</dd>
-              <dt>{c.size}</dt><dd>{card.file?.size || '—'}</dd>
-            </dl>
-            <DownloadHash hash={card.file?.sha256} lang={lang} />
-            {card.file?.url ? (
-              <a class="btn btn-outline" href={card.file.url}><Icon name="download" size={20} />{card.button}</a>
-            ) : <button class="btn btn-outline" disabled>{c.pending}</button>}
-          </article>
-        ))}
+        <section class="card card-soft why" aria-labelledby="why-store">
+          <h2 id="why-store">{c.whyTitle}</h2>
+          <ul>{c.why.map((item) => <li><Icon name="check" size={20} /><span>{item}</span></li>)}</ul>
+        </section>
       </div>
-      {newerBeta && (
-        <aside class="card beta-card">
-          <div><h2>{c.beta} <span class="chip">{newerBeta.version}</span></h2><p class="muted">{c.betaText}</p></div>
-          <ReleaseDownloads release={newerBeta} lang={lang} />
-          <a href={`${localePath('/changelog', lang)}#v${newerBeta.version.replace(/[^a-z0-9]+/gi, '-')}`}>{c.notes} →</a>
-        </aside>
-      )}
-      <section class="card card-soft updates" aria-labelledby="automatic-updates">
-        <h2 id="automatic-updates">{c.updates}</h2>
-        <ul>{c.updateItems.map((item) => <li>{item}</li>)}</ul>
-      </section>
       <div class="info">
         <section class="card" aria-labelledby="requirements">
           <h2 id="requirements">{c.requirements}</h2>
-          <ul>{c.requirementItems.map((item) => <li>{item}</li>)}</ul>
-        </section>
-        <section class="card verification" aria-labelledby="verify-download">
-          <h2 id="verify-download">{c.verify}</h2>
-          <p class="muted">{c.verifyText}</p>
-          <pre><code>Get-FileHash .\GenZip-Setup.exe -Algorithm SHA256</code></pre>
+          <ul class="plain">{c.requirementItems.map((item) => <li>{item}</li>)}</ul>
         </section>
         <section class="card" aria-labelledby="other-platforms">
           <h2 id="other-platforms">{c.other}</h2>
@@ -119,47 +88,31 @@ const cards = [
       <p class="notes"><a href={localePath('/changelog', lang)}>{c.notes} →</a></p>
     </div>
   </section>
-  <script is:inline>
-    document.querySelectorAll('[data-copy-hash]').forEach((button) => {
-      button.addEventListener('click', async () => {
-        const status = button.closest('.checksum')?.querySelector('[role="status"]');
-        if (!status) return;
-        try {
-          await navigator.clipboard.writeText(button.dataset.copyHash ?? '');
-          status.textContent = button.dataset.copied ?? '';
-        } catch {
-          status.textContent = button.dataset.failed ?? '';
-        }
-      });
-    });
-  </script>
 </Base>
 
 <style>
   .version { margin: 20px 0 0; display: flex; flex-wrap: wrap; gap: 8px; }
-  .download-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
-  .download-card { display: flex; flex-direction: column; gap: 16px; min-width: 0; border-radius: var(--radius-lg); }
-  .download-card h2 { font-size: 1.4rem; margin: 0; }
-  .download-card p { margin: 0; }
-  .download-card > .btn { margin-top: auto; }
-  .card-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; color: var(--primary); min-height: 36px; }
-  .featured { border-color: var(--primary); }
+  .store-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 24px; align-items: stretch; }
+  .store-card { display: flex; flex-direction: column; gap: 16px; min-width: 0; border-color: var(--primary); border-radius: var(--radius-lg); }
+  .store-card h2 { font-size: 1.5rem; margin: 0; }
+  .store-card p { margin: 0; }
+  .store-card > .btn { margin-top: auto; align-self: flex-start; }
+  .card-heading { color: var(--primary); }
   .facts { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 16px; margin: 0; font-size: 0.9rem; }
   dt { color: var(--text-muted); }
   dd { margin: 0; overflow-wrap: anywhere; }
-  button:disabled { opacity: 0.6; cursor: default; }
-  .beta-card { margin-top: 24px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px; }
-  .beta-card h2 { font-size: 1.25rem; }
-  .beta-card p { margin: 0; }
-  .updates { margin-top: 40px; }
-  .updates h2, .info h2 { font-size: 1.25rem; }
-  ul { margin: 0; padding-left: 20px; }
-  li + li { margin-top: 8px; }
-  .info { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr) minmax(0, 1fr); gap: 24px; margin-top: 24px; }
-  .info > section { min-width: 0; }
-  pre { max-width: 100%; margin-bottom: 0; }
+  button:disabled { opacity: 0.7; cursor: default; }
+  .why { border-radius: var(--radius-lg); }
+  .why h2, .info h2 { font-size: 1.25rem; }
+  .why ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; }
+  .why li { display: flex; gap: 12px; align-items: flex-start; }
+  .why li :global(svg) { flex-shrink: 0; margin-top: 2px; color: var(--primary); }
+  .plain { margin: 0; padding-left: 20px; }
+  .plain li + li { margin-top: 8px; }
+  .info { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin-top: 24px; }
   .notes { text-align: center; margin: 32px 0 0; }
-  @media (max-width: 1000px) {
-    .download-cards, .info { grid-template-columns: 1fr; }
+  @media (max-width: 900px) {
+    .store-layout, .info { grid-template-columns: 1fr; }
+    .store-card > .btn { align-self: stretch; }
   }
 </style>
