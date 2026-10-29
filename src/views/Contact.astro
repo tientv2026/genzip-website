@@ -1,45 +1,106 @@
 ---
 import Base from '../layouts/Base.astro';
+import PageHero from '../components/ui/PageHero.astro';
+import Icon from '../components/ui/Icon.astro';
 import { getLangFromUrl, localePath, useTranslations } from '../i18n/ui';
 import { support } from '../data/product';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-
 const c = {
   vi: {
-    lead: 'Báo lỗi, góp ý hoặc hỏi về GenZip qua email. Khi báo lỗi, hãy gửi kèm phiên bản (Trợ giúp → Giới thiệu → Sao chép thông tin).',
-    faq: 'Xem trước phần Hỏi đáp',
+    lead: 'Bạn có góp ý, câu hỏi hoặc gặp lỗi khi dùng GenZip? Hãy gửi email cho tác giả.',
+    email: 'Email',
+    emailText: 'Báo lỗi, chia sẻ ý tưởng hoặc hỏi về GenZip.',
+    website: 'Trang web',
+    websiteText: 'Thông tin sản phẩm, bản tải và hướng dẫn sử dụng.',
+    checklist: 'Khi báo lỗi, hãy gửi kèm',
+    items: [
+      'Phiên bản GenZip: vào Trợ giúp → Giới thiệu → Sao chép thông tin.',
+      'Phiên bản Windows bạn đang sử dụng.',
+      'Các bước dẫn đến lỗi và thông báo lỗi, nếu có.',
+      'Loại tệp nén gặp lỗi, ví dụ ZIP, 7z hoặc RAR.',
+    ],
+    faqTitle: 'Có thể câu trả lời đã ở đây',
+    faqText: 'Xem các câu hỏi về định dạng, mật khẩu, cài đặt và cập nhật.',
+    faq: 'Xem phần Hỏi đáp',
   },
   en: {
-    lead: 'Report a bug, send feedback or ask about GenZip by email. For bugs, include your version (Help → About → Copy info).',
-    faq: 'Check the FAQ first',
+    lead: 'Have feedback, a question, or a problem using GenZip? Send the author an email.',
+    email: 'Email',
+    emailText: 'Report a bug, share an idea, or ask about GenZip.',
+    website: 'Website',
+    websiteText: 'Product information, downloads, and user guides.',
+    checklist: 'When reporting a bug, please include',
+    items: [
+      'Your GenZip version: open Help → About → Copy info.',
+      'The Windows version you are using.',
+      'Steps to reproduce the issue and any error message.',
+      'The archive type involved, such as ZIP, 7z, or RAR.',
+    ],
+    faqTitle: 'Your answer may already be here',
+    faqText: 'Find answers about formats, passwords, installation, and updates.',
+    faq: 'Read the FAQ',
   },
 }[lang];
 ---
 
-<Base title={t('footer.contact')}>
+<Base title={t('footer.contact')} description={c.lead}>
+  <PageHero eyebrow="GenZip" title={t('footer.contact')} lead={c.lead} />
   <section class="section">
-    <div class="container narrow">
-      <h1>{t('footer.contact')}</h1>
-      <p class="muted">{c.lead}</p>
-      <div class="card">
-        <p><strong>Email:</strong> <a href={`mailto:${support.email}`}>{support.email}</a></p>
-        <p><strong>Website:</strong> <a href={support.website}>{support.website.replace('https://', '')}</a></p>
+    <div class="container contact-content">
+      <div class="contact-cards">
+        <section class="card card-raised" aria-labelledby="email-title">
+          <span class="contact-icon">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 5h18v14H3zM3 6l9 7 9-7" /></svg>
+          </span>
+          <h2 id="email-title">{c.email}</h2>
+          <p class="muted">{c.emailText}</p>
+          <a href={`mailto:${support.email}`}>{support.email}<Icon name="arrow-right" size={18} /></a>
+        </section>
+        <section class="card" aria-labelledby="website-title">
+          <span class="contact-icon">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" /><path d="M3 12h18M12 3c5 5 5 13 0 18M12 3c-5 5-5 13 0 18" /></svg>
+          </span>
+          <h2 id="website-title">{c.website}</h2>
+          <p class="muted">{c.websiteText}</p>
+          <a href={support.website}>{support.website.replace('https://', '')}<Icon name="arrow-right" size={18} /></a>
+        </section>
       </div>
-      <p><a href={localePath('/faq', lang)}>{c.faq} →</a></p>
+      <section class="checklist" aria-labelledby="bug-report-title">
+        <h2 id="bug-report-title">{c.checklist}</h2>
+        <ul>
+          {c.items.map((item) => <li><Icon name="check" size={22} /><span>{item}</span></li>)}
+        </ul>
+      </section>
+      <section class="card card-soft faq-link" aria-labelledby="contact-faq-title">
+        <div>
+          <h2 id="contact-faq-title">{c.faqTitle}</h2>
+          <p class="muted">{c.faqText}</p>
+        </div>
+        <a class="btn btn-outline" href={localePath('/faq', lang)}>{c.faq}<Icon name="arrow-right" size={18} /></a>
+      </section>
     </div>
   </section>
 </Base>
 
 <style>
-  .narrow {
-    max-width: 760px;
-  }
-  .card {
-    margin: 24px 0;
-  }
-  .card p:last-child {
-    margin: 0;
+  .contact-content { max-width: 1000px; }
+  .contact-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .contact-cards > section { min-width: 0; border-radius: var(--radius-lg); }
+  .contact-icon { display: inline-grid; place-items: center; width: 56px; height: 56px; margin-bottom: 20px; border-radius: var(--radius); background: var(--band); color: var(--primary); }
+  h2 { font-size: 1.375rem; }
+  .contact-cards a { display: inline-flex; align-items: center; gap: 8px; overflow-wrap: anywhere; font-weight: 600; }
+  .checklist { margin: 44px 0; }
+  .checklist ul { display: grid; gap: 16px; padding: 0; margin: 24px 0 0; list-style: none; }
+  .checklist li { display: flex; align-items: flex-start; gap: 12px; }
+  .checklist li :global(svg) { margin-top: 2px; color: var(--primary); }
+  .faq-link { display: flex; align-items: center; gap: 24px; border-radius: var(--radius-lg); }
+  .faq-link p { margin: 0; }
+  .faq-link .btn { margin-left: auto; flex-shrink: 0; }
+  @media (max-width: 700px) {
+    .contact-cards { grid-template-columns: 1fr; }
+    .faq-link { flex-direction: column; align-items: flex-start; }
+    .faq-link .btn { margin-left: 0; }
   }
 </style>

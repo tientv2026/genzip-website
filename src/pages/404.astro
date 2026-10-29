@@ -1,13 +1,58 @@
 ---
 import Base from '../layouts/Base.astro';
+import Icon from '../components/ui/Icon.astro';
+
+const c = {
+  vi: {
+    title: 'Không tìm thấy trang',
+    lead: 'Đường dẫn có thể đã thay đổi hoặc trang không còn tồn tại. Bạn có thể bắt đầu lại từ đây.',
+    home: 'Về trang chủ',
+    guide: 'Xem hướng dẫn',
+  },
+  en: {
+    title: 'Page not found',
+    lead: 'The address may have changed, or this page may no longer exist. You can start again here.',
+    home: 'Go to home',
+    guide: 'Read the guide',
+  },
+};
 ---
 
-<Base title="404">
-  <section class="section">
-    <div class="container section-title">
-      <h1>404</h1>
-      <p class="muted">Không tìm thấy trang. · Page not found.</p>
-      <p><a class="btn btn-primary" href="/">GenZip</a></p>
+<Base title={`${c.vi.title} · ${c.en.title}`}>
+  <section class="section not-found">
+    <div class="container">
+      <img class="logo" src="/brand/genzip-128.png" alt="GenZip" width="96" height="96" />
+      <span class="eyebrow">404</span>
+      <h1><span lang="vi">{c.vi.title}</span><span lang="en">{c.en.title}</span></h1>
+      <div class="language-options">
+        {(['vi', 'en'] as const).map((lang) => (
+          <div class="language-option" lang={lang}>
+            <p class="muted">{c[lang].lead}</p>
+            <div class="actions">
+              <a class="btn btn-primary" href={lang === 'vi' ? '/' : '/en/'}>{c[lang].home}<Icon name="arrow-right" size={18} /></a>
+              <a class="btn btn-outline" href={lang === 'vi' ? '/guide' : '/en/guide'}>{c[lang].guide}</a>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   </section>
 </Base>
+
+<style>
+  .not-found { padding: 80px 0; background: var(--hero-gradient); text-align: center; }
+  .not-found .container { max-width: 1000px; }
+  .logo { margin: 0 auto 24px; }
+  h1 { margin-bottom: 32px; }
+  h1 span { display: block; }
+  h1 span[lang='en'] { margin-top: 12px; font-size: 0.6em; color: var(--text-muted); }
+  .language-options { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+  .language-option { display: flex; flex-direction: column; align-items: center; }
+  .language-option p { max-width: 380px; }
+  .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: auto; }
+  @media (max-width: 700px) {
+    .not-found { padding: 48px 0; }
+    .language-options { grid-template-columns: 1fr; gap: 28px; }
+    .language-option + .language-option { border-top: 1px solid var(--border); padding-top: 28px; }
+  }
+</style>

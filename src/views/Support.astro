@@ -1,112 +1,121 @@
 ---
 import Base from '../layouts/Base.astro';
+import Icon from '../components/ui/Icon.astro';
+import CopyButton from '../components/info/CopyButton.astro';
 import { getLangFromUrl, useTranslations } from '../i18n/ui';
 import { support } from '../data/product';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-
 const c = {
   vi: {
     title: 'Ủng hộ tác giả',
-    lead: 'GenZip miễn phí và không quảng cáo. Nếu GenZip giúp ích cho bạn, bạn có thể ủng hộ để dự án tiếp tục phát triển.',
+    lead: 'GenZip miễn phí và không quảng cáo. Nếu GenZip giúp ích cho bạn, sự ủng hộ của bạn sẽ giúp dự án tiếp tục phát triển.',
     bank: 'Chuyển khoản ngân hàng',
     bankName: 'Ngân hàng',
     holder: 'Chủ tài khoản',
     account: 'Số tài khoản',
-    note: 'Nội dung: GenZip',
-    paypalText: 'Ủng hộ từ nước ngoài qua PayPal.',
+    note: 'Nội dung chuyển khoản',
+    paypalText: 'Một cách thuận tiện để ủng hộ tác giả từ nước ngoài.',
     paypalBtn: 'Ủng hộ qua PayPal',
-    thanks: 'Cảm ơn bạn đã dùng GenZip!',
+    helps: 'Ủng hộ cũng giúp…',
+    reasons: ['Giữ GenZip miễn phí cho mọi người.', 'Duy trì một ứng dụng không quảng cáo.', 'Tiếp tục phát triển cho các nền tảng mới.'],
+    thanks: 'Cảm ơn bạn đã dùng GenZip. Mọi sự ủng hộ đều được trân trọng.',
   },
   en: {
     title: 'Support the author',
-    lead: 'GenZip is free and ad-free. If it helps you, you can support its continued development.',
+    lead: 'GenZip is free and ad-free. If it helps you, your support can help the project keep growing.',
     bank: 'Bank transfer (Vietnam)',
     bankName: 'Bank',
     holder: 'Account holder',
     account: 'Account number',
-    note: 'Reference: GenZip',
-    paypalText: 'Support from anywhere with PayPal.',
+    note: 'Transfer reference',
+    paypalText: 'A convenient way to support the author from abroad.',
     paypalBtn: 'Support with PayPal',
-    thanks: 'Thank you for using GenZip!',
+    helps: 'Your support also helps…',
+    reasons: ['Keep GenZip free for everyone.', 'Maintain an app without ads.', 'Continue development for new platforms.'],
+    thanks: 'Thank you for using GenZip. Every contribution is appreciated.',
   },
 }[lang];
+const fields = [
+  { label: c.bankName, value: support.bank.name },
+  { label: c.holder, value: support.bank.holder },
+  { label: c.account, value: support.bank.account },
+];
 ---
 
-<Base title={t('nav.support')}>
+<Base title={t('nav.support')} description={c.lead}>
+  <section class="page-hero">
+    <div class="container support-head">
+      <img src="/brand/genzip-128.png" alt="GenZip" width="80" height="80" />
+      <span class="eyebrow"><Icon name="heart" size={16} />{t('nav.support')}</span>
+      <h1>{c.title}</h1>
+      <p class="lead">{c.lead}</p>
+    </div>
+  </section>
   <section class="section">
-    <div class="container narrow">
-      <header class="head">
-        <img src="/brand/genzip-128.png" alt="" width="72" height="72" />
-        <h1>{c.title}</h1>
-        <p class="muted">{c.lead}</p>
-      </header>
-
+    <div class="container support-content">
       <div class="options">
-        <div class="card">
-          <h2>{c.bank}</h2>
+        <section class="card card-raised" aria-labelledby="bank-title">
+          <h2 id="bank-title">{c.bank}</h2>
           <dl>
-            <dt>{c.bankName}</dt><dd>{support.bank.name}</dd>
-            <dt>{c.holder}</dt><dd>{support.bank.holder}</dd>
-            <dt>{c.account}</dt><dd><code>{support.bank.account}</code></dd>
+            {fields.map(({ label, value }) => (
+              <div class="bank-field">
+                <dt>{label}</dt>
+                <dd>
+                  <span class="bank-value">{value}</span>
+                  <CopyButton value={value} label={label} />
+                </dd>
+              </div>
+            ))}
           </dl>
-          <p class="muted small">{c.note}</p>
-        </div>
-        <div class="card">
-          <h2>PayPal</h2>
+          <p class="transfer-note muted">{c.note}: <strong>GenZip</strong></p>
+        </section>
+        <section class="card paypal-card" aria-labelledby="paypal-title">
+          <span class="icon-badge"><Icon name="heart" /></span>
+          <h2 id="paypal-title">PayPal</h2>
           <p class="muted">{c.paypalText}</p>
-          <a class="btn btn-primary" href={support.paypal} rel="noopener">{c.paypalBtn}</a>
-        </div>
+          <a class="btn btn-primary" href={support.paypal} rel="noopener noreferrer">{c.paypalBtn}<Icon name="arrow-right" size={18} /></a>
+        </section>
       </div>
-      <p class="thanks">{c.thanks}</p>
+      <section class="card card-soft reasons" aria-labelledby="support-helps">
+        <h2 id="support-helps">{c.helps}</h2>
+        <ul>
+          {c.reasons.map((reason) => <li><Icon name="check" size={20} /><span>{reason}</span></li>)}
+        </ul>
+      </section>
+      <p class="thanks muted"><Icon name="heart" size={20} />{c.thanks}</p>
     </div>
   </section>
 </Base>
 
 <style>
-  .narrow {
-    max-width: 860px;
-  }
-  .head {
-    text-align: center;
-    max-width: 640px;
-    margin: 0 auto 40px;
-  }
-  .head img {
-    margin: 0 auto 16px;
-  }
-  .options {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
-  }
-  .options h2 {
-    font-size: 1.25rem;
-  }
-  dl {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 8px 16px;
-    margin: 0 0 12px;
-  }
-  dt {
-    color: var(--text-muted);
-  }
-  dd {
-    margin: 0;
-    font-weight: 600;
-  }
-  .small {
-    font-size: 0.9rem;
-  }
-  .thanks {
-    text-align: center;
-    margin-top: 32px;
-  }
-  @media (max-width: 768px) {
-    .options {
-      grid-template-columns: 1fr;
-    }
+  .support-head { max-width: 840px; text-align: center; }
+  .support-head img { margin: 0 auto 20px; }
+  .support-head .eyebrow :global(svg) { color: var(--brand-link); }
+  .support-head .lead { margin-inline: auto; }
+  .support-content { max-width: 1000px; }
+  .options { display: grid; grid-template-columns: 1.15fr 1fr; gap: 24px; }
+  .options > section { min-width: 0; border-radius: var(--radius-lg); }
+  h2 { font-size: 1.375rem; }
+  dl { margin: 24px 0; }
+  .bank-field + .bank-field { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border); }
+  dt { color: var(--text-muted); font-size: 0.875rem; }
+  dd { margin: 4px 0 0; }
+  .bank-value { font-weight: 600; overflow-wrap: anywhere; user-select: all; }
+  .transfer-note { margin: 0; padding: 12px 16px; background: var(--subtle); border-radius: var(--radius-sm); }
+  .transfer-note strong { color: var(--text); }
+  .paypal-card { display: flex; flex-direction: column; align-items: flex-start; }
+  .paypal-card .icon-badge { margin-bottom: 24px; color: var(--brand-link); }
+  .paypal-card .btn { margin-top: auto; }
+  .reasons { margin-top: 32px; border-radius: var(--radius-lg); }
+  .reasons ul { padding: 0; margin: 20px 0 0; list-style: none; display: grid; gap: 12px; }
+  .reasons li { display: flex; align-items: flex-start; gap: 12px; }
+  .reasons li :global(svg) { margin-top: 3px; color: var(--primary); }
+  .thanks { display: flex; align-items: flex-start; justify-content: center; gap: 10px; margin: 32px 0 0; text-align: center; }
+  .thanks :global(svg) { margin-top: 3px; color: var(--brand-link); }
+  @media (max-width: 700px) {
+    .options { grid-template-columns: 1fr; }
+    .paypal-card .btn { margin-top: 12px; }
   }
 </style>

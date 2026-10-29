@@ -1,0 +1,73 @@
+---
+import { getLangFromUrl } from '../../i18n/ui';
+
+interface Props {
+  value: string;
+  label: string;
+}
+const { value, label } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+const c = {
+  vi: { copy: 'Sao chép', copied: 'Đã sao chép', failed: 'Chưa sao chép được. Hãy chọn và sao chép giá trị phía trên.' },
+  en: { copy: 'Copy', copied: 'Copied', failed: 'Could not copy. Please select and copy the value above.' },
+}[lang];
+---
+
+<div class="copy-control" data-copy-control data-value={value} data-copied={c.copied} data-failed={c.failed}>
+  <button class="btn btn-outline btn-sm copy-button" type="button" aria-label={`${c.copy}: ${label}`} hidden>
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+      <path d="M9 8h12v13H9zM5 16H3V3h12v2" />
+    </svg>
+    <span>{c.copy}</span>
+  </button>
+  <span class="copy-status muted" role="status" aria-live="polite"></span>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-copy-control]').forEach((control) => {
+    const button = control.querySelector<HTMLButtonElement>('button');
+    const status = control.querySelector<HTMLElement>('[role="status"]');
+    if (!button || !status) return;
+    button.hidden = false;
+    let reset: ReturnType<typeof setTimeout>;
+    button.addEventListener('click', async () => {
+      clearTimeout(reset);
+      button.disabled = true;
+      status.textContent = '';
+      const value = control.dataset.value || '';
+      try {
+        try {
+          await navigator.clipboard.writeText(value);
+        } catch {
+          // Dự phòng khi trình duyệt không cho dùng Clipboard API.
+          const field = document.createElement('textarea');
+          field.value = value;
+          field.readOnly = true;
+          field.style.position = 'fixed';
+          field.style.left = '-9999px';
+          document.body.append(field);
+          try {
+            field.select();
+            if (!document.execCommand('copy')) throw new Error('Copy failed');
+          } finally {
+            field.remove();
+          }
+        }
+        status.textContent = control.dataset.copied || '';
+        reset = setTimeout(() => { status.textContent = ''; }, 3000);
+      } catch {
+        status.textContent = control.dataset.failed || '';
+      } finally {
+        button.disabled = false;
+        button.focus({ preventScroll: true });
+      }
+    });
+  });
+</script>
+
+<style>
+  .copy-control { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 12px; margin-top: 8px; }
+  .copy-button[hidden] { display: none; }
+  .copy-button:disabled { cursor: wait; opacity: 0.65; }
+  .copy-status { font-size: 0.875rem; font-weight: 400; }
+</style>

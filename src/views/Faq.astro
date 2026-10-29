@@ -1,104 +1,164 @@
 ---
 import Base from '../layouts/Base.astro';
+import PageHero from '../components/ui/PageHero.astro';
+import CtaCard from '../components/ui/CtaCard.astro';
+import Icon from '../components/ui/Icon.astro';
 import { getLangFromUrl, localePath, useTranslations } from '../i18n/ui';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-
 const c = {
   vi: {
     title: 'Câu hỏi thường gặp',
-    more: 'Không thấy câu trả lời?',
+    lead: 'Những điều cần biết để bắt đầu dùng GenZip một cách an tâm.',
+    search: 'Tìm trong câu hỏi và câu trả lời',
+    placeholder: 'Ví dụ: mật khẩu, bản portable, cập nhật…',
+    results: 'câu hỏi phù hợp',
+    empty: 'Chưa tìm thấy câu hỏi phù hợp. Hãy thử từ khóa khác hoặc liên hệ tác giả.',
+    more: 'Không thấy câu trả lời bạn cần?',
     contact: 'Liên hệ tác giả',
-    items: [
-      ['GenZip có thật sự miễn phí không?', 'Có. GenZip miễn phí, không quảng cáo, không bản trả phí ẩn. Nếu thấy hữu ích, bạn có thể ủng hộ tác giả.'],
-      ['GenZip có tạo được tệp RAR không?', 'Không. RAR là định dạng độc quyền. GenZip đọc và giải nén được RAR4/RAR5, còn khi tạo nén thì dùng ZIP, 7z hoặc TAR.'],
-      ['GenZip có gửi dữ liệu của tôi đi không?', 'Không. GenZip không có tài khoản, không telemetry, không gửi tệp hay tên tệp đi đâu. Bản tải trực tiếp chỉ kiểm tra cập nhật tối đa 1 lần/ngày và tắt được.'],
-      ['Tôi quên mật khẩu tệp nén, GenZip mở được không?', 'Không. Mã hoá AES-256 không có “cửa sau”; GenZip không phá mật khẩu.'],
-      ['Nên dùng ZIP hay 7z?', 'ZIP mở được ở mọi máy. 7z nén nhỏ hơn và mã hoá được cả tên tệp. Nếu đặt mật khẩu có dấu tiếng Việt, hãy dùng 7z.'],
-      ['Dùng chung với WinRAR hoặc 7-Zip được không?', 'Được. GenZip chỉ đăng ký liên kết tệp và menu chuột phải cho tài khoản Windows hiện tại, bạn bật/tắt được trong Cài đặt → Tích hợp.'],
-      ['Gỡ cài đặt có sạch không?', 'Có. Gỡ GenZip sẽ gỡ menu chuột phải và liên kết tệp. Dữ liệu cài đặt nằm trong thư mục dữ liệu ứng dụng của bạn.'],
-      ['Khi nào có bản macOS và Linux?', 'Đang phát triển sau bản Windows 1.0.'],
+    groups: [
+      { title: 'Chung', items: [
+        ['GenZip có thật sự miễn phí không?', 'Có. GenZip miễn phí, không quảng cáo, không bản trả phí ẩn. Nếu thấy hữu ích, bạn có thể ủng hộ tác giả.'],
+        ['GenZip có hỗ trợ tiếng Việt không?', 'Có. GenZip hỗ trợ tiếng Việt và tiếng Anh.'],
+        ['Khi nào có bản macOS và Linux?', 'Đang phát triển sau bản Windows 1.0.'],
+      ] },
+      { title: 'Định dạng', items: [
+        ['GenZip có tạo được tệp RAR không?', 'Không. RAR là định dạng độc quyền. GenZip đọc và giải nén được RAR4/RAR5, còn khi tạo nén thì dùng ZIP, 7z hoặc TAR.'],
+        ['Nên dùng ZIP hay 7z?', 'ZIP được hỗ trợ rộng rãi. 7z hỗ trợ nén gọn và mã hoá cả tên tệp. Nếu đặt mật khẩu có dấu tiếng Việt, hãy dùng 7z.'],
+      ] },
+      { title: 'Bảo mật & quyền riêng tư', items: [
+        ['GenZip có gửi dữ liệu của tôi đi không?', 'Không. GenZip không có tài khoản, không telemetry, không gửi tệp hay tên tệp đi đâu. Bản tải trực tiếp chỉ kiểm tra cập nhật tối đa 1 lần/ngày và tắt được.'],
+        ['Tôi quên mật khẩu tệp nén, GenZip mở được không?', 'Không. Mã hoá AES-256 không có “cửa sau”; GenZip không phá mật khẩu.'],
+      ] },
+      { title: 'Cài đặt & cập nhật', items: [
+        ['Tôi nên tải bản cài đặt nào?', 'Nên chọn Microsoft Store để được cập nhật tự động. Bản .exe cài cho tài khoản Windows hiện tại, không cần quyền quản trị. Bản portable .zip chạy không cần cài đặt và không có menu chuột phải.'],
+        ['GenZip cập nhật như thế nào?', 'Microsoft Store cập nhật bản cài từ Store. Bản tải trực tiếp kiểm tra cập nhật tối đa một lần mỗi ngày, có thể tắt trong Cài đặt và sử dụng bản kê cập nhật có chữ ký số.'],
+        ['Dùng chung với phần mềm nén khác được không?', 'Được. GenZip chỉ đăng ký liên kết tệp và menu chuột phải cho tài khoản Windows hiện tại, bạn bật/tắt được trong Cài đặt → Tích hợp.'],
+        ['Gỡ cài đặt có sạch không?', 'Có. Gỡ GenZip sẽ gỡ menu chuột phải và liên kết tệp. Dữ liệu cài đặt nằm trong thư mục dữ liệu ứng dụng của bạn.'],
+      ] },
     ],
   },
   en: {
     title: 'Frequently asked questions',
-    more: 'Didn’t find your answer?',
+    lead: 'A few things to know before getting started with GenZip.',
+    search: 'Search questions and answers',
+    placeholder: 'Try: password, portable, updates…',
+    results: 'matching questions',
+    empty: 'No matching questions yet. Try another search or contact the author.',
+    more: 'Didn’t find the answer you need?',
     contact: 'Contact the author',
-    items: [
-      ['Is GenZip really free?', 'Yes. GenZip is free, with no ads and no hidden paid tier. If it helps you, you can support the author.'],
-      ['Can GenZip create RAR files?', 'No. RAR is proprietary. GenZip opens and extracts RAR4/RAR5 and creates ZIP, 7z or TAR.'],
-      ['Does GenZip collect my data?', 'No. No account, no telemetry, your files and file names never leave your PC. The direct-download build checks for updates at most once a day, and you can turn it off.'],
-      ['I forgot my archive password — can GenZip open it?', 'No. AES-256 has no back door, and GenZip does not crack passwords.'],
-      ['ZIP or 7z?', 'ZIP opens everywhere. 7z is smaller and can encrypt file names.'],
-      ['Can I use GenZip alongside WinRAR or 7-Zip?', 'Yes. GenZip only registers file associations and the right-click menu for the current Windows user, and you can toggle them in Settings → Integration.'],
-      ['Does uninstalling leave anything behind?', 'Uninstalling removes the right-click menu and file associations. Settings live in your app data folder.'],
-      ['When will macOS and Linux arrive?', 'They are in development after Windows 1.0.'],
+    groups: [
+      { title: 'General', items: [
+        ['Is GenZip really free?', 'Yes. GenZip is free, with no ads and no hidden paid tier. If it helps you, you can support the author.'],
+        ['Does GenZip support Vietnamese?', 'Yes. GenZip supports Vietnamese and English.'],
+        ['When will macOS and Linux arrive?', 'They are in development after Windows 1.0.'],
+      ] },
+      { title: 'Formats', items: [
+        ['Can GenZip create RAR files?', 'No. RAR is proprietary. GenZip opens and extracts RAR4/RAR5 and creates ZIP, 7z or TAR.'],
+        ['ZIP or 7z?', 'ZIP is widely supported. 7z supports compact archives and file name encryption. Use 7z if your password includes Vietnamese diacritics.'],
+      ] },
+      { title: 'Security & privacy', items: [
+        ['Does GenZip collect my data?', 'No. No account, no telemetry, your files and file names never leave your PC. The direct-download build checks for updates at most once a day, and you can turn it off.'],
+        ['I forgot my archive password — can GenZip open it?', 'No. AES-256 has no back door, and GenZip does not crack passwords.'],
+      ] },
+      { title: 'Installation & updates', items: [
+        ['Which download should I choose?', 'Microsoft Store is recommended for automatic updates. The .exe installs for your current Windows user without administrator rights. The portable .zip runs without installation and has no right-click menu.'],
+        ['How does GenZip update?', 'Microsoft Store updates the Store build. The direct-download build checks at most once a day, can be disabled in Settings, and uses a signed update manifest.'],
+        ['Can I use GenZip alongside other archive managers?', 'Yes. GenZip only registers file associations and the right-click menu for the current Windows user, and you can toggle them in Settings → Integration.'],
+        ['Does uninstalling leave anything behind?', 'Uninstalling removes the right-click menu and file associations. Settings live in your app data folder.'],
+      ] },
     ],
   },
 }[lang];
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  inLanguage: lang,
+  mainEntity: c.groups.flatMap((group) => group.items.map(([q, a]) => ({
+    '@type': 'Question',
+    name: q,
+    acceptedAnswer: { '@type': 'Answer', text: a },
+  }))),
+};
 ---
 
-<Base title={t('nav.faq')}>
+<Base title={t('nav.faq')} description={c.lead}>
+  <PageHero eyebrow={t('nav.faq')} title={c.title} lead={c.lead} />
   <section class="section">
-    <div class="container narrow">
-      <h1>{c.title}</h1>
-      <div class="list">
-        {
-          c.items.map(([q, a], i) => (
-            <details class="card item" open={i === 0}>
-              <summary>{q}</summary>
-              <p class="muted">{a}</p>
-            </details>
-          ))
-        }
+    <div class="container faq-content" data-faq data-results={c.results}>
+      <div class="search-panel card card-soft" data-search-panel hidden>
+        <label for="faq-search">{c.search}</label>
+        <div class="search-field">
+          <Icon name="search" size={20} />
+          <input id="faq-search" type="search" placeholder={c.placeholder} aria-controls="faq-groups" autocomplete="off" />
+        </div>
+        <p class="search-status muted" role="status" aria-live="polite" data-search-status></p>
       </div>
-      <p class="more">
-        {c.more} <a href={localePath('/contact', lang)}>{c.contact} →</a>
-      </p>
+      <div id="faq-groups">
+        {c.groups.map((group, index) => (
+          <section class="faq-group" data-faq-group aria-labelledby={`faq-topic-${index}`}>
+            <h2 id={`faq-topic-${index}`}>{group.title}</h2>
+            {group.items.map(([q, a]) => (
+              <details class="faq-item" data-faq-item>
+                <summary>{q}</summary>
+                <p>{a}</p>
+              </details>
+            ))}
+          </section>
+        ))}
+      </div>
+      <p class="card muted" data-search-empty hidden>{c.empty}</p>
+      <p class="more">{c.more} <a href={localePath('/contact', lang)}>{c.contact} →</a></p>
+      <CtaCard />
     </div>
   </section>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(schema).replace(/</g, '\u003c')} />
 </Base>
 
+<script is:inline>
+  (() => {
+    const root = document.querySelector('[data-faq]');
+    if (!root) return;
+    const input = root.querySelector('#faq-search');
+    const status = root.querySelector('[data-search-status]');
+    const empty = root.querySelector('[data-search-empty]');
+    const normalize = (value) => value.toLocaleLowerCase().normalize('NFD').replace(/\p{M}/gu, '').replace(/đ/g, 'd');
+    const items = Array.from(root.querySelectorAll('[data-faq-item]')).map((item) => ({
+      item,
+      text: normalize(item.textContent || ''),
+    }));
+    const groups = Array.from(root.querySelectorAll('[data-faq-group]'));
+    root.querySelector('[data-search-panel]').hidden = false;
+    input.addEventListener('input', () => {
+      const words = normalize(input.value.trim()).split(/\s+/).filter(Boolean);
+      let count = 0;
+      items.forEach(({ item, text }) => {
+        const matches = words.every((word) => text.includes(word));
+        item.hidden = !matches;
+        item.open = words.length > 0 && matches;
+        if (matches) count++;
+      });
+      groups.forEach((group) => {
+        group.hidden = !Array.from(group.querySelectorAll('[data-faq-item]')).some((item) => !item.hidden);
+      });
+      empty.hidden = count > 0;
+      status.textContent = words.length ? `${count} ${root.dataset.results}` : '';
+    });
+  })();
+</script>
+
 <style>
-  .narrow {
-    max-width: 820px;
-  }
-  .list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-top: 32px;
-  }
-  .item {
-    padding: 0;
-  }
-  summary {
-    cursor: pointer;
-    padding: 18px 24px;
-    font-weight: 600;
-    list-style: none;
-    display: flex;
-    justify-content: space-between;
-    gap: 16px;
-  }
-  summary::-webkit-details-marker {
-    display: none;
-  }
-  summary::after {
-    content: '+';
-    color: var(--primary);
-    font-size: 1.25rem;
-    line-height: 1;
-  }
-  details[open] summary::after {
-    content: '−';
-  }
-  .item p {
-    padding: 0 24px 18px;
-    margin: 0;
-  }
-  .more {
-    margin-top: 32px;
-  }
+  .faq-content { max-width: 960px; }
+  .search-panel { margin-bottom: 40px; }
+  label { display: block; margin-bottom: 10px; font-weight: 600; }
+  .search-field { position: relative; }
+  .search-field :global(svg) { position: absolute; left: 16px; top: 16px; color: var(--text-muted); }
+  input { width: 100%; min-height: 52px; padding: 12px 16px 12px 48px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); color: var(--text); font: inherit; }
+  input::placeholder { color: var(--text-muted); opacity: 1; }
+  .search-status { margin: 10px 0 0; font-size: 0.875rem; }
+  .search-status:empty { display: none; }
+  .faq-group { margin-bottom: 36px; }
+  .faq-group h2 { font-size: 1.375rem; margin-bottom: 16px; }
+  .more { margin: 40px 0; }
 </style>

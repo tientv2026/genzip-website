@@ -2,6 +2,7 @@
 // Trang pháp lý / changelog: nội dung lấy từ src/content/legal (đồng bộ từ repo app).
 import { getCollection, render } from 'astro:content';
 import Base from '../layouts/Base.astro';
+import PageHero from '../components/ui/PageHero.astro';
 import { getLangFromUrl } from '../i18n/ui';
 
 interface Props {
@@ -17,14 +18,82 @@ const entry = find(lang) ?? find(lang === 'vi' ? 'en' : 'vi');
 if (!entry) {
   throw new Error(`Thiếu nội dung legal/${lang}/${doc}. Chạy: npm run sync`);
 }
-const { Content } = await render(entry);
+const { Content, headings } = await render(entry);
+const toc = headings.filter((heading) => heading.depth <= 3);
+const contentLang = entry.id.startsWith('en/') ? 'en' : 'vi';
+const c = {
+  vi: {
+    source: 'Nguồn',
+    toc: 'Trong trang này',
+    top: 'Về đầu trang',
+    fallback: 'Tài liệu này hiện được cung cấp bằng tiếng Anh.',
+  },
+  en: {
+    source: 'Source',
+    toc: 'On this page',
+    top: 'Back to top',
+    fallback: 'This document is currently available in Vietnamese.',
+  },
+}[lang];
 ---
 
 <Base title={entry.data.title}>
-  <section class="section">
-    <article class="container prose">
-      <h1>{entry.data.title}</h1>
-      <Content />
-    </article>
+  <div id="legal-top">
+    <PageHero title={entry.data.title}>
+      <p class="source muted">{c.source}: <code>{entry.data.source ?? `src/content/legal/${entry.id}.md`}</code></p>
+      {contentLang !== lang && <p class="fallback muted">{c.fallback}</p>}
+    </PageHero>
+  </div>
+  <section class="section" aria-label={entry.data.title}>
+    <div class:list={['container', 'legal-layout', { 'has-toc': toc.length > 0 }]}>
+      {toc.length > 0 && (
+        <aside class="legal-sidebar">
+          <nav class="card toc" aria-labelledby="legal-toc-title">
+            <h2 id="legal-toc-title">{c.toc}</h2>
+            <ul>
+              {toc.map((heading) => (
+                <li class:list={{ nested: heading.depth > 2 }}>
+                  <a href={`#${heading.slug}`}>{heading.text}</a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </aside>
+      )}
+      <div class="legal-body">
+        <article class="prose" lang={contentLang}>
+          <Content />
+        </article>
+        <a class="back-top" href="#legal-top">↑ {c.top}</a>
+      </div>
+    </div>
   </section>
 </Base>
+
+<style>
+  #legal-top { scroll-margin-top: 88px; }
+  .source { margin: 24px 0 0; font-size: 0.875rem; overflow-wrap: anywhere; }
+  .fallback { margin: 12px 0 0; }
+  .legal-layout { max-width: 1160px; }
+  .legal-body { min-width: 0; }
+  .prose { margin: 0 auto; overflow-wrap: anywhere; }
+  .prose :global(h1), .prose :global(h2), .prose :global(h3), .prose :global(h4) { scroll-margin-top: 100px; }
+  .prose :global(ul), .prose :global(ol) { padding-left: 1.5rem; }
+  .prose :global(li + li) { margin-top: 8px; }
+  .prose :global(blockquote) { margin: 24px 0; padding: 12px 20px; border-left: 3px solid var(--primary); background: var(--subtle); color: var(--text-muted); }
+  .prose :global(blockquote > :last-child) { margin-bottom: 0; }
+  .legal-sidebar { min-width: 0; margin-bottom: 32px; }
+  .toc { background: var(--subtle); }
+  .toc h2 { font-size: 1rem; margin-bottom: 16px; }
+  .toc ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 4px; }
+  .toc a { display: block; padding: 6px 0; color: var(--text-muted); font-size: 0.875rem; overflow-wrap: anywhere; }
+  .toc a:hover { color: var(--primary); }
+  .toc .nested { padding-left: 12px; }
+  .back-top { display: block; width: fit-content; margin: 40px auto 0; padding: 8px 0; font-weight: 600; }
+  @media (min-width: 1000px) {
+    .has-toc { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 48px; align-items: start; }
+    .legal-sidebar { position: sticky; top: 100px; margin-bottom: 0; }
+    .toc { max-height: calc(100dvh - 132px); overflow-y: auto; }
+    .back-top { margin-left: 0; }
+  }
+</style>
