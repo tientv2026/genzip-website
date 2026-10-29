@@ -2,39 +2,44 @@
 import Base from '../layouts/Base.astro';
 import Icon from '../components/ui/Icon.astro';
 import CopyButton from '../components/info/CopyButton.astro';
-import { getLangFromUrl, useTranslations } from '../i18n/ui';
+import { getLangFromUrl } from '../i18n/ui';
 import { support } from '../data/product';
 
 const lang = getLangFromUrl(Astro.url);
-const t = useTranslations(lang);
 const c = {
   vi: {
     title: 'Ủng hộ tác giả',
-    lead: 'GenZip miễn phí và không quảng cáo. Nếu GenZip giúp ích cho bạn, sự ủng hộ của bạn sẽ giúp dự án tiếp tục phát triển.',
+    lead: 'Cảm ơn bạn đã đồng hành cùng GenZip!',
     bank: 'Chuyển khoản ngân hàng',
+    bankHint: 'Quét mã QR bằng app ngân hàng hoặc chuyển khoản theo thông tin bên dưới.',
+    qrAlt: 'Mã VietQR chuyển khoản tới ACB – TRUONG VIET TIEN',
+    phoneTip: 'Trên điện thoại: chụp màn hình mã QR rồi mở trong app ngân hàng.',
     bankName: 'Ngân hàng',
     holder: 'Chủ tài khoản',
     account: 'Số tài khoản',
     note: 'Nội dung chuyển khoản',
-    paypalText: 'Một cách thuận tiện để ủng hộ tác giả từ nước ngoài.',
-    paypalBtn: 'Ủng hộ qua PayPal',
+    paypalText: 'Ủng hộ qua PayPal — nhanh chóng, an toàn.',
+    paypalBtn: 'Mở PayPal',
     helps: 'Ủng hộ cũng giúp…',
-    reasons: ['Giữ GenZip miễn phí cho mọi người.', 'Duy trì một ứng dụng không quảng cáo.', 'Tiếp tục phát triển cho các nền tảng mới.'],
-    thanks: 'Cảm ơn bạn đã dùng GenZip. Mọi sự ủng hộ đều được trân trọng.',
+    reasons: ['Giữ GenZip miễn phí cho mọi người.', 'Duy trì một ứng dụng không quảng cáo.', 'Tiếp tục cải thiện GenZip.'],
+    thanks: 'Mọi sự ủng hộ đều giúp GenZip phát triển tốt hơn.',
   },
   en: {
     title: 'Support the author',
-    lead: 'GenZip is free and ad-free. If it helps you, your support can help the project keep growing.',
+    lead: 'Thank you for being with GenZip!',
     bank: 'Bank transfer (Vietnam)',
+    bankHint: 'Scan with your banking app or transfer using the details below.',
+    qrAlt: 'VietQR code for a transfer to ACB – TRUONG VIET TIEN',
+    phoneTip: 'On a phone: take a screenshot of the QR and open it in your banking app.',
     bankName: 'Bank',
     holder: 'Account holder',
     account: 'Account number',
     note: 'Transfer reference',
-    paypalText: 'A convenient way to support the author from abroad.',
-    paypalBtn: 'Support with PayPal',
+    paypalText: 'Support via PayPal — quick and secure.',
+    paypalBtn: 'Open PayPal',
     helps: 'Your support also helps…',
-    reasons: ['Keep GenZip free for everyone.', 'Maintain an app without ads.', 'Continue development for new platforms.'],
-    thanks: 'Thank you for using GenZip. Every contribution is appreciated.',
+    reasons: ['Keep GenZip free for everyone.', 'Maintain an app without ads.', 'Keep improving GenZip.'],
+    thanks: 'Every contribution helps GenZip grow.',
   },
 }[lang];
 const fields = [
@@ -44,78 +49,157 @@ const fields = [
 ];
 ---
 
-<Base title={t('nav.support')} description={c.lead}>
-  <section class="page-hero">
-    <div class="container support-head">
-      <img src="/brand/genzip-128.png" alt="GenZip" width="80" height="80" />
-      <span class="eyebrow"><Icon name="heart" size={16} />{t('nav.support')}</span>
-      <h1>{c.title}</h1>
-      <p class="lead">{c.lead}</p>
-    </div>
-  </section>
-  <section class="section">
+<Base title={c.title} description={c.lead}>
+  <section class="support-page">
     <div class="container support-content">
+      <header class="support-head">
+        <svg class="support-mug" viewBox="0 0 80 80" width="80" height="80" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+          <defs>
+            <linearGradient id="support-mug-gradient" x1="16" y1="20" x2="64" y2="72" gradientUnits="userSpaceOnUse">
+              <stop class="gradient-start" />
+              <stop class="gradient-end" offset="1" />
+            </linearGradient>
+          </defs>
+          <path class="mug-steam" d="m23 17-4-6m18 4V7m14 10 4-6" stroke-width="4" />
+          <path d="M13 28h45v24c0 13-8 20-22 20S13 65 13 52V28Zm45 7h5c13 0 13 22 0 22h-5" stroke="url(#support-mug-gradient)" stroke-width="4" />
+          <path class="mug-heart" d="M36 57 24 45a7 7 0 0 1 12-7 7 7 0 0 1 12 7L36 57Z" />
+        </svg>
+        <div>
+          <h1>{c.title}</h1>
+          <p class="lead">{c.lead}</p>
+        </div>
+      </header>
       <div class="options">
-        <section class="card card-raised" aria-labelledby="bank-title">
-          <h2 id="bank-title">{c.bank}</h2>
-          <dl>
-            {fields.map(({ label, value }) => (
-              <div class="bank-field">
-                <dt>{label}</dt>
-                <dd>
-                  <span class="bank-value">{value}</span>
-                  <CopyButton value={value} label={label} />
-                </dd>
+        <section class="card card-raised bank-card" aria-labelledby="bank-title">
+          <div class="card-heading">
+            <span class="bank-icon">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <path d="m3 8 9-6 9 6H3Zm2 3v7m7-7v7m7-7v7M4 18h16M2 22h20" />
+              </svg>
+            </span>
+            <div>
+              <h2 id="bank-title">{c.bank}</h2>
+              <p class="muted">{c.bankHint}</p>
+            </div>
+          </div>
+          <div class="bank-details">
+            <figure class="qr">
+              <div class="qr-frame">
+                <img src={support.qr} width="220" height="220" alt={c.qrAlt} />
+                <span class="qr-corner top-left" aria-hidden="true"></span>
+                <span class="qr-corner top-right" aria-hidden="true"></span>
+                <span class="qr-corner bottom-left" aria-hidden="true"></span>
+                <span class="qr-corner bottom-right" aria-hidden="true"></span>
               </div>
-            ))}
-          </dl>
-          <p class="transfer-note muted">{c.note}: <strong>GenZip</strong></p>
+              <figcaption class="muted">VietQR · NAPAS 247</figcaption>
+            </figure>
+            <div class="bank-info">
+              <dl>
+                {fields.map(({ label, value }) => (
+                  <div class="bank-field">
+                    <dt>{label}</dt>
+                    <dd>
+                      <span class="bank-value">{value}</span>
+                      <CopyButton value={value} label={label} />
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+              <p class="transfer-note muted">{c.note}: <strong>GenZip</strong></p>
+            </div>
+          </div>
+          <p class="phone-tip muted">{c.phoneTip}</p>
         </section>
-        <section class="card paypal-card" aria-labelledby="paypal-title">
-          <span class="icon-badge"><Icon name="heart" /></span>
-          <h2 id="paypal-title">PayPal</h2>
+        <section class="card card-raised paypal-card" aria-labelledby="paypal-title">
+          <div class="card-heading">
+            <span class="paypal-tile" aria-hidden="true">P</span>
+            <h2 id="paypal-title">PayPal</h2>
+          </div>
           <p class="muted">{c.paypalText}</p>
-          <a class="btn btn-primary" href={support.paypal} rel="noopener noreferrer">{c.paypalBtn}<Icon name="arrow-right" size={18} /></a>
+          <a class="btn btn-primary" href={support.paypal} target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+              <path d="M14 3h7v7m0-7L10 14M10 3H3v18h18v-7" />
+            </svg>
+            {c.paypalBtn}
+          </a>
         </section>
       </div>
-      <section class="card card-soft reasons" aria-labelledby="support-helps">
+      <p class="thanks muted"><Icon name="heart" size={22} />{c.thanks}</p>
+      <section class="reasons" aria-labelledby="support-helps">
         <h2 id="support-helps">{c.helps}</h2>
         <ul>
           {c.reasons.map((reason) => <li><Icon name="check" size={20} /><span>{reason}</span></li>)}
         </ul>
       </section>
-      <p class="thanks muted"><Icon name="heart" size={20} />{c.thanks}</p>
     </div>
   </section>
 </Base>
 
 <style>
-  .support-head { max-width: 840px; text-align: center; }
-  .support-head img { margin: 0 auto 20px; }
-  .support-head .eyebrow :global(svg) { color: var(--brand-link); }
-  .support-head .lead { margin-inline: auto; }
-  .support-content { max-width: 1000px; }
-  .options { display: grid; grid-template-columns: 1.15fr 1fr; gap: 24px; }
+  .support-page { padding: 64px 0; background: var(--hero-gradient); }
+  .support-content { max-width: 1200px; }
+  .support-head { display: flex; align-items: center; gap: 24px; margin-bottom: 36px; }
+  .support-head h1 { margin-bottom: 12px; }
+  .support-head .lead { margin: 0; color: var(--text-muted); font-size: 1.125rem; }
+  .gradient-start { stop-color: var(--brand-magenta); }
+  .gradient-end { stop-color: var(--brand-purple); }
+  .mug-steam { stroke: var(--brand-magenta); }
+  .mug-heart { fill: var(--accent-pink); stroke: var(--brand-magenta); stroke-width: 1.5; }
+  .options { display: grid; grid-template-columns: minmax(0, 1.85fr) minmax(0, 1fr); gap: 20px; }
   .options > section { min-width: 0; border-radius: var(--radius-lg); }
-  h2 { font-size: 1.375rem; }
-  dl { margin: 24px 0; }
-  .bank-field + .bank-field { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border); }
-  dt { color: var(--text-muted); font-size: 0.875rem; }
-  dd { margin: 4px 0 0; }
+  .card-heading { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
+  h2 { font-size: 1.25rem; }
+  .card-heading h2 { margin-bottom: 8px; }
+  .card-heading p { margin: 0; font-size: 0.9375rem; }
+  .bank-icon, .paypal-tile { display: grid; place-items: center; flex-shrink: 0; width: 52px; height: 52px; border-radius: var(--radius); }
+  .bank-icon { color: var(--primary); background: var(--accent-soft); }
+  .bank-details { display: grid; grid-template-columns: 244px minmax(0, 1fr); align-items: start; gap: 24px; }
+  .qr { width: 244px; max-width: 100%; margin: 0; }
+  /* Nền QR luôn trắng để giữ độ tương phản trong cả hai giao diện. */
+  .qr-frame { --qr-paper: #fff; position: relative; padding: 12px; background: var(--qr-paper); border-radius: var(--radius); }
+  .qr-frame img { width: 220px; height: auto; aspect-ratio: 1; background: var(--qr-paper); filter: none; }
+  .qr-corner { position: absolute; width: 22px; height: 22px; border: 3px solid var(--primary); }
+  .top-left { top: 5px; left: 5px; border-right: 0; border-bottom: 0; border-radius: 6px 0 0; }
+  .top-right { top: 5px; right: 5px; border-left: 0; border-bottom: 0; border-radius: 0 6px 0 0; }
+  .bottom-left { bottom: 5px; left: 5px; border-right: 0; border-top: 0; border-radius: 0 0 0 6px; }
+  .bottom-right { bottom: 5px; right: 5px; border-left: 0; border-top: 0; border-radius: 0 0 6px; }
+  figcaption { margin-top: 10px; text-align: center; font-size: 0.8125rem; }
+  .bank-info { min-width: 0; }
+  dl { margin: 0; }
+  .bank-field + .bank-field { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
+  dt { color: var(--text-muted); font-size: 0.8125rem; }
+  dd { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 12px; margin: 4px 0 0; }
   .bank-value { font-weight: 600; overflow-wrap: anywhere; user-select: all; }
-  .transfer-note { margin: 0; padding: 12px 16px; background: var(--subtle); border-radius: var(--radius-sm); }
+  .bank-field :global(.copy-control) { margin-top: 0; }
+  .transfer-note { margin: 16px 0 0; padding: 10px 12px; background: var(--subtle); border-radius: var(--radius-sm); font-size: 0.875rem; }
   .transfer-note strong { color: var(--text); }
   .paypal-card { display: flex; flex-direction: column; align-items: flex-start; }
-  .paypal-card .icon-badge { margin-bottom: 24px; color: var(--brand-link); }
-  .paypal-card .btn { margin-top: auto; }
-  .reasons { margin-top: 32px; border-radius: var(--radius-lg); }
-  .reasons ul { padding: 0; margin: 20px 0 0; list-style: none; display: grid; gap: 12px; }
-  .reasons li { display: flex; align-items: flex-start; gap: 12px; }
+  .phone-tip { display: none; margin: 20px 0 0; font-size: 0.875rem; }
+  .paypal-tile { background: var(--subtle); border: 1px solid var(--border); color: var(--text-muted); font-size: 1.75rem; font-weight: 600; }
+  .paypal-card h2 { margin: 0; }
+  .paypal-card .btn { width: 100%; margin-top: auto; }
+  .reasons { margin-top: 40px; }
+  .reasons h2 { font-size: 1rem; }
+  .reasons ul { padding: 0; margin: 16px 0 0; list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px 24px; }
+  .reasons li { display: flex; align-items: flex-start; gap: 8px; color: var(--text-muted); font-size: 0.9375rem; }
   .reasons li :global(svg) { margin-top: 3px; color: var(--primary); }
-  .thanks { display: flex; align-items: flex-start; justify-content: center; gap: 10px; margin: 32px 0 0; text-align: center; }
-  .thanks :global(svg) { margin-top: 3px; color: var(--brand-link); }
-  @media (max-width: 700px) {
+  .thanks { display: flex; align-items: flex-start; gap: 12px; margin: 28px 0 0; padding-top: 24px; border-top: 1px solid var(--border); }
+  .thanks :global(svg) { margin-top: 2px; color: var(--accent-pink); fill: currentColor; }
+  @media (max-width: 999px) {
     .options { grid-template-columns: 1fr; }
-    .paypal-card .btn { margin-top: 12px; }
+    .paypal-card .btn { width: auto; margin-top: 8px; }
+  }
+  @media (max-width: 639px) {
+    .support-page { padding: 36px 0; }
+    .support-head { align-items: flex-start; gap: 16px; margin-bottom: 28px; }
+    .support-mug { width: 56px; height: 56px; }
+    .support-head .lead { font-size: 1rem; }
+    .card-heading { align-items: flex-start; gap: 12px; }
+    .bank-details { grid-template-columns: minmax(0, 1fr); }
+    .qr { justify-self: center; }
+    .phone-tip { display: block; }
+    .paypal-card .card-heading { align-items: center; }
+    .paypal-card .btn { width: 100%; }
+    .reasons ul { grid-template-columns: 1fr; }
   }
 </style>
