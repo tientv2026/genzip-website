@@ -79,5 +79,7 @@ export function localePath(path: string, lang: Lang): string {
 /** Cùng trang ở ngôn ngữ kia (dùng cho nút VI/EN). */
 export function switchLangPath(url: URL, target: Lang): string {
   const rest = url.pathname.replace(/^\/en(?=\/|$)/, '') || '/';
+  // Trang 404 chỉ có một bản: đổi ngôn ngữ thì về trang chủ ngôn ngữ đó.
+  if (/^\/404\/?$/.test(rest)) return localePath('/', target);
   return localePath(rest, target);
 }

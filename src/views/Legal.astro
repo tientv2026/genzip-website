@@ -21,6 +21,12 @@ if (!entry) {
 const { Content, headings } = await render(entry);
 const toc = headings.filter((heading) => heading.depth <= 3);
 const contentLang = entry.id.startsWith('en/') ? 'en' : 'vi';
+// Tiêu đề trong tệp gốc viết hoa và kèm "— GenZip": đổi thành dạng câu cho tab và tiêu đề trang.
+const rawTitle = entry.data.title.replace(/\s*[—–-]\s*genzip$/i, '');
+const title =
+  rawTitle === rawTitle.toLocaleUpperCase(contentLang)
+    ? rawTitle.charAt(0) + rawTitle.slice(1).toLocaleLowerCase(contentLang)
+    : rawTitle;
 const c = {
   vi: {
     source: 'Nguồn',
@@ -37,14 +43,14 @@ const c = {
 }[lang];
 ---
 
-<Base title={entry.data.title}>
+<Base title={title}>
   <div id="legal-top">
-    <PageHero title={entry.data.title}>
+    <PageHero title={title}>
       <p class="source muted">{c.source}: <code>{entry.data.source ?? `src/content/legal/${entry.id}.md`}</code></p>
       {contentLang !== lang && <p class="fallback muted">{c.fallback}</p>}
     </PageHero>
   </div>
-  <section class="section" aria-label={entry.data.title}>
+  <section class="section" aria-label={title}>
     <div class:list={['container', 'legal-layout', { 'has-toc': toc.length > 0 }]}>
       {toc.length > 0 && (
         <aside class="legal-sidebar">
