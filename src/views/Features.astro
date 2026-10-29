@@ -1,5 +1,11 @@
 ---
 import Base from '../layouts/Base.astro';
+import Screenshot from '../components/Screenshot.astro';
+import FeatureGrid from '../components/features/FeatureGrid.astro';
+import PageHero from '../components/ui/PageHero.astro';
+import SectionHeading from '../components/ui/SectionHeading.astro';
+import CtaCard from '../components/ui/CtaCard.astro';
+import Icon from '../components/ui/Icon.astro';
 import { getLangFromUrl, useTranslations } from '../i18n/ui';
 
 const lang = getLangFromUrl(Astro.url);
@@ -9,11 +15,28 @@ type Group = { id: string; title: string; items: string[] };
 
 const c = {
   vi: {
+    eyebrow: 'TÍNH NĂNG',
     title: 'Mọi thứ bạn cần để làm việc với tệp nén',
     lead: 'Danh sách dưới đây chỉ gồm những gì GenZip đã làm được. Tính năng chưa xong được ghi rõ “Sắp có”.',
     noRar: 'GenZip đọc và giải nén được RAR nhưng không tạo tệp RAR (RAR là định dạng độc quyền).',
     soonTitle: 'Sắp có',
     soon: ['macOS', 'Linux', 'Hàng đợi nhiều tác vụ', 'Xem trước tệp', 'Tạo tệp tự giải nén (SFX)'],
+    jumpLabel: 'Đi tới nhóm tính năng',
+    available: 'Đang có trong GenZip',
+    rarTitle: 'Đọc RAR, tạo ZIP, 7z và TAR',
+    soonLead: 'Những tính năng đang được lên kế hoạch, chưa có trong phiên bản hiện tại.',
+    shots: ['GenZip đang mở và duyệt nội dung tệp nén', 'Hộp thoại chọn thư mục đích và tùy chọn giải nén trong GenZip', 'Hộp thoại tạo tệp nén và các tùy chọn nén trong GenZip'],
+    cardTitles: {
+      security: ['Mã hóa AES-256', 'Mật khẩu riêng tư', 'Giải nén an toàn', 'Engine tách biệt', 'Giữ cảnh báo Internet'],
+      progress: ['Tiến độ rõ ràng', 'Tạm dừng thật', 'Theo dõi khi chạy nền', 'Dừng khi cần'],
+      windows: ['Menu chuột phải', 'Mở bằng nhấp đúp', 'Một cửa sổ làm việc', 'Hỗ trợ tiếp cận'],
+      personal: ['Sáng, tối, hệ thống', 'Màu nhấn của bạn', 'Sắp xếp không gian', 'Hai ngôn ngữ'],
+      updates: ['Qua Microsoft Store', 'Tự kiểm tra cập nhật', 'Xác minh phiên bản', 'Chọn kênh cập nhật'],
+      cli: ['Mở tệp nén', 'Giải nén', 'Tạo tệp nén', 'Kiểm tra tệp nén', 'Xem phiên bản'],
+    } as Record<string, string[]>,
+    cliLead: 'Mở, giải nén, tạo và kiểm tra tệp nén từ dòng lệnh.',
+    cliLabel: 'Các lệnh GenZip',
+    cliDescriptions: ['Mở tệp nén từ đường dẫn.', 'Giải nén bằng lệnh x hoặc e.', 'Tạo nén với tùy chọn --quick zip|7z.', 'Kiểm tra tệp nén bằng lệnh t.', 'Hiển thị phiên bản GenZip.'],
     groups: [
       { id: 'open', title: 'Mở & xem', items: ['ZIP, 7z, RAR4/RAR5 (kể cả header mã hoá), TAR, GZ, BZ2, XZ, ZST, ISO, CAB, WIM', 'Tệp chia phần .7z.001, .part1.rar — báo rõ khi thiếu phần', 'Màn Home: kéo-thả, tệp gần đây, Tạo/Mở nhanh', 'Thanh địa chỉ, Back/Forward/Up, tìm trong tệp nén', 'Lọc theo loại: Thư mục, Tài liệu, Ảnh, Video, Âm thanh, Khác', 'Thống kê: số thư mục/tệp, tỉ lệ nén, trạng thái mã hoá', 'Bảng nhiều cột sắp xếp được, chọn nhiều mục', 'Hỏi lại trước khi mở tệp có rủi ro (exe, script…)'] },
       { id: 'extract', title: 'Giải nén', items: ['Tất cả / mục đã chọn / thư mục con', 'Thư mục đích có lịch sử, tạo thư mục theo tên tệp nén', 'Tệp trùng: Hỏi / Ghi đè / Bỏ qua / Tự đổi tên', 'Giữ cấu trúc thư mục, mở thư mục đích khi xong', 'Kiểm tra lại sau khi giải nén', '“Giải nén tại đây” ra thư mục con cạnh tệp nén'] },
@@ -27,11 +50,28 @@ const c = {
     ] as Group[],
   },
   en: {
+    eyebrow: 'FEATURES',
     title: 'Everything you need to handle archives',
     lead: 'This list only contains what GenZip already does. Unfinished features are marked “Coming soon”.',
     noRar: 'GenZip opens and extracts RAR but does not create RAR files (RAR is a proprietary format).',
     soonTitle: 'Coming soon',
     soon: ['macOS', 'Linux', 'Batch queue', 'File preview', 'Self-extracting archives (SFX)'],
+    jumpLabel: 'Jump to a feature group',
+    available: 'Available in GenZip',
+    rarTitle: 'Read RAR, create ZIP, 7z and TAR',
+    soonLead: 'Planned features, not yet available in the current version.',
+    shots: ['GenZip opening and browsing the contents of an archive', 'GenZip extraction dialog with destination and extraction options', 'GenZip archive creation dialog with compression options'],
+    cardTitles: {
+      security: ['AES-256 encryption', 'Private passwords', 'Safe extraction', 'Separate engine', 'Internet warnings kept'],
+      progress: ['Clear progress', 'Real pause', 'Background progress', 'Stop when needed'],
+      windows: ['Right-click menu', 'Double-click to open', 'One workspace', 'Accessibility'],
+      personal: ['Light, dark, system', 'Your accent color', 'Your workspace', 'Two languages'],
+      updates: ['Via Microsoft Store', 'Update checks', 'Verified releases', 'Choose your channel'],
+      cli: ['Open an archive', 'Extract', 'Create an archive', 'Test an archive', 'Show version'],
+    } as Record<string, string[]>,
+    cliLead: 'Open, extract, create and test archives from the command line.',
+    cliLabel: 'GenZip commands',
+    cliDescriptions: ['Open an archive from its path.', 'Extract using the x or e command.', 'Create with the --quick zip|7z option.', 'Test an archive using the t command.', 'Display the GenZip version.'],
     groups: [
       { id: 'open', title: 'Open & browse', items: ['ZIP, 7z, RAR4/RAR5 (including encrypted headers), TAR, GZ, BZ2, XZ, ZST, ISO, CAB, WIM', 'Split archives .7z.001, .part1.rar — tells you when a part is missing', 'Home screen: drag & drop, recent files, quick Create/Open', 'Address bar, Back/Forward/Up, search inside the archive', 'Filter by type: Folders, Documents, Images, Video, Audio, Other', 'Stats: folders/files, compression ratio, encryption state', 'Sortable multi-column table, multi-select', 'Asks before opening risky files (exe, scripts…)'] },
       { id: 'extract', title: 'Extract', items: ['All / selected / subfolder', 'Destination history, folder named after the archive', 'Existing files: Ask / Overwrite / Skip / Auto-rename', 'Keep folder structure, open destination when done', 'Verify after extraction', '“Extract here” into a subfolder next to the archive'] },
@@ -45,122 +85,126 @@ const c = {
     ] as Group[],
   },
 }[lang];
+const screenshots = ['main', 'extract', 'create'] as const;
+const groupIcons: Record<string, string> = {
+  open: 'folder', extract: 'download', create: 'file', security: 'shield',
+  progress: 'bolt', windows: 'windows', personal: 'sun', updates: 'download', cli: 'gear',
+};
+const featureIcons: Record<string, string[]> = {
+  security: ['lock', 'key', 'shield', 'gear', 'file'],
+  progress: ['bolt', 'minus', 'windows', 'folder'],
+  windows: ['menu', 'file', 'windows', 'eye'],
+  personal: ['moon', 'sun', 'gear', 'file'],
+  updates: ['store', 'download', 'shield', 'split'],
+};
+const commands = c.groups[8].items.map((item) => item.split(' — ')[0]);
 ---
 
-<Base title={t('nav.features')}>
-  <section class="section">
+<Base title={t('nav.features')} description={c.lead}>
+  <PageHero eyebrow={c.eyebrow} title={c.title} lead={c.lead} />
+
+  <div class="container">
+    <nav class="quick-jumps" aria-label={c.jumpLabel}>
+      {c.groups.map((g) => (
+        <a class="pill-btn" href={`#${g.id}`}><Icon name={groupIcons[g.id]} size={18} />{g.title}</a>
+      ))}
+      <a class="pill-btn" href="#soon"><Icon name="plus" size={18} />{c.soonTitle}</a>
+    </nav>
+  </div>
+
+  {c.groups.slice(0, 3).map((g, i) => (
+    <section id={g.id} class:list={['section feature-section', { band: i === 1 }]}>
+      <div class:list={['container feature-row', { reversed: i === 1 }]}>
+        <div class="feature-copy">
+          <SectionHeading eyebrow={c.available} title={g.title} align="left" />
+          <ul class="feature-list">
+            {g.items.map((item) => <li><Icon name="check" size={18} /><span>{item}</span></li>)}
+          </ul>
+        </div>
+        <div class="feature-visual">
+          <Screenshot name={screenshots[i]} alt={c.shots[i]} />
+        </div>
+      </div>
+    </section>
+  ))}
+
+  {c.groups.slice(3, 8).map((g, i) => (
+    <section id={g.id} class:list={['section feature-section', { band: i % 2 === 0 }]}>
+      <div class="container">
+        <SectionHeading title={g.title} align="left" />
+        <FeatureGrid items={g.items.map((text, index) => ({
+          icon: featureIcons[g.id][index],
+          title: c.cardTitles[g.id][index],
+          text,
+        }))} />
+      </div>
+    </section>
+  ))}
+
+  <section id="cli" class="section feature-section">
     <div class="container">
-      <header class="page-head">
-        <h1>{c.title}</h1>
-        <p class="muted">{c.lead}</p>
-      </header>
-
-      <div class="layout">
-        <nav class="toc" aria-label={t('nav.features')}>
-          {c.groups.map((g) => <a href={`#${g.id}`}>{g.title}</a>)}
-          <a href="#soon">{c.soonTitle}</a>
-        </nav>
-
-        <div class="groups">
-          <div class="callout callout-note">{c.noRar}</div>
-          {
-            c.groups.map((g) => (
-              <section id={g.id} class="card group">
-                <h2>{g.title}</h2>
-                <ul>
-                  {g.items.map((item) => (
-                    <li>{item}</li>
-                  ))}
-                </ul>
-              </section>
-            ))
-          }
-          <section id="soon" class="card group">
-            <h2>{c.soonTitle}</h2>
-            <div class="soon">{c.soon.map((s) => <span class="chip chip-soon">{s}</span>)}</div>
-          </section>
+      <SectionHeading title={c.groups[8].title} lead={c.cliLead} align="left" />
+      <div class="command-layout">
+        <FeatureGrid items={c.cardTitles.cli.map((title, i) => ({ icon: 'gear', title, text: c.cliDescriptions[i] }))} />
+        <div class="command-panel card card-raised">
+          <div class="command-heading"><Icon name="gear" size={20} /><span>{c.cliLabel}</span></div>
+          <pre tabindex="0" aria-label={c.cliLabel}><code>{commands.map((command, i) => `# ${c.cardTitles.cli[i]}\n${command}`).join('\n\n')}</code></pre>
         </div>
       </div>
     </div>
   </section>
+
+  <div class="container closing-sections">
+    <aside class="rar-note card card-soft">
+      <span class="icon-badge"><Icon name="file" /></span>
+      <div><h2>{c.rarTitle}</h2><p class="muted">{c.noRar}</p></div>
+    </aside>
+    <section id="soon" class="soon-section">
+      <SectionHeading title={c.soonTitle} lead={c.soonLead} align="left" />
+      <ul class="soon">{c.soon.map((s) => <li class="chip chip-soon">{s}</li>)}</ul>
+    </section>
+    <CtaCard />
+  </div>
 </Base>
 
 <style>
-  .page-head {
-    max-width: 760px;
-    margin-bottom: 40px;
-  }
-  .layout {
-    display: grid;
-    grid-template-columns: 220px 1fr;
-    gap: 40px;
-    align-items: start;
-  }
-  .toc {
-    position: sticky;
-    top: 88px;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-  .toc a {
-    color: var(--text-muted);
-    padding: 6px 12px;
-    border-left: 2px solid var(--border);
-  }
-  .toc a:hover {
-    color: var(--primary);
-    border-color: var(--primary);
-    text-decoration: none;
-  }
-  .groups {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-  .group {
-    scroll-margin-top: 88px;
-  }
-  .group h2 {
-    font-size: 1.35rem;
-  }
-  ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px 24px;
-  }
-  li {
-    position: relative;
-    padding-left: 26px;
-  }
-  li::before {
-    content: '';
-    position: absolute;
-    left: 2px;
-    top: 0.45em;
-    width: 12px;
-    height: 7px;
-    border-left: 2px solid var(--primary);
-    border-bottom: 2px solid var(--primary);
-    transform: rotate(-45deg);
-  }
-  .soon {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
+  .quick-jumps { display: flex; flex-wrap: wrap; gap: 10px; padding-block: 28px; }
+  .quick-jumps .pill-btn { border-radius: 999px; background: var(--surface); }
+  .feature-section, .soon-section { scroll-margin-top: 96px; }
+  .feature-row { display: grid; grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.15fr); gap: 48px; align-items: center; }
+  .feature-copy, .feature-visual { min-width: 0; }
+  .reversed { grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.95fr); }
+  .reversed .feature-copy { grid-column: 2; grid-row: 1; }
+  .reversed .feature-visual { grid-column: 1; grid-row: 1; }
+  .feature-list { display: grid; gap: 13px; list-style: none; padding: 0; margin: 0; }
+  .feature-list li { display: flex; align-items: flex-start; gap: 10px; color: var(--text-muted); }
+  .feature-list :global(svg) { color: var(--primary); margin-top: 4px; }
+  .command-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; align-items: start; }
+  .command-layout :global(.feature-grid) { grid-template-columns: minmax(0, 1fr); }
+  .command-panel { min-width: 0; padding: 0; overflow: hidden; border-radius: var(--radius-lg); }
+  .command-heading { display: flex; align-items: center; gap: 10px; padding: 16px 20px; border-bottom: 1px solid var(--border); color: var(--text-muted); }
+  .command-heading :global(svg) { color: var(--primary); }
+  pre { border: 0; border-radius: 0; padding: 24px; margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.7; color: var(--text); }
+  .closing-sections { padding-block: 8px 56px; }
+  .rar-note { display: flex; align-items: center; gap: 24px; border-radius: var(--radius-lg); }
+  .rar-note .icon-badge { background: var(--surface); }
+  .rar-note h2 { font-size: 1.25rem; margin-bottom: 8px; }
+  .rar-note p { margin: 0; }
+  .soon-section { padding-block: 48px; }
+  .soon { display: flex; flex-wrap: wrap; gap: 10px; list-style: none; padding: 0; margin: 0; }
   @media (max-width: 900px) {
-    .layout {
-      grid-template-columns: 1fr;
-    }
-    .toc {
-      display: none;
-    }
-    ul {
-      grid-template-columns: 1fr;
-    }
+    .feature-row, .reversed, .command-layout { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+    .reversed .feature-copy, .reversed .feature-visual { grid-column: auto; grid-row: auto; }
+    .feature-visual { width: 100%; max-width: 760px; margin-inline: auto; }
+  }
+  @media (max-width: 600px) {
+    .quick-jumps { gap: 8px; padding-block: 24px 12px; }
+    .quick-jumps .pill-btn { padding-inline: 12px; }
+    .rar-note { align-items: flex-start; gap: 16px; }
+    .rar-note .icon-badge { width: 48px; height: 48px; }
+    .rar-note .icon-badge :global(svg) { width: 28px; height: 28px; }
+    pre { padding: 20px; }
+    .soon-section { padding-block: 36px; }
+    .closing-sections { padding-bottom: 36px; }
   }
 </style>

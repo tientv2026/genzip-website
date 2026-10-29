@@ -1,0 +1,44 @@
+---
+import Icon from '../ui/Icon.astro';
+
+interface Props {
+  items: { icon: string; title: string; text: string }[];
+}
+
+const { items } = Astro.props;
+---
+
+<ul class="feature-grid">
+  {items.map((item) => (
+    <li class="card feature-card">
+      <span class="icon-badge"><Icon name={item.icon} /></span>
+      <div>
+        <h3>{item.title}</h3>
+        <p class="muted">{item.text}</p>
+      </div>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .feature-card { display: flex; align-items: flex-start; gap: 16px; }
+  .feature-card > div { min-width: 0; }
+  .icon-badge { width: 48px; height: 48px; }
+  .icon-badge :global(svg) { width: 26px; height: 26px; }
+  h3 { font-size: 1.0625rem; margin-bottom: 8px; }
+  p { margin: 0; font-size: 0.9375rem; overflow-wrap: anywhere; }
+  @media (max-width: 1000px) {
+    .feature-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 600px) {
+    .feature-grid { grid-template-columns: minmax(0, 1fr); }
+  }
+</style>
