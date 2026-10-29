@@ -1,0 +1,38 @@
+---
+import Screenshot from '../Screenshot.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import FeatureGrid from './FeatureGrid.astro';
+
+interface Props {
+  id: string;
+  title: string;
+  lead: string;
+  screenshot?: 'main' | 'preview-image' | 'create' | 'extract' | 'queue' | 'test-result';
+  alt?: string;
+  items: { icon: string; title: string; text: string }[];
+  band?: boolean;
+}
+
+const { id, title, lead, screenshot, alt, items, band = false } = Astro.props;
+---
+
+<section id={id} class:list={['section feature-group', { band }]} aria-label={title}>
+  <div class="container">
+    <div class:list={['introduction', { illustrated: screenshot }]}>
+      <SectionHeading title={title} lead={lead} align="left" />
+      {screenshot && <div class="visual"><Screenshot name={screenshot} alt={alt ?? title} /></div>}
+    </div>
+    <FeatureGrid items={items} />
+  </div>
+</section>
+
+<style>
+  .feature-group { scroll-margin-top: 96px; }
+  .illustrated { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); align-items: center; gap: 40px; margin-bottom: 32px; }
+  .illustrated :global(.section-heading) { margin-bottom: 0; }
+  .visual { min-width: 0; }
+  @media (max-width: 800px) {
+    .illustrated { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+    .visual { width: 100%; max-width: 720px; margin-inline: auto; }
+  }
+</style>

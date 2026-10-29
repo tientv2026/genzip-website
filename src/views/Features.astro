@@ -1,210 +1,318 @@
 ---
 import Base from '../layouts/Base.astro';
-import Screenshot from '../components/Screenshot.astro';
+import FeatureGroup from '../components/features/FeatureGroup.astro';
+import FormatMatrix from '../components/features/FormatMatrix.astro';
 import FeatureGrid from '../components/features/FeatureGrid.astro';
 import PageHero from '../components/ui/PageHero.astro';
 import SectionHeading from '../components/ui/SectionHeading.astro';
-import CtaCard from '../components/ui/CtaCard.astro';
 import Icon from '../components/ui/Icon.astro';
 import { getLangFromUrl, useTranslations } from '../i18n/ui';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-
-type Group = { id: string; title: string; items: string[] };
+type Card = { icon: string; title: string; text: string };
+type Group = {
+  id: string;
+  icon: string;
+  title: string;
+  lead: string;
+  screenshot?: 'main' | 'preview-image' | 'create' | 'extract' | 'queue' | 'test-result';
+  alt?: string;
+  items: Card[];
+};
 
 const c = {
   vi: {
-    eyebrow: 'TÍNH NĂNG',
-    title: 'Mọi thứ bạn cần để làm việc với tệp nén',
-    lead: 'Danh sách dưới đây chỉ gồm những gì GenZip đã làm được. Tính năng chưa xong được ghi rõ “Sắp có”.',
-    noRar: 'GenZip đọc và giải nén được RAR nhưng không tạo tệp RAR (RAR là định dạng độc quyền).',
+    eyebrow: 'TÍNH NĂNG · 0.9.0-beta.1',
+    title: 'Làm việc với tệp nén, từ đầu đến cuối',
+    lead: 'Tham chiếu tính năng của GenZip 0.9.0-beta.1, bản Microsoft Store: mở, duyệt, chỉnh sửa, tạo và giải nén trong một giao diện quen thuộc.',
+    toc: 'Trong trang này',
+    formatsTitle: 'Định dạng được hỗ trợ',
+    formatsLead: 'Đọc và giải nén các định dạng mà lõi 7-Zip 26.05 hỗ trợ. Chỉ tạo và sửa ZIP, 7Z, TAR; không tạo RAR.',
     soonTitle: 'Sắp có',
-    soon: ['macOS', 'Linux', 'Tăng tốc nhờ RAM: đọc trước tới 100 MB, dùng tối đa 35% RAM trống'],
-    jumpLabel: 'Đi tới nhóm tính năng',
-    available: 'Đang có trong GenZip',
-    rarTitle: 'Đọc RAR, tạo ZIP, 7z và TAR',
-    soonLead: 'Những tính năng đang được lên kế hoạch, chưa có trong phiên bản hiện tại.',
-    shots: ['GenZip đang mở và duyệt nội dung tệp nén', 'Hộp thoại chọn thư mục đích và tùy chọn giải nén trong GenZip', 'Hộp thoại tạo tệp nén và các tùy chọn nén trong GenZip'],
-    cardTitles: {
-      security: ['Mã hóa AES-256', 'Mật khẩu riêng tư', 'Giải nén an toàn', 'Engine tách biệt', 'Giữ cảnh báo Internet'],
-      progress: ['Hàng đợi tác vụ', 'Tiến độ rõ ràng', 'Tạm dừng thật', 'Theo dõi khi chạy nền', 'Dừng khi cần'],
-      windows: ['Menu chuột phải', 'Mở bằng nhấp đúp', 'Một cửa sổ làm việc', 'Hỗ trợ tiếp cận'],
-      personal: ['Sáng, tối, hệ thống', 'Màu nhấn của bạn', 'Sắp xếp không gian', 'Hai ngôn ngữ'],
-      updates: ['Qua Microsoft Store', 'Không tự kết nối mạng', 'Microsoft ký số', 'Xem có gì mới'],
-      cli: ['Mở tệp nén', 'Giải nén', 'Tạo tệp nén', 'Kiểm tra tệp nén', 'Xem phiên bản'],
-    } as Record<string, string[]>,
-    cliLead: 'Mở, giải nén, tạo và kiểm tra tệp nén từ dòng lệnh.',
-    cliLabel: 'Các lệnh GenZip',
-    cliDescriptions: ['Mở tệp nén từ đường dẫn.', 'Giải nén bằng lệnh x hoặc e.', 'Tạo nén với tùy chọn --quick zip|7z.', 'Kiểm tra tệp nén bằng lệnh t.', 'Hiển thị phiên bản GenZip.'],
+    soonLead: 'Các mục dưới đây chưa có trong GenZip 0.9.0-beta.1.',
+    soon: [
+      { icon: 'windows', title: 'macOS & Linux', text: 'Sắp có: phiên bản dành cho macOS và Linux.' },
+      { icon: 'gear', title: 'Mức dùng bộ nhớ', text: 'Sắp có: Tiết kiệm / Cân bằng / Tối đa, tận dụng RAM để đọc trước dữ liệu.' },
+      { icon: 'plus', title: 'Các mục khác', text: 'Sắp có: benchmark trong app, sửa chữa tệp nén hỏng và bản tải tự do.' },
+    ],
     groups: [
-      { id: 'open', title: 'Mở & xem', items: ['ZIP, 7z, RAR4/RAR5 (kể cả header mã hoá), TAR, GZ, BZ2, XZ, ZST, ISO, CAB, WIM', 'Tệp chia phần .7z.001, .part1.rar — báo rõ khi thiếu phần', 'Màn Home: kéo-thả, tệp gần đây, Tạo/Mở nhanh', 'Thanh địa chỉ, Back/Forward/Up, tìm trong tệp nén', 'Lọc theo loại: Thư mục, Tài liệu, Ảnh, Video, Âm thanh, Khác', 'Thống kê: số thư mục/tệp, tỉ lệ nén, trạng thái mã hoá', 'Bảng nhiều cột sắp xếp được, chọn nhiều mục', 'Xem trước ảnh và văn bản ngay trong tệp nén', 'Ưa thích và tệp gần đây', 'Hỏi lại trước khi mở tệp có rủi ro (exe, script…)'] },
-      { id: 'extract', title: 'Giải nén', items: ['Tất cả / mục đã chọn / thư mục con', 'Thư mục đích có lịch sử, tạo thư mục theo tên tệp nén', 'Tệp trùng: Hỏi / Ghi đè / Bỏ qua / Tự đổi tên', 'Giữ cấu trúc thư mục, mở thư mục đích khi xong', 'Kiểm tra lại sau khi giải nén', 'Kiểm tra toàn vẹn tệp nén, xuất báo cáo', '“Giải nén tại đây” ra thư mục con cạnh tệp nén'] },
-      { id: 'create', title: 'Tạo nén', items: ['Định dạng ZIP, 7z, TAR', 'Mức nén, phương thức, kích thước từ điển, solid (7z)', 'Chia volume theo KB/MB/GB', 'Preset: Thông thường, Tối đa, Nhanh, Lưu trữ', 'Tạo tệp tự giải nén .exe (định dạng 7Z)', 'Sửa tệp nén đang mở: thêm, xoá, đổi tên mục; kéo thả tệp vào cửa sổ'] },
-      { id: 'security', title: 'Bảo mật', items: ['Mật khẩu AES-256, mã hoá cả tên tệp với 7z', 'Mật khẩu không bao giờ ghi xuống đĩa hay nhật ký', 'Chặn đường dẫn độc hại (../, đường dẫn tuyệt đối, tên thiết bị Windows)', 'Engine 7-Zip chạy trong tiến trình riêng, kiểm tra mã băm', 'Giữ cảnh báo “tệp tải từ Internet” (Mark-of-the-Web) cho tệp giải nén'] },
-      { id: 'progress', title: 'Tiến trình', items: ['Hàng đợi tác vụ: xếp nhiều việc nén/giải nén chạy lần lượt', '% theo dung lượng thật, tốc độ, thời gian còn lại', 'Tạm dừng thật — không đọc/ghi, không tốn CPU', 'Chạy nền, tiến độ trên thanh taskbar', 'Huỷ tức thì, màn kết quả có nút Mở thư mục'] },
-      { id: 'windows', title: 'Tích hợp Windows', items: ['Menu chuột phải Windows 11 và Windows 10, dạng gộp hoặc phẳng', 'Liên kết định dạng tệp, mở bằng double-click', 'Chỉ một cửa sổ chạy (single-instance)', 'DPI 100–200%, High Contrast, trình đọc màn hình'] },
-      { id: 'personal', title: 'Cá nhân hoá', items: ['Sáng / Tối / Theo hệ thống', '9 màu nhấn', 'Chọn cột hiển thị, giới hạn lịch sử', 'Tiếng Việt và tiếng Anh'] },
-      { id: 'updates', title: 'Cập nhật', items: ['Microsoft Store tự tải và cài bản mới', 'Bản Store không tự kết nối mạng', 'Gói cài đặt do Microsoft kiểm tra và ký số', 'Ghi chú từng phiên bản ở trang Lịch sử phiên bản'] },
-      { id: 'cli', title: 'Dòng lệnh', items: ['genzip <tệp> — mở tệp nén', 'genzip x / e — giải nén', 'genzip a [--quick zip|7z] — tạo nén', 'genzip t — kiểm tra', 'genzip --version'] },
+      {
+        id: 'open', icon: 'folder', title: 'Mở & duyệt',
+        lead: 'Tìm đúng tệp, xem cấu trúc và nắm thông tin của tệp nén ngay trên màn hình chính.',
+        screenshot: 'main', alt: 'Màn hình chính GenZip với thanh công cụ, bộ lọc loại tệp và các cột nội dung tệp nén',
+        items: [
+          { icon: 'folder', title: 'Bắt đầu từ trang chủ', text: 'Thả tệp hoặc nhấn để chọn; tạo tệp nén, mở tệp nén và truy cập tệp gần đây.' },
+          { icon: 'menu', title: 'Thanh công cụ', text: 'Thêm, Giải nén, Kiểm tra, Xem, Xoá, Đổi tên, Tìm kiếm, Thông tin và Cấu hình.' },
+          { icon: 'search', title: 'Đường dẫn & bộ lọc', text: 'Thanh đường dẫn và ô tìm trong tệp nén. Sidebar có Truy cập nhanh, File nén đang mở; lọc Tất cả, Thư mục, Tài liệu, Hình ảnh, Video, Âm thanh, Khác.' },
+          { icon: 'file', title: 'Các cột nội dung', text: 'Tên, Kích thước, Đã nén, Loại, Ngày sửa đổi; có thể bật thêm Ratio và CRC32.' },
+          { icon: 'eye', title: 'Tổng quan tệp nén', text: 'Tên, định dạng, dung lượng nén và gốc, số thư mục và tệp; thẻ Chú thích khi có, Nén % và Mã hoá.' },
+          { icon: 'gear', title: 'Menu & ưa thích', text: 'Tệp, Lệnh, Công cụ, Ưa thích, Tuỳ chọn, Trợ giúp. Thêm và sắp xếp ưa thích; mở hàng đợi, thư mục log, cài đặt, ngôn ngữ, giao diện, giới thiệu và ủng hộ tác giả.' },
+        ],
+      },
+      {
+        id: 'preview-edit', icon: 'eye', title: 'Xem trước & sửa trong tệp nén',
+        lead: 'Xem nội dung trước khi mở và chỉnh sửa trực tiếp các tệp ZIP, 7Z, TAR.',
+        screenshot: 'preview-image', alt: 'Khung xem trước hình ảnh trong tệp nén của GenZip',
+        items: [
+          { icon: 'eye', title: 'Xem trước bằng F3', text: 'Ảnh tối đa 20 MB; văn bản hiển thị 64 KB đầu. Loại tệp khác hiển thị thẻ thông tin.' },
+          { icon: 'plus', title: 'Thêm, xoá & đổi tên', text: 'Thêm tệp hoặc thư mục vào ZIP, 7Z, TAR đang mở. Xoá bằng Delete, đổi tên bằng F2; dữ liệu cũ không nén lại.' },
+          { icon: 'folder', title: 'Kéo thả có xác nhận', text: 'Kéo tệp vào cửa sổ để thêm vào tệp nén; GenZip hỏi xác nhận trước khi thực hiện.' },
+          { icon: 'shield', title: 'Giữ nguyên bản gốc', text: 'Nếu huỷ hoặc gặp lỗi khi sửa, tệp nén gốc được giữ nguyên.' },
+          { icon: 'file', title: 'Mở bằng ứng dụng mặc định', text: 'Mở tệp trong archive bằng ứng dụng mặc định của Windows.' },
+          { icon: 'lock', title: 'Hỏi trước với tệp rủi ro', text: 'Tệp có thể chạy mã như HTML, EXE, JS… cần xác nhận trước khi mở.' },
+        ],
+      },
+      {
+        id: 'create', icon: 'file', title: 'Tạo tệp nén',
+        lead: 'Một trang hai cột cho thiết lập nén và bảo mật. Mặc định: ZIP, mức 5, Deflate, không chia phần, không mã hoá.',
+        screenshot: 'create', alt: 'Hộp thoại tạo tệp nén thật của GenZip với hai cột Thiết lập nén và Bảo mật',
+        items: [
+          { icon: 'file', title: 'Tên, nơi lưu & cấu hình', text: 'Chọn tên và đuôi .zip / .7z / .tar / .exe, nơi lưu bằng Duyệt. Ba thẻ ZIP / 7Z / TAR; cấu hình Cân bằng / Nén tối đa / Nhanh / Lưu trữ.' },
+          { icon: 'gear', title: 'Mức nén & từ điển', text: 'Lưu trữ hoặc mức 1–9; Bình thường = 5, Tối đa = 9. Có tuỳ chọn kích thước từ điển.' },
+          { icon: 'gear', title: 'Phương pháp theo định dạng', text: 'ZIP: Deflate / Store. 7Z: LZMA2 / LZMA / Store. TAR: Store.' },
+          { icon: 'split', title: 'Chia phần', text: 'Không chia / 100 MB / 700 MB / 4 GB FAT32, hoặc tuỳ chỉnh số và đơn vị MB / GB.' },
+          { icon: 'file', title: 'Solid & tự giải nén', text: 'Nén solid cho 7Z. Tạo .exe tự giải nén chỉ từ 7Z không chia phần, dùng module SFX chính thức của 7-Zip.' },
+          { icon: 'lock', title: 'Mã hoá theo định dạng', text: 'ZIP dùng ZipCrypto hoặc AES-256; 7Z dùng AES-256 và có tuỳ chọn Ẩn tên tệp (7Z).' },
+          { icon: 'key', title: 'Nhập mật khẩu', text: 'Mật khẩu và Nhập lại có nút mắt; có tuỳ chọn Hiện mật khẩu.' },
+          { icon: 'file', title: 'Ghi chú ZIP', text: 'Soạn ghi chú trong cửa sổ con; chỉ dùng cho ZIP một tệp.' },
+          { icon: 'check', title: 'Xác minh sau khi nén', text: 'Kiểm tra lại tệp nén vừa tạo bằng cùng mật khẩu. Chọn Tạo file nén để bắt đầu hoặc Huỷ để đóng.' },
+        ],
+      },
+      {
+        id: 'extract', icon: 'download', title: 'Giải nén',
+        lead: 'Chọn nơi lưu và cách xử lý tệp trước khi bắt đầu, hoặc chỉ giải nén các mục đang chọn.',
+        screenshot: 'extract', alt: 'Hộp thoại giải nén GenZip với cây thư mục đích, chế độ cập nhật và chế độ ghi đè',
+        items: [
+          { icon: 'folder', title: 'Chọn thư mục đích', text: 'Duyệt, lịch sử đích, cây thư mục This PC / Desktop / Documents / Downloads… và nút Thư mục mới.' },
+          { icon: 'download', title: 'Ba chế độ cập nhật', text: 'Giải nén và thay thế; Giải nén và cập nhật (chỉ tệp mới hơn hoặc mới); Chỉ làm mới tệp đã có.' },
+          { icon: 'split', title: 'Bốn chế độ ghi đè', text: 'Hỏi trước / Ghi đè không hỏi / Bỏ qua tệp đã có / Tự đổi tên.' },
+          { icon: 'file', title: 'Giữ tệp hỏng', text: 'Có tuỳ chọn giữ tệp hỏng khi giải nén.' },
+          { icon: 'gear', title: 'Lưu lựa chọn', text: 'Mở thư mục đích sau khi giải nén và Lưu thiết lập.' },
+          { icon: 'key', title: 'Mục chọn & mật khẩu', text: 'Giải nén mục đang chọn khi có lựa chọn. Hộp thoại mật khẩu xuất hiện khi cần.' },
+        ],
+      },
+      {
+        id: 'progress', icon: 'bolt', title: 'Tiến trình, hàng đợi & kết quả',
+        lead: 'Theo dõi công việc đang chạy, tạm dừng trong engine và xếp các thao tác tiếp theo vào hàng đợi.',
+        screenshot: 'queue', alt: 'Cửa sổ hàng đợi tác vụ GenZip để theo dõi và sắp xếp các công việc',
+        items: [
+          { icon: 'bolt', title: 'Tiến trình chi tiết', text: 'Tiến độ tổng và tệp hiện tại, đã xử lý, n/N tệp, thời gian đã chạy, tốc độ, thời gian còn lại và mức tiết kiệm khi nén.' },
+          { icon: 'windows', title: 'Chạy nền', text: 'Nút Chạy nền nằm trong cửa sổ tiến trình: thu nhỏ và hiển thị phần trăm trên biểu tượng taskbar.' },
+          { icon: 'minus', title: 'Tạm dừng thật', text: 'Tạm dừng / Tiếp tục dừng thật trong engine. Có nút Huỷ thao tác.' },
+          { icon: 'split', title: 'Hàng đợi tuần tự', text: 'Ra lệnh khi đang bận để xếp hàng. Cửa sổ hàng đợi cho phép huỷ, huỷ tất cả, xoá mục xong và đưa lên / xuống.' },
+          { icon: 'file', title: 'Giải quyết tệp trùng', text: 'Thay thế / Bỏ qua / Giữ cả hai / Đổi tên… / Dừng; có lựa chọn áp dụng cho tất cả.' },
+          { icon: 'check', title: 'Kết quả rõ ràng', text: 'Thành công / một phần / lỗi / đã dừng, kèm số liệu, Chi tiết lỗi, Sao chép chi tiết và Mở thư mục.' },
+        ],
+      },
+      {
+        id: 'test-info', icon: 'check', title: 'Kiểm tra & thông tin',
+        lead: 'Kiểm tra tính toàn vẹn và lưu lại kết quả để xem sau.',
+        screenshot: 'test-result', alt: 'Kết quả kiểm tra toàn vẹn tệp nén trong GenZip với số liệu và tuỳ chọn xuất báo cáo',
+        items: [
+          { icon: 'check', title: 'Kiểm tra toàn vẹn', text: 'Tổng số tệp, Đã kiểm tra, Hoàn thành, Lỗi, Bỏ qua và Thời gian.' },
+          { icon: 'file', title: 'Xuất báo cáo .txt', text: 'Xuất báo cáo kiểm tra ra tệp .txt hoặc chọn Xem chi tiết.' },
+          { icon: 'eye', title: 'Thông tin tệp nén', text: 'Dung lượng gốc và sau nén, số tệp / thư mục, mã hoá, phần trăm tiết kiệm; có Sao chép thông tin.' },
+        ],
+      },
+      {
+        id: 'safety', icon: 'shield', title: 'An toàn',
+        lead: 'Các biện pháp bảo vệ khi giải nén và trải nghiệm riêng tư của bản Microsoft Store.',
+        items: [
+          { icon: 'shield', title: 'Chặn đường dẫn nguy hiểm', text: 'Chặn đường dẫn nguy hiểm như ../ và tên thiết bị Windows.' },
+          { icon: 'gear', title: 'Giới hạn giải nén', text: 'Giới hạn số mục, tỉ lệ nở, dung lượng và độ sâu thư mục.' },
+          { icon: 'lock', title: 'Giữ Mark of the Web', text: 'Giữ dấu nguồn Internet trên tệp được giải nén; có thiết lập bảo mật để quản lý.' },
+          { icon: 'store', title: 'Riêng tư trong bản Store', text: 'Không kết nối mạng, không quảng cáo, không yêu cầu tài khoản.' },
+        ],
+      },
+      {
+        id: 'windows-settings', icon: 'windows', title: 'Tích hợp Windows & cài đặt',
+        lead: 'Lệnh chuột phải ngay trong Windows và cửa sổ cài đặt riêng để điều chỉnh cách làm việc.',
+        items: [
+          { icon: 'windows', title: 'Menu Windows 11 cấp một', text: 'Mở bằng GenZip; Giải nén tệp…; Giải nén tại đây; Giải nén vào "<tên>\\"; Thêm vào tệp nén…; Thêm vào "<tên>.zip"; Thêm vào "<tên>.7z".' },
+          { icon: 'menu', title: 'Menu cổ điển', text: 'Nén nhanh thành tệp ZIP/7Z; Giải nén vào thư mục cùng tên.' },
+          { icon: 'file', title: 'Liên kết do Windows quản lý', text: 'Bản Store có sẵn liên kết tệp và menu chuột phải trong gói. Chọn GenZip ở Ứng dụng mặc định của Windows; app không tự đặt mặc định. Các đuôi: .zip .7z .rar .tar .gz .bz2 .xz .zst .iso .cab .wim .001.' },
+          { icon: 'gear', title: 'Chung', text: 'Ngôn ngữ, lịch sử tệp gần đây và số mục, xoá lịch sử, kiểu xem danh sách, cột hiển thị.' },
+          { icon: 'file', title: 'Nén & giải nén', text: 'Định dạng, mức 0–9 và phương pháp nén mặc định. Đích giải nén: cạnh archive / thư mục cố định / hỏi; xử lý tệp đã có và mở thư mục sau khi giải nén.' },
+          { icon: 'sun', title: 'Giao diện & bảo mật', text: 'Hệ thống / Sáng / Tối, màu nhấn, kiểu icon. Trang Bảo mật có giữ Mark of the Web và giới hạn an toàn.' },
+          { icon: 'store', title: 'Tích hợp & cập nhật', text: 'Trang Tích hợp ghi Windows quản lý cho bản Microsoft Store. Trang Cập nhật ghi Cập nhật do Microsoft Store cung cấp; không có kênh hay nút kiểm tra cập nhật.' },
+          { icon: 'gear', title: 'Nâng cao', text: 'Số luồng, thư mục tạm, mức log và 7z.dll tuỳ chỉnh theo LGPL.' },
+        ],
+      },
     ] as Group[],
+    cli: 'Hỗ trợ dòng lệnh cơ bản.',
   },
   en: {
-    eyebrow: 'FEATURES',
-    title: 'Everything you need to handle archives',
-    lead: 'This list only contains what GenZip already does. Unfinished features are marked “Coming soon”.',
-    noRar: 'GenZip opens and extracts RAR but does not create RAR files (RAR is a proprietary format).',
+    eyebrow: 'FEATURES · 0.9.0-beta.1',
+    title: 'Work with archives, from start to finish',
+    lead: 'A feature reference for GenZip 0.9.0-beta.1, Microsoft Store build: open, browse, edit, create and extract in a familiar interface.',
+    toc: 'On this page',
+    formatsTitle: 'Supported formats',
+    formatsLead: 'Read and extract formats supported by the 7-Zip 26.05 core. Create and edit ZIP, 7Z and TAR only; RAR creation is not supported.',
     soonTitle: 'Coming soon',
-    soon: ['macOS', 'Linux', 'Faster with RAM: read ahead up to 100 MB, using at most 35% of free RAM'],
-    jumpLabel: 'Jump to a feature group',
-    available: 'Available in GenZip',
-    rarTitle: 'Read RAR, create ZIP, 7z and TAR',
-    soonLead: 'Planned features, not yet available in the current version.',
-    shots: ['GenZip opening and browsing the contents of an archive', 'GenZip extraction dialog with destination and extraction options', 'GenZip archive creation dialog with compression options'],
-    cardTitles: {
-      security: ['AES-256 encryption', 'Private passwords', 'Safe extraction', 'Separate engine', 'Internet warnings kept'],
-      progress: ['Task queue', 'Clear progress', 'Real pause', 'Background progress', 'Stop when needed'],
-      windows: ['Right-click menu', 'Double-click to open', 'One workspace', 'Accessibility'],
-      personal: ['Light, dark, system', 'Your accent color', 'Your workspace', 'Two languages'],
-      updates: ['Via Microsoft Store', 'No network by itself', 'Signed by Microsoft', 'See what’s new'],
-      cli: ['Open an archive', 'Extract', 'Create an archive', 'Test an archive', 'Show version'],
-    } as Record<string, string[]>,
-    cliLead: 'Open, extract, create and test archives from the command line.',
-    cliLabel: 'GenZip commands',
-    cliDescriptions: ['Open an archive from its path.', 'Extract using the x or e command.', 'Create with the --quick zip|7z option.', 'Test an archive using the t command.', 'Display the GenZip version.'],
+    soonLead: 'These features are not available in GenZip 0.9.0-beta.1.',
+    soon: [
+      { icon: 'windows', title: 'macOS & Linux', text: 'Coming soon: versions for macOS and Linux.' },
+      { icon: 'gear', title: 'Memory usage modes', text: 'Coming soon: Economy / Balanced / Maximum, using RAM to read data ahead.' },
+      { icon: 'plus', title: 'More to come', text: 'Coming soon: in-app benchmarks, damaged archive repair and a standalone download.' },
+    ],
     groups: [
-      { id: 'open', title: 'Open & browse', items: ['ZIP, 7z, RAR4/RAR5 (including encrypted headers), TAR, GZ, BZ2, XZ, ZST, ISO, CAB, WIM', 'Split archives .7z.001, .part1.rar — tells you when a part is missing', 'Home screen: drag & drop, recent files, quick Create/Open', 'Address bar, Back/Forward/Up, search inside the archive', 'Filter by type: Folders, Documents, Images, Video, Audio, Other', 'Stats: folders/files, compression ratio, encryption state', 'Sortable multi-column table, multi-select', 'Preview images and text inside archives', 'Favorites and recent files', 'Asks before opening risky files (exe, scripts…)'] },
-      { id: 'extract', title: 'Extract', items: ['All / selected / subfolder', 'Destination history, folder named after the archive', 'Existing files: Ask / Overwrite / Skip / Auto-rename', 'Keep folder structure, open destination when done', 'Verify after extraction', 'Integrity test with exportable report', '“Extract here” into a subfolder next to the archive'] },
-      { id: 'create', title: 'Create', items: ['ZIP, 7z, TAR', 'Level, method, dictionary size, solid (7z)', 'Split into KB/MB/GB volumes', 'Presets: Normal, Maximum, Fast, Store', 'Create self-extracting .exe archives (7Z format)', 'Edit open archives: add, delete and rename items; drag and drop files into the window'] },
-      { id: 'security', title: 'Security', items: ['AES-256 passwords, file-name encryption with 7z', 'Passwords are never written to disk or logs', 'Blocks malicious paths (../, absolute paths, Windows device names)', 'The 7-Zip engine runs in a separate, hash-pinned process', 'Keeps the “downloaded from the Internet” mark (Mark-of-the-Web) on extracted files'] },
-      { id: 'progress', title: 'Progress', items: ['Task queue: line up several compress/extract jobs', 'Real byte-based %, speed, time left', 'Real pause — no reads/writes, no CPU', 'Background mode with taskbar progress', 'Instant cancel, result screen with Open folder'] },
-      { id: 'windows', title: 'Windows integration', items: ['Windows 11 and Windows 10 right-click menus, cascaded or flat', 'File associations, double-click to open', 'Single instance', 'DPI 100–200%, High Contrast, screen readers'] },
-      { id: 'personal', title: 'Personalize', items: ['Light / Dark / System', '9 accent colors', 'Choose columns, history limit', 'Vietnamese and English'] },
-      { id: 'updates', title: 'Updates', items: ['Microsoft Store downloads and installs new versions', 'The Store build never connects to the network by itself', 'The package is checked and signed by Microsoft', 'Notes for every version on the Release notes page'] },
-      { id: 'cli', title: 'Command line', items: ['genzip <file> — open an archive', 'genzip x / e — extract', 'genzip a [--quick zip|7z] — create', 'genzip t — test', 'genzip --version'] },
+      {
+        id: 'open', icon: 'folder', title: 'Open & browse',
+        lead: 'Find files, explore the structure and see archive information on the main screen.',
+        screenshot: 'main', alt: 'GenZip main screen with the toolbar, file type filters and archive content columns',
+        items: [
+          { icon: 'folder', title: 'Start from Home', text: 'Drop a file or click to choose one; create an archive, open an archive and access recent files.' },
+          { icon: 'menu', title: 'Toolbar actions', text: 'Add, Extract, Test, View, Delete, Rename, Search, Info and Settings.' },
+          { icon: 'search', title: 'Paths & filters', text: 'Archive path bar and search box. The sidebar includes Quick access and Open archive; filter All, Folders, Documents, Images, Video, Audio and Other.' },
+          { icon: 'file', title: 'Content columns', text: 'Name, Size, Packed, Type and Modified; optionally show Ratio and CRC32.' },
+          { icon: 'eye', title: 'Archive overview', text: 'Name, format, packed and original sizes, folder and file counts; Comment when present, Compression % and Encryption cards.' },
+          { icon: 'gear', title: 'Menus & favorites', text: 'File, Commands, Tools, Favorites, Options and Help. Add and organize favorites; open the queue, log folder, settings, language, theme, About and Support the author.' },
+        ],
+      },
+      {
+        id: 'preview-edit', icon: 'eye', title: 'Preview & edit inside archives',
+        lead: 'Preview content before opening it and edit ZIP, 7Z and TAR archives directly.',
+        screenshot: 'preview-image', alt: 'GenZip image preview pane showing an image inside an archive',
+        items: [
+          { icon: 'eye', title: 'Preview with F3', text: 'Images up to 20 MB; the first 64 KB of text. Other file types show an information card.' },
+          { icon: 'plus', title: 'Add, delete & rename', text: 'Add files or folders to an open ZIP, 7Z or TAR. Delete with Delete and rename with F2; existing data is not recompressed.' },
+          { icon: 'folder', title: 'Confirm drag and drop', text: 'Drag files into the window to add them to the archive; GenZip asks for confirmation first.' },
+          { icon: 'shield', title: 'Keep the original', text: 'Cancelling an edit or encountering an error leaves the original archive intact.' },
+          { icon: 'file', title: 'Open in the default app', text: 'Open a file inside an archive using its default Windows application.' },
+          { icon: 'lock', title: 'Confirm risky files', text: 'Files that can run code, such as HTML, EXE and JS, require confirmation before opening.' },
+        ],
+      },
+      {
+        id: 'create', icon: 'file', title: 'Create archives',
+        lead: 'One page with two columns for compression and security. Defaults: ZIP, level 5, Deflate, no splitting and no encryption.',
+        screenshot: 'create', alt: 'Real GenZip create archive dialog with Compression settings and Security columns',
+        items: [
+          { icon: 'file', title: 'Name, location & presets', text: 'Choose a name and .zip / .7z / .tar / .exe extension, and Browse for a destination. ZIP / 7Z / TAR format cards; Balanced / Maximum compression / Fast / Store presets.' },
+          { icon: 'gear', title: 'Level & dictionary', text: 'Store or levels 1–9; Normal = 5, Maximum = 9. Dictionary size is configurable.' },
+          { icon: 'gear', title: 'Methods by format', text: 'ZIP: Deflate / Store. 7Z: LZMA2 / LZMA / Store. TAR: Store.' },
+          { icon: 'split', title: 'Split volumes', text: 'No splitting / 100 MB / 700 MB / 4 GB FAT32, or a custom number in MB / GB.' },
+          { icon: 'file', title: 'Solid & self-extracting', text: 'Solid compression for 7Z. Create a self-extracting .exe only from unsplit 7Z, using the official 7-Zip SFX module.' },
+          { icon: 'lock', title: 'Encryption by format', text: 'ZIP offers ZipCrypto or AES-256; 7Z offers AES-256 with a Hide file names (7Z) option.' },
+          { icon: 'key', title: 'Password entry', text: 'Password and confirmation fields have eye buttons; a Show password option is available.' },
+          { icon: 'file', title: 'ZIP comments', text: 'Edit a comment in a separate window; available for single-file ZIP only.' },
+          { icon: 'check', title: 'Verify after compression', text: 'Test the new archive using the same password. Choose Create archive to start or Cancel to close.' },
+        ],
+      },
+      {
+        id: 'extract', icon: 'download', title: 'Extract archives',
+        lead: 'Choose a destination and file handling rules before starting, or extract only the selected items.',
+        screenshot: 'extract', alt: 'GenZip extraction dialog with the destination tree, update modes and overwrite modes',
+        items: [
+          { icon: 'folder', title: 'Choose a destination', text: 'Browse, destination history, a folder tree with This PC / Desktop / Documents / Downloads and more, plus New folder.' },
+          { icon: 'download', title: 'Three update modes', text: 'Extract and replace; Extract and update (newer or new files only); Freshen existing files only.' },
+          { icon: 'split', title: 'Four overwrite modes', text: 'Ask before overwrite / Overwrite without prompt / Skip existing files / Rename automatically.' },
+          { icon: 'file', title: 'Keep broken files', text: 'An option lets you keep broken files during extraction.' },
+          { icon: 'gear', title: 'Save your choices', text: 'Open the destination folder after extraction and save extraction settings.' },
+          { icon: 'key', title: 'Selection & passwords', text: 'Extract selected items when a selection exists. A password dialog appears when needed.' },
+        ],
+      },
+      {
+        id: 'progress', icon: 'bolt', title: 'Progress, queue & results',
+        lead: 'Follow active work, pause in the engine and queue subsequent operations.',
+        screenshot: 'queue', alt: 'GenZip task queue window for tracking and reordering operations',
+        items: [
+          { icon: 'bolt', title: 'Detailed progress', text: 'Overall and current file progress, processed amount, n/N files, elapsed time, speed, time remaining and savings during compression.' },
+          { icon: 'windows', title: 'Run in background', text: 'The Run in background button is in the progress window: minimize it and show a percentage on the taskbar icon.' },
+          { icon: 'minus', title: 'Real pause', text: 'Pause / Resume pauses work in the engine. You can also cancel the operation.' },
+          { icon: 'split', title: 'Sequential task queue', text: 'Issue commands while busy to queue them. Cancel one or all, remove completed entries and move tasks up or down in the queue window.' },
+          { icon: 'file', title: 'Resolve file conflicts', text: 'Replace / Skip / Keep both / Rename… / Stop, with an Apply to all option.' },
+          { icon: 'check', title: 'Clear results', text: 'Success / partial / error / stopped, with figures, Error details, Copy details and Open folder.' },
+        ],
+      },
+      {
+        id: 'test-info', icon: 'check', title: 'Test & information',
+        lead: 'Check archive integrity and keep a report to review later.',
+        screenshot: 'test-result', alt: 'GenZip archive integrity test results with statistics and report export',
+        items: [
+          { icon: 'check', title: 'Integrity testing', text: 'Total files, Tested, Completed, Errors, Skipped and Time.' },
+          { icon: 'file', title: 'Export a .txt report', text: 'Export the test report as a .txt file or choose View details.' },
+          { icon: 'eye', title: 'Archive information', text: 'Original and packed sizes, file and folder counts, encryption and percentage saved; Copy information is available.' },
+        ],
+      },
+      {
+        id: 'safety', icon: 'shield', title: 'Safety',
+        lead: 'Extraction safeguards and a private experience in the Microsoft Store build.',
+        items: [
+          { icon: 'shield', title: 'Block dangerous paths', text: 'Blocks dangerous paths such as ../ and Windows device names.' },
+          { icon: 'gear', title: 'Extraction limits', text: 'Limits for entry count, expansion ratio, size and folder depth.' },
+          { icon: 'lock', title: 'Keep Mark of the Web', text: 'Preserves the Internet origin mark on extracted files, with controls in security settings.' },
+          { icon: 'store', title: 'Privacy in the Store build', text: 'No network connections, no ads and no account required.' },
+        ],
+      },
+      {
+        id: 'windows-settings', icon: 'windows', title: 'Windows integration & settings',
+        lead: 'Right-click commands in Windows and a separate settings window to tailor your workflow.',
+        items: [
+          { icon: 'windows', title: 'Windows 11 top-level menu', text: 'Open with GenZip; Extract files…; Extract here; Extract to "<name>\\"; Add to archive…; Add to "<name>.zip"; Add to "<name>.7z".' },
+          { icon: 'menu', title: 'Classic menu', text: 'Quick compress to ZIP/7Z; Extract to a folder with the same name.' },
+          { icon: 'file', title: 'Windows manages associations', text: 'File associations and the right-click menu are included in the Store package. Choose GenZip in Windows Default apps; the app cannot set itself as default. Extensions: .zip .7z .rar .tar .gz .bz2 .xz .zst .iso .cab .wim .001.' },
+          { icon: 'gear', title: 'General', text: 'Language, recent file history and item count, clear history, list view style and visible columns.' },
+          { icon: 'file', title: 'Compression & extraction', text: 'Default format, level 0–9 and compression method. Extraction destination: beside the archive / fixed folder / ask; existing file handling and opening the folder after extraction.' },
+          { icon: 'sun', title: 'Appearance & security', text: 'System / Light / Dark, accent color and icon style. Security settings include keeping Mark of the Web and safety limits.' },
+          { icon: 'store', title: 'Integration & updates', text: 'Integration says Windows manages the Microsoft Store build. Updates says Microsoft Store provides updates; there are no update channels or check button.' },
+          { icon: 'gear', title: 'Advanced', text: 'Thread count, temporary folder, log level and a custom 7z.dll under the LGPL.' },
+        ],
+      },
     ] as Group[],
+    cli: 'Basic command-line support.',
   },
 }[lang];
-const screenshots = ['main', 'extract', 'create'] as const;
-const groupIcons: Record<string, string> = {
-  open: 'folder', extract: 'download', create: 'file', security: 'shield',
-  progress: 'bolt', windows: 'windows', personal: 'sun', updates: 'download', cli: 'gear',
-};
-const featureIcons: Record<string, string[]> = {
-  security: ['lock', 'key', 'shield', 'gear', 'file'],
-  progress: ['split', 'bolt', 'minus', 'windows', 'folder'],
-  windows: ['menu', 'file', 'windows', 'eye'],
-  personal: ['moon', 'sun', 'gear', 'file'],
-  updates: ['store', 'lock', 'shield', 'file'],
-};
-const commands = c.groups[8].items.map((item) => item.split(' — ')[0]);
 ---
 
 <Base title={t('nav.features')} description={c.lead}>
   <PageHero eyebrow={c.eyebrow} title={c.title} lead={c.lead} />
 
   <div class="container">
-    <nav class="quick-jumps" aria-label={c.jumpLabel}>
-      {c.groups.map((g) => (
-        <a class="pill-btn" href={`#${g.id}`}><Icon name={groupIcons[g.id]} size={18} />{g.title}</a>
-      ))}
-      <a class="pill-btn" href="#soon"><Icon name="plus" size={18} />{c.soonTitle}</a>
+    <nav class="contents" aria-label={c.toc}>
+      <h2>{c.toc}</h2>
+      <ul>
+        {c.groups.map((group) => (
+          <li><a href={`#${group.id}`}><Icon name={group.icon} size={18} /><span>{group.title}</span></a></li>
+        ))}
+        <li><a href="#formats"><Icon name="file" size={18} /><span>{c.formatsTitle}</span></a></li>
+        <li><a href="#soon"><Icon name="plus" size={18} /><span>{c.soonTitle}</span></a></li>
+      </ul>
     </nav>
   </div>
 
-  {c.groups.slice(0, 3).map((g, i) => (
-    <section id={g.id} class:list={['section feature-section', { band: i === 1 }]}>
-      <div class:list={['container feature-row', { reversed: i === 1 }]}>
-        <div class="feature-copy">
-          <SectionHeading eyebrow={c.available} title={g.title} align="left" />
-          <ul class="feature-list">
-            {g.items.map((item) => <li><Icon name="check" size={18} /><span>{item}</span></li>)}
-          </ul>
-        </div>
-        <div class="feature-visual">
-          <Screenshot name={screenshots[i]} alt={c.shots[i]} />
-        </div>
-      </div>
-    </section>
-  ))}
+  {c.groups.map((group, index) => <FeatureGroup {...group} band={index % 2 === 1} />)}
 
-  {c.groups.slice(3, 8).map((g, i) => (
-    <section id={g.id} class:list={['section feature-section', { band: i % 2 === 0 }]}>
-      <div class="container">
-        <SectionHeading title={g.title} align="left" />
-        <FeatureGrid items={g.items.map((text, index) => ({
-          icon: featureIcons[g.id][index],
-          title: c.cardTitles[g.id][index],
-          text,
-        }))} />
-      </div>
-    </section>
-  ))}
-
-  <section id="cli" class="section feature-section">
+  <section id="formats" class="section reference-section" aria-label={c.formatsTitle}>
     <div class="container">
-      <SectionHeading title={c.groups[8].title} lead={c.cliLead} align="left" />
-      <div class="command-layout">
-        <FeatureGrid items={c.cardTitles.cli.map((title, i) => ({ icon: 'gear', title, text: c.cliDescriptions[i] }))} />
-        <div class="command-panel card card-raised">
-          <div class="command-heading"><Icon name="gear" size={20} /><span>{c.cliLabel}</span></div>
-          <pre tabindex="0" aria-label={c.cliLabel}><code>{commands.map((command, i) => `# ${c.cardTitles.cli[i]}\n${command}`).join('\n\n')}</code></pre>
-        </div>
-      </div>
+      <SectionHeading title={c.formatsTitle} lead={c.formatsLead} align="left" />
+      <FormatMatrix lang={lang} />
+      <p class="cli muted">{c.cli}</p>
     </div>
   </section>
 
-  <div class="container closing-sections">
-    <aside class="rar-note card card-soft">
-      <span class="icon-badge"><Icon name="file" /></span>
-      <div><h2>{c.rarTitle}</h2><p class="muted">{c.noRar}</p></div>
-    </aside>
-    <section id="soon" class="soon-section">
+  <section id="soon" class="section reference-section band" aria-label={c.soonTitle}>
+    <div class="container">
       <SectionHeading title={c.soonTitle} lead={c.soonLead} align="left" />
-      <ul class="soon">{c.soon.map((s) => <li class="chip chip-soon">{s}</li>)}</ul>
-    </section>
-    <CtaCard />
-  </div>
+      <FeatureGrid items={c.soon} />
+    </div>
+  </section>
 </Base>
 
 <style>
-  .quick-jumps { display: flex; flex-wrap: wrap; gap: 10px; padding-block: 28px; }
-  .quick-jumps .pill-btn { border-radius: 999px; background: var(--surface); }
-  .feature-section, .soon-section { scroll-margin-top: 96px; }
-  .feature-row { display: grid; grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.15fr); gap: 48px; align-items: center; }
-  .feature-copy, .feature-visual { min-width: 0; }
-  .reversed { grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.95fr); }
-  .reversed .feature-copy { grid-column: 2; grid-row: 1; }
-  .reversed .feature-visual { grid-column: 1; grid-row: 1; }
-  .feature-list { display: grid; gap: 13px; list-style: none; padding: 0; margin: 0; }
-  .feature-list li { display: flex; align-items: flex-start; gap: 10px; color: var(--text-muted); }
-  .feature-list :global(svg) { color: var(--primary); margin-top: 4px; }
-  .command-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; align-items: start; }
-  .command-layout :global(.feature-grid) { grid-template-columns: minmax(0, 1fr); }
-  .command-panel { min-width: 0; padding: 0; overflow: hidden; border-radius: var(--radius-lg); }
-  .command-heading { display: flex; align-items: center; gap: 10px; padding: 16px 20px; border-bottom: 1px solid var(--border); color: var(--text-muted); }
-  .command-heading :global(svg) { color: var(--primary); }
-  pre { border: 0; border-radius: 0; padding: 24px; margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.7; color: var(--text); }
-  .closing-sections { padding-block: 8px 56px; }
-  .rar-note { display: flex; align-items: center; gap: 24px; border-radius: var(--radius-lg); }
-  .rar-note .icon-badge { background: var(--surface); }
-  .rar-note h2 { font-size: 1.25rem; margin-bottom: 8px; }
-  .rar-note p { margin: 0; }
-  .soon-section { padding-block: 48px; }
-  .soon { display: flex; flex-wrap: wrap; gap: 10px; list-style: none; padding: 0; margin: 0; }
+  .contents { padding-block: 32px; }
+  .contents h2 { font-size: 1rem; margin-bottom: 16px; }
+  .contents ul { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px 20px; list-style: none; margin: 0; padding: 0; }
+  .contents a { display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 8px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text-muted); font-size: 0.9375rem; }
+  .contents a:hover { border-color: var(--primary); background: var(--accent-soft); text-decoration: none; }
+  .contents :global(svg) { color: var(--primary); }
+  .reference-section { scroll-margin-top: 96px; }
+  .cli { margin: 20px 0 0; font-size: 0.9375rem; }
   @media (max-width: 900px) {
-    .feature-row, .reversed, .command-layout { grid-template-columns: minmax(0, 1fr); gap: 32px; }
-    .reversed .feature-copy, .reversed .feature-visual { grid-column: auto; grid-row: auto; }
-    .feature-visual { width: 100%; max-width: 760px; margin-inline: auto; }
+    .contents ul { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
   @media (max-width: 600px) {
-    .quick-jumps { gap: 8px; padding-block: 24px 12px; }
-    .quick-jumps .pill-btn { padding-inline: 12px; }
-    .rar-note { align-items: flex-start; gap: 16px; }
-    .rar-note .icon-badge { width: 48px; height: 48px; }
-    .rar-note .icon-badge :global(svg) { width: 28px; height: 28px; }
-    pre { padding: 20px; }
-    .soon-section { padding-block: 36px; }
-    .closing-sections { padding-bottom: 36px; }
+    .contents { padding-block: 24px; }
+    .contents ul { grid-template-columns: minmax(0, 1fr); gap: 8px; }
   }
 </style>
