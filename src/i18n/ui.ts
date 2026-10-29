@@ -7,6 +7,7 @@ export const ui = {
   vi: {
     'site.tagline': 'Trình nén miễn phí cho Windows',
     'nav.features': 'Tính năng',
+    'nav.benchmark': 'Tốc độ',
     'nav.news': 'Tin tức',
     'nav.label': 'Điều hướng chính',
     'language.label': 'Ngôn ngữ',
@@ -33,6 +34,7 @@ export const ui = {
   en: {
     'site.tagline': 'Free archive manager for Windows',
     'nav.features': 'Features',
+    'nav.benchmark': 'Speed',
     'nav.news': 'News',
     'nav.label': 'Main navigation',
     'language.label': 'Language',
