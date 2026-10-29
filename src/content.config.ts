@@ -20,4 +20,29 @@ const legal = defineCollection({
   }),
 });
 
-export const collections = { guide, legal };
+// Ghi chú phát hành: src/content/releases/<lang>/<version>.md (id: "vi/1.0.0").
+// Số phiên bản, ngày, link tải nằm ở src/data/releases.ts.
+const releases = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/releases' }),
+  schema: z.object({
+    title: z.string(),
+    /** Một câu tóm tắt hiện trên thẻ phiên bản. */
+    summary: z.string(),
+  }),
+});
+
+// Tin tức / blog: src/content/news/<lang>/<slug>.md (id: "vi/ra-mat-genzip").
+const news = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/news' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    date: z.coerce.date(),
+    tags: z.array(z.string()).default([]),
+    /** Ảnh bìa trong public/, ví dụ "/news/ra-mat.png". */
+    cover: z.string().optional(),
+    draft: z.boolean().default(false),
+  }),
+});
+
+export const collections = { guide, legal, releases, news };
