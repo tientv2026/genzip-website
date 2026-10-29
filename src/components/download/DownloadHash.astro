@@ -1,0 +1,28 @@
+---
+import type { Lang } from '../../i18n/ui';
+
+interface Props { hash?: string; lang: Lang; }
+const { hash, lang } = Astro.props;
+const c = {
+  vi: { copy: 'Sao chép', copied: 'Đã sao chép', failed: 'Không thể sao chép', label: 'Sao chép mã SHA-256' },
+  en: { copy: 'Copy', copied: 'Copied', failed: 'Could not copy', label: 'Copy SHA-256 hash' },
+}[lang];
+---
+
+<div class="checksum">
+  <span class="muted">SHA-256</span>
+  <div class="hash-row">
+    <code class="hash" title={hash}>{hash || '—'}</code>
+    {hash && <button type="button" class="copy" data-copy-hash={hash} data-copied={c.copied} data-failed={c.failed} aria-label={c.label}>{c.copy}</button>}
+  </div>
+  <span class="copy-status muted" role="status" aria-live="polite"></span>
+</div>
+
+<style>
+  .checksum { min-width: 0; font-size: 0.85rem; }
+  .hash-row { display: flex; align-items: center; gap: 8px; margin-top: 4px; min-width: 0; }
+  .hash { display: block; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .copy { flex-shrink: 0; min-height: 36px; padding: 4px 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); color: var(--primary); font: inherit; cursor: pointer; }
+  .copy:hover { border-color: var(--primary); }
+  .copy-status { display: block; min-height: 1.6em; margin-top: 4px; overflow-wrap: anywhere; }
+</style>

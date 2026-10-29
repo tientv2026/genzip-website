@@ -1,0 +1,80 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/ui/PageHero.astro';
+import ReleaseDownloads from '../components/download/ReleaseDownloads.astro';
+import { compareVersions, formatReleaseDate } from '../components/download/releases';
+import { releases, isReleased } from '../data/releases';
+import { getLangFromUrl, localePath } from '../i18n/ui';
+
+const lang = getLangFromUrl(Astro.url);
+const otherLang = lang === 'vi' ? 'en' : 'vi';
+const c = {
+  vi: { title: 'Lịch sử phiên bản', lead: 'Có gì mới trong từng phiên bản GenZip.', stable: 'Ổn định', beta: 'Beta', pending: 'Sắp phát hành', download: 'Tải GenZip' },
+  en: { title: 'Release notes', lead: 'What’s new in each version of GenZip.', stable: 'Stable', beta: 'Beta', pending: 'Coming soon', download: 'Download GenZip' },
+}[lang];
+const notes = await getCollection('releases');
+const entries = await Promise.all([...releases].sort((a, b) => compareVersions(b.version, a.version)).map(async (release) => {
+  const localized = notes.find((entry) => entry.id === `${lang}/${release.version}`);
+  const fallback = notes.find((entry) => entry.id === `${otherLang}/${release.version}`);
+  const entry = localized ?? fallback;
+  return {
+    release,
+    summary: entry?.data.summary,
+    Content: entry ? (await render(entry)).Content : undefined,
+    notesLang: localized ? lang : otherLang,
+    id: `v${release.version.replace(/[^a-z0-9]+/gi, '-')}`,
+  };
+}));
+---
+
+<Base title={c.title} description={c.lead}>
+  <PageHero title={c.title} lead={c.lead} />
+  <section class="section" aria-label={c.title}>
+    <div class="container history">
+      <ol class="timeline">
+        {entries.map(({ release, summary, Content, notesLang, id }) => (
+          <li class="timeline-entry">
+            <article class="card release" id={id} aria-labelledby={`${id}-title`}>
+              <header>
+                <div class="release-heading">
+                  <h2 id={`${id}-title`}><a href={`#${id}`}>GenZip {release.version}</a></h2>
+                  <span class:list={['chip', { 'chip-soon': release.channel === 'beta' }]}>{c[release.channel]}</span>
+                </div>
+                <p class="release-date muted">{isReleased(release) ? <time datetime={release.date}>{formatReleaseDate(release.date!, lang)}</time> : c.pending}</p>
+              </header>
+              {summary && <p class="summary" lang={notesLang}>{summary}</p>}
+              {Content && <div class="prose release-notes" lang={notesLang}><Content /></div>}
+              <ReleaseDownloads release={release} lang={lang} />
+            </article>
+          </li>
+        ))}
+      </ol>
+      <p class="download-link"><a href={localePath('/download', lang)}>{c.download} →</a></p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .history { max-width: 960px; }
+  .timeline { list-style: none; margin: 0; padding: 0 0 0 28px; border-left: 2px solid var(--border); }
+  .timeline-entry { position: relative; min-width: 0; padding-bottom: 32px; }
+  .timeline-entry:last-child { padding-bottom: 0; }
+  .timeline-entry::before { content: ''; position: absolute; top: 30px; left: -36px; width: 14px; height: 14px; background: var(--primary); border: 3px solid var(--canvas); border-radius: 50%; box-shadow: 0 0 0 1px var(--border); }
+  .release { border-radius: var(--radius-lg); scroll-margin-top: 100px; min-width: 0; overflow-wrap: anywhere; }
+  .release-heading { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+  .release-heading h2 { font-size: 1.5rem; margin: 0; }
+  .release-heading a { color: var(--text); }
+  .release-date { margin: 12px 0 0; font-size: 0.9rem; }
+  .summary { margin: 24px 0 0; font-size: 1.1rem; }
+  .release-notes { margin: 24px 0; }
+  .release-notes :global(h2) { font-size: 1.25rem; margin-top: 0; }
+  .release-notes :global(ul) { padding-left: 20px; }
+  .release-notes :global(li + li) { margin-top: 8px; }
+  .download-link { text-align: center; margin: 32px 0 0; }
+  @media (max-width: 600px) {
+    .timeline { padding-left: 18px; }
+    .timeline-entry::before { left: -26px; }
+    .release { padding: 20px 16px; }
+  }
+</style>

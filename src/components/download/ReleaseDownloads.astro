@@ -1,0 +1,25 @@
+---
+import { isReleased, type Release } from '../../data/releases';
+import type { Lang } from '../../i18n/ui';
+import Icon from '../ui/Icon.astro';
+
+interface Props { release: Release; lang: Lang; }
+const { release, lang } = Astro.props;
+const c = {
+  vi: { installer: 'Tải bộ cài .exe', portable: 'Tải portable .zip' },
+  en: { installer: 'Download installer .exe', portable: 'Download portable .zip' },
+}[lang];
+const files = isReleased(release) ? [
+  { label: c.installer, file: release.downloads?.installer },
+  { label: c.portable, file: release.downloads?.portable },
+].filter(({ file }) => file?.url) : [];
+---
+
+{files.length > 0 && <div class="release-downloads">
+  {files.map(({ label, file }) => <a class="btn btn-outline btn-sm" href={file!.url}><Icon name="download" size={18} />{label}{file!.size && ` · ${file!.size}`}</a>)}
+</div>}
+
+<style>
+  .release-downloads { display: flex; flex-wrap: wrap; gap: 12px; }
+  a { max-width: 100%; overflow-wrap: anywhere; }
+</style>

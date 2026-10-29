@@ -1,177 +1,165 @@
 ---
 import Base from '../layouts/Base.astro';
-import { getLangFromUrl, localePath, useTranslations } from '../i18n/ui';
-import { release, storeUrl } from '../data/product';
+import PageHero from '../components/ui/PageHero.astro';
+import Icon from '../components/ui/Icon.astro';
+import DownloadHash from '../components/download/DownloadHash.astro';
+import ReleaseDownloads from '../components/download/ReleaseDownloads.astro';
+import { compareVersions, formatReleaseDate } from '../components/download/releases';
+import { getLangFromUrl, localePath } from '../i18n/ui';
+import { storeUrl } from '../data/product';
+import { getCurrentRelease, getLatestRelease, isReleased } from '../data/releases';
 
 const lang = getLangFromUrl(Astro.url);
-const t = useTranslations(lang);
-const pending = lang === 'vi' ? 'Sắp phát hành' : 'Not released yet';
-
+const current = getCurrentRelease('stable');
+const latest = getLatestRelease('stable');
+const beta = getLatestRelease('beta');
+const newerBeta = beta && (!latest || compareVersions(beta.version, latest.version) > 0) ? beta : undefined;
 const c = {
   vi: {
-    title: 'Tải GenZip',
-    lead: 'Miễn phí cho Windows 10 và 11 (64-bit).',
-    cards: [
-      { name: 'Microsoft Store', badge: 'Khuyên dùng', text: 'Tự cập nhật qua Store, được Microsoft ký số.', button: 'Mở trong Microsoft Store', href: storeUrl, file: null },
-      { name: 'Bộ cài (.exe)', badge: null, text: 'Cài cho người dùng hiện tại, không cần quyền quản trị. Có menu chuột phải và tự kiểm tra cập nhật.', button: 'Tải .exe', href: release.installer.url, file: release.installer },
-      { name: 'Bản portable (.zip)', badge: null, text: 'Giải nén và chạy, không cần cài. Không đăng ký menu chuột phải.', button: 'Tải .zip', href: release.portable.url, file: release.portable },
+    title: 'Tải GenZip', lead: 'Miễn phí cho Windows 10 và 11 (64-bit).',
+    version: 'Phiên bản', pending: 'Sắp phát hành', recommended: 'Khuyên dùng',
+    store: 'Tự động cập nhật qua Microsoft Store.', storeButton: 'Mở Microsoft Store',
+    installer: 'Bộ cài .exe', installerText: 'Cài cho người dùng hiện tại, không cần quyền quản trị. Có menu chuột phải và tự kiểm tra cập nhật.', installerButton: 'Tải .exe',
+    portable: 'Portable .zip', portableText: 'Giải nén và chạy, không cần cài đặt. Không đăng ký menu chuột phải.', portableButton: 'Tải .zip',
+    size: 'Dung lượng', beta: 'Bản Beta', betaText: 'Dùng thử phiên bản mới hơn trên kênh Beta.',
+    updates: 'Cập nhật tự động',
+    updateItems: [
+      'Bản Microsoft Store được cập nhật bởi Microsoft Store.',
+      'Bản tải trực tiếp kiểm tra cập nhật tối đa một lần mỗi ngày. Bạn có thể tắt trong Cài đặt → Cập nhật.',
+      'Bản kê phát hành được ký bằng Ed25519. Có hai kênh Ổn định và Beta.',
+      'Không gửi mã định danh máy khi kiểm tra cập nhật.',
     ],
-    req: 'Yêu cầu hệ thống',
-    reqItems: ['Windows 10 hoặc Windows 11, 64-bit (x64)', 'Không cần .NET, không cần quyền quản trị'],
-    verify: 'Kiểm tra tệp tải về',
-    verifyText: 'So mã SHA-256 bên dưới với kết quả lệnh này trong PowerShell:',
-    other: 'macOS và Linux',
-    otherText: 'Đang phát triển. Kiến trúc GenZip đã sẵn sàng đa nền tảng.',
-    notes: 'Xem lịch sử phiên bản',
-    version: 'Phiên bản',
+    requirements: 'Yêu cầu hệ thống', requirementItems: ['Windows 10 hoặc Windows 11, 64-bit (x64)', 'Không cần quyền quản trị'],
+    verify: 'Kiểm tra tệp tải về', verifyText: 'Chạy lệnh sau trong PowerShell, rồi so sánh kết quả với mã SHA-256 của tệp ở trên:',
+    other: 'macOS và Linux', otherText: 'Sắp phát hành cho macOS và Linux.', notes: 'Xem lịch sử phiên bản',
   },
   en: {
-    title: 'Download GenZip',
-    lead: 'Free for Windows 10 and 11 (64-bit).',
-    cards: [
-      { name: 'Microsoft Store', badge: 'Recommended', text: 'Automatic updates through the Store, signed by Microsoft.', button: 'Open in Microsoft Store', href: storeUrl, file: null },
-      { name: 'Installer (.exe)', badge: null, text: 'Installs for the current user, no admin rights needed. Includes the right-click menu and update checks.', button: 'Download .exe', href: release.installer.url, file: release.installer },
-      { name: 'Portable (.zip)', badge: null, text: 'Unzip and run, no installation. Does not register the right-click menu.', button: 'Download .zip', href: release.portable.url, file: release.portable },
+    title: 'Download GenZip', lead: 'Free for Windows 10 and 11 (64-bit).',
+    version: 'Version', pending: 'Coming soon', recommended: 'Recommended',
+    store: 'Automatic updates through Microsoft Store.', storeButton: 'Open Microsoft Store',
+    installer: 'Installer .exe', installerText: 'Installs for the current user, no admin rights needed. Includes the right-click menu and automatic update checks.', installerButton: 'Download .exe',
+    portable: 'Portable .zip', portableText: 'Unzip and run, no installation needed. Does not register the right-click menu.', portableButton: 'Download .zip',
+    size: 'File size', beta: 'Beta release', betaText: 'Try a newer version on the Beta channel.',
+    updates: 'Automatic updates',
+    updateItems: [
+      'The Microsoft Store build is updated by Microsoft Store.',
+      'The direct-download build checks for updates at most once a day. You can turn this off in Settings → Updates.',
+      'The release manifest is signed with Ed25519. Stable and Beta channels are available.',
+      'No machine ID is sent when checking for updates.',
     ],
-    req: 'System requirements',
-    reqItems: ['Windows 10 or Windows 11, 64-bit (x64)', 'No .NET, no admin rights required'],
-    verify: 'Verify your download',
-    verifyText: 'Compare the SHA-256 below with the output of this PowerShell command:',
-    other: 'macOS and Linux',
-    otherText: 'In development. GenZip is built to be cross-platform.',
-    notes: 'See the changelog',
-    version: 'Version',
+    requirements: 'System requirements', requirementItems: ['Windows 10 or Windows 11, 64-bit (x64)', 'No admin rights required'],
+    verify: 'Verify your download', verifyText: 'Run this command in PowerShell, then compare the result with the file’s SHA-256 above:',
+    other: 'macOS and Linux', otherText: 'Coming soon for macOS and Linux.', notes: 'See release notes',
   },
 }[lang];
+const cards = [
+  { name: c.installer, text: c.installerText, button: c.installerButton, file: latest?.downloads?.installer },
+  { name: c.portable, text: c.portableText, button: c.portableButton, file: latest?.downloads?.portable },
+];
 ---
 
-<Base title={t('nav.download')}>
-  <section class="section">
+<Base title={c.title} description={c.lead}>
+  <PageHero title={c.title} lead={c.lead}>
+    <p class="version muted">
+      {c.version} {current.version} <span aria-hidden="true">·</span>
+      {isReleased(current) ? <time datetime={current.date}>{formatReleaseDate(current.date!, lang)}</time> : c.pending}
+    </p>
+  </PageHero>
+  <section class="section" aria-label={c.title}>
     <div class="container">
-      <header class="section-title">
-        <h1>{c.title}</h1>
-        <p class="muted">{c.lead}</p>
-      </header>
-
-      <div class="cards">
-        {
-          c.cards.map((card) => (
-            <div class:list={['card', 'dl', { featured: card.badge }]}>
-              <div class="dl-head">
-                <h2>{card.name}</h2>
-                {card.badge && <span class="chip">{card.badge}</span>}
-              </div>
-              <p class="muted">{card.text}</p>
-              {card.file && (
-                <dl class="facts">
-                  <dt>{c.version}</dt>
-                  <dd>{release.version}{card.file.size && ` · ${card.file.size}`}</dd>
-                  <dt>SHA-256</dt>
-                  <dd><code class="hash">{card.file.sha256 || '—'}</code></dd>
-                </dl>
-              )}
-              {card.href ? (
-                <a class:list={['btn', card.badge ? 'btn-primary' : 'btn-outline']} href={card.href}>{card.button}</a>
-              ) : (
-                <span class="btn btn-outline" aria-disabled="true">{pending}</span>
-              )}
-            </div>
-          ))
-        }
+      <div class="download-cards">
+        <article class="card card-raised download-card featured">
+          <div class="card-heading"><Icon name="store" size={32} /><span class="chip">{c.recommended}</span></div>
+          <h2>Microsoft Store</h2>
+          <p class="muted">{c.store}</p>
+          <a class="btn btn-primary" href={storeUrl}><Icon name="windows" size={20} />{c.storeButton}</a>
+        </article>
+        {cards.map((card) => (
+          <article class="card download-card">
+            <div class="card-heading"><Icon name="download" size={32} /></div>
+            <h2>{card.name}</h2>
+            <p class="muted">{card.text}</p>
+            <dl class="facts">
+              <dt>{c.version}</dt><dd>{(latest ?? current).version}</dd>
+              <dt>{c.size}</dt><dd>{card.file?.size || '—'}</dd>
+            </dl>
+            <DownloadHash hash={card.file?.sha256} lang={lang} />
+            {card.file?.url ? (
+              <a class="btn btn-outline" href={card.file.url}><Icon name="download" size={20} />{card.button}</a>
+            ) : <button class="btn btn-outline" disabled>{c.pending}</button>}
+          </article>
+        ))}
       </div>
-
+      {newerBeta && (
+        <aside class="card beta-card">
+          <div><h2>{c.beta} <span class="chip">{newerBeta.version}</span></h2><p class="muted">{c.betaText}</p></div>
+          <ReleaseDownloads release={newerBeta} lang={lang} />
+          <a href={`${localePath('/changelog', lang)}#v${newerBeta.version.replace(/[^a-z0-9]+/gi, '-')}`}>{c.notes} →</a>
+        </aside>
+      )}
+      <section class="card card-soft updates" aria-labelledby="automatic-updates">
+        <h2 id="automatic-updates">{c.updates}</h2>
+        <ul>{c.updateItems.map((item) => <li>{item}</li>)}</ul>
+      </section>
       <div class="info">
-        <div class="card">
-          <h3>{c.req}</h3>
-          <ul>{c.reqItems.map((r) => <li>{r}</li>)}</ul>
-        </div>
-        <div class="card">
-          <h3>{c.verify}</h3>
+        <section class="card" aria-labelledby="requirements">
+          <h2 id="requirements">{c.requirements}</h2>
+          <ul>{c.requirementItems.map((item) => <li>{item}</li>)}</ul>
+        </section>
+        <section class="card verification" aria-labelledby="verify-download">
+          <h2 id="verify-download">{c.verify}</h2>
           <p class="muted">{c.verifyText}</p>
           <pre><code>Get-FileHash .\GenZip-Setup.exe -Algorithm SHA256</code></pre>
-        </div>
-        <div class="card">
-          <h3>{c.other}</h3>
+        </section>
+        <section class="card" aria-labelledby="other-platforms">
+          <h2 id="other-platforms">{c.other}</h2>
           <p class="muted">{c.otherText}</p>
-          <span class="chip chip-soon">{t('common.soon')}</span>
-        </div>
+        </section>
       </div>
-
       <p class="notes"><a href={localePath('/changelog', lang)}>{c.notes} →</a></p>
     </div>
   </section>
+  <script is:inline>
+    document.querySelectorAll('[data-copy-hash]').forEach((button) => {
+      button.addEventListener('click', async () => {
+        const status = button.closest('.checksum')?.querySelector('[role="status"]');
+        if (!status) return;
+        try {
+          await navigator.clipboard.writeText(button.dataset.copyHash ?? '');
+          status.textContent = button.dataset.copied ?? '';
+        } catch {
+          status.textContent = button.dataset.failed ?? '';
+        }
+      });
+    });
+  </script>
 </Base>
 
 <style>
-  .cards {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-  }
-  .dl {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-  .dl .btn {
-    margin-top: auto;
-  }
-  .featured {
-    border-color: var(--primary);
-    box-shadow: var(--shadow);
-  }
-  .dl-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-  }
-  .dl-head h2 {
-    font-size: 1.25rem;
-    margin: 0;
-  }
-  .facts {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 4px 12px;
-    margin: 0;
-    font-size: 0.9rem;
-  }
-  dt {
-    color: var(--text-muted);
-  }
-  dd {
-    margin: 0;
-    min-width: 0;
-  }
-  .hash {
-    display: block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  [aria-disabled='true'] {
-    opacity: 0.6;
-    cursor: default;
-  }
-  .info {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-    margin-top: 32px;
-  }
-  .info ul {
-    padding-left: 20px;
-    margin: 0;
-  }
-  .notes {
-    text-align: center;
-    margin-top: 32px;
-  }
-  @media (max-width: 900px) {
-    .cards,
-    .info {
-      grid-template-columns: 1fr;
-    }
+  .version { margin: 20px 0 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .download-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+  .download-card { display: flex; flex-direction: column; gap: 16px; min-width: 0; border-radius: var(--radius-lg); }
+  .download-card h2 { font-size: 1.4rem; margin: 0; }
+  .download-card p { margin: 0; }
+  .download-card > .btn { margin-top: auto; }
+  .card-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; color: var(--primary); min-height: 36px; }
+  .featured { border-color: var(--primary); }
+  .facts { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 16px; margin: 0; font-size: 0.9rem; }
+  dt { color: var(--text-muted); }
+  dd { margin: 0; overflow-wrap: anywhere; }
+  button:disabled { opacity: 0.6; cursor: default; }
+  .beta-card { margin-top: 24px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px; }
+  .beta-card h2 { font-size: 1.25rem; }
+  .beta-card p { margin: 0; }
+  .updates { margin-top: 40px; }
+  .updates h2, .info h2 { font-size: 1.25rem; }
+  ul { margin: 0; padding-left: 20px; }
+  li + li { margin-top: 8px; }
+  .info { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr) minmax(0, 1fr); gap: 24px; margin-top: 24px; }
+  .info > section { min-width: 0; }
+  pre { max-width: 100%; margin-bottom: 0; }
+  .notes { text-align: center; margin: 32px 0 0; }
+  @media (max-width: 1000px) {
+    .download-cards, .info { grid-template-columns: 1fr; }
   }
 </style>
