@@ -1,0 +1,257 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/ui/PageHero.astro';
+import { benchmark, type BenchRow } from '../data/benchmark';
+import { getLangFromUrl, useTranslations } from '../i18n/ui';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const locale = lang === 'vi' ? 'vi-VN' : 'en-US';
+const number = new Intl.NumberFormat(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const integer = new Intl.NumberFormat(locale);
+const c = {
+  vi: {
+    title: 'Tốc độ ngang 7-Zip',
+    lead: `GenZip dùng engine ${benchmark.engine} chính thức, nên tốc độ gần với 7z.exe của 7-Zip. Dưới đây là các số đo thực tế.`,
+    summary: 'Tổng quan kết quả',
+    cases: 'Trường hợp đo',
+    median: 'Tỉ lệ trung vị',
+    best: 'Tỉ lệ tốt nhất',
+    worst: 'Tỉ lệ cao nhất',
+    ratio: 'GenZip / 7z.exe',
+    ratioNote: 'Tỉ lệ = thời gian GenZip / thời gian 7z.exe. Thấp hơn là nhanh hơn; 1× là bằng nhau.',
+    results: 'Thời gian cho từng trường hợp',
+    scaleNote: 'Thời gian tính bằng giây; thấp hơn là nhanh hơn. Mỗi cặp thanh có thang đo riêng, lấy thời gian dài hơn làm chiều rộng tối đa. Không so chiều dài thanh giữa các trường hợp.',
+    operations: { extract: 'Giải nén', test: 'Kiểm tra', create: 'Tạo' },
+    datasets: { big: '1 tệp 512 MiB', small: '20 000 tệp nhỏ' },
+    seconds: 'giây',
+    table: 'Xem bảng số liệu',
+    tableCaption: 'Thời gian trung vị theo trường hợp (giây) và tỉ lệ GenZip / 7z.exe',
+    case: 'Trường hợp',
+    methodology: 'Cách đo',
+    procedure: `Mỗi số đo là trung vị của ${integer.format(benchmark.runs)} lần chạy. Chạy xen kẽ 7z.exe và GenZip, cùng phiên bản engine ${benchmark.engine}, với engine đã được làm nóng.`,
+    dataLabel: 'Bộ dữ liệu',
+    dataDescription: '1 × tệp 512 MiB và 20 000 tệp nhỏ',
+    measured: 'Ngày đo',
+    version: 'Phiên bản GenZip',
+    engine: 'Engine',
+    cpu: 'Bộ xử lý',
+    ram: 'RAM',
+    disk: 'Ổ đĩa',
+    os: 'Hệ điều hành',
+    caveat: 'Kết quả thay đổi theo máy và dữ liệu. GenZip không nhanh hơn trong mọi trường hợp — mục tiêu là ngang 7-Zip trong khi có thêm giao diện, an toàn và tiện ích.',
+    update: 'Số liệu sẽ được cập nhật khi có tối ưu mới.',
+    soon: 'Sắp có',
+    optimization: 'Đang làm: tận dụng RAM để đọc trước.',
+  },
+  en: {
+    title: 'Neck and neck with 7-Zip',
+    lead: `GenZip uses the official ${benchmark.engine} engine, so its speed is close to 7-Zip’s own 7z.exe. The numbers below are real measurements.`,
+    summary: 'Results at a glance',
+    cases: 'Measured cases',
+    median: 'Median ratio',
+    best: 'Best ratio',
+    worst: 'Highest ratio',
+    ratio: 'GenZip / 7z.exe',
+    ratioNote: 'Ratio = GenZip time / 7z.exe time. Lower is faster; 1× means equal time.',
+    results: 'Time for each case',
+    scaleNote: 'Times are in seconds; lower is faster. Each pair of bars uses its own scale, with the longer time filling the available width. Do not compare bar lengths across cases.',
+    operations: { extract: 'Extract', test: 'Test', create: 'Create' },
+    datasets: { big: 'one 512 MiB file', small: '20,000 small files' },
+    seconds: 'seconds',
+    table: 'View data table',
+    tableCaption: 'Median time by case (seconds) and GenZip / 7z.exe ratio',
+    case: 'Case',
+    methodology: 'Methodology',
+    procedure: `Each measurement is the median of ${integer.format(benchmark.runs)} runs. 7z.exe and GenZip were alternated, using the same ${benchmark.engine} engine version, with the engine warmed up.`,
+    dataLabel: 'Data sets',
+    dataDescription: '1 × 512 MiB file and 20,000 small files',
+    measured: 'Measured on',
+    version: 'GenZip version',
+    engine: 'Engine',
+    cpu: 'Processor',
+    ram: 'RAM',
+    disk: 'Disk',
+    os: 'Operating system',
+    caveat: 'Results vary by machine and data. GenZip is not faster in every case — the goal is to match 7-Zip while adding a graphical interface, safety and convenience.',
+    update: 'Measurements will be updated as new optimizations arrive.',
+    soon: 'Coming soon',
+    optimization: 'In progress: using RAM to read ahead.',
+  },
+}[lang];
+
+const ratios = benchmark.rows.map((row) => row.genzip / row.sevenZip).sort((a, b) => a - b);
+const middle = Math.floor(ratios.length / 2);
+const median = ratios.length % 2 ? ratios[middle] : (ratios[middle - 1] + ratios[middle]) / 2;
+const stats = [
+  { label: c.cases, value: integer.format(benchmark.rows.length) },
+  { label: c.median, value: `${number.format(median)}×` },
+  { label: c.best, value: `${number.format(ratios[0])}×` },
+  { label: c.worst, value: `${number.format(ratios[ratios.length - 1])}×` },
+];
+const operations: BenchRow['op'][] = ['extract', 'test', 'create'];
+const rowLabel = (row: BenchRow) => `${c.operations[row.op]} — ${c.datasets[row.data]} (${row.format.toUpperCase()})`;
+const measured = new Intl.DateTimeFormat(locale, { dateStyle: 'long', timeZone: 'UTC' }).format(new Date(`${benchmark.measured}T00:00:00Z`));
+const machine = [
+  [c.cpu, lang === 'vi' ? benchmark.machine.cpu : benchmark.machine.cpuEn],
+  [c.ram, benchmark.machine.ram],
+  [c.disk, benchmark.machine.disk],
+  [c.os, benchmark.machine.os],
+];
+---
+
+<Base title={t('nav.benchmark')} description={c.lead}>
+  <PageHero eyebrow={t('nav.benchmark')} title={c.title} lead={c.lead} />
+  <div class="container benchmark-content">
+    <section class="section" aria-labelledby="benchmark-summary">
+      <h2 id="benchmark-summary">{c.summary}</h2>
+      <dl class="stats">
+        {stats.map((stat) => (
+          <div class="card card-raised stat">
+            <dt>{stat.label}</dt>
+            <dd>{stat.value}</dd>
+          </div>
+        ))}
+      </dl>
+      <p class="muted ratio-note">{c.ratioNote}</p>
+    </section>
+
+    <section class="results" aria-labelledby="benchmark-results">
+      <h2 id="benchmark-results">{c.results}</h2>
+      <p class="muted" id="benchmark-scale">{c.scaleNote}</p>
+      <ul class="legend" aria-label={c.results}>
+        <li><span class="swatch sevenzip" aria-hidden="true"></span>7z.exe</li>
+        <li><span class="swatch genzip" aria-hidden="true"></span>GenZip</li>
+      </ul>
+      <div class="chart" aria-describedby="benchmark-scale">
+        {operations.map((op) => (
+          <section class="chart-group card" aria-labelledby={`benchmark-${op}`}>
+            <h3 id={`benchmark-${op}`}>{c.operations[op]}</h3>
+            <ul class="chart-rows">
+              {benchmark.rows.filter((row) => row.op === op).map((row) => (
+                <li class="chart-row">
+                  <div class="row-heading">
+                    <h4>{rowLabel(row)}</h4>
+                    <p class="row-ratio"><span>{c.ratio}</span> <strong>{number.format(row.genzip / row.sevenZip)}×</strong></p>
+                  </div>
+                  <dl class="bars">
+                    {[
+                      { label: '7z.exe', time: row.sevenZip, style: 'sevenzip' },
+                      { label: 'GenZip', time: row.genzip, style: 'genzip' },
+                    ].map((bar) => (
+                      <div class="bar-row">
+                        <dt>{bar.label}</dt>
+                        <dd>
+                          <span class="bar-track" aria-hidden="true">
+                            <span class={`bar-fill ${bar.style}`} style={`width: ${bar.time / Math.max(row.sevenZip, row.genzip) * 100}%`}></span>
+                          </span>
+                          <span class="bar-value">{number.format(bar.time)} <span class="unit">{c.seconds}</span></span>
+                        </dd>
+                      </div>
+                    ))}
+                  </dl>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))}
+      </div>
+      <details class="data-table">
+        <summary>{c.table}</summary>
+        <table>
+          <caption>{c.tableCaption}</caption>
+          <thead>
+            <tr>
+              <th scope="col">{c.case}</th>
+              <th scope="col">7z.exe</th>
+              <th scope="col">GenZip</th>
+              <th scope="col">{c.ratio}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {operations.flatMap((op) => benchmark.rows.filter((row) => row.op === op)).map((row) => (
+              <tr>
+                <th scope="row">{rowLabel(row)}</th>
+                <td>{number.format(row.sevenZip)}</td>
+                <td>{number.format(row.genzip)}</td>
+                <td>{number.format(row.genzip / row.sevenZip)}×</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </details>
+    </section>
+
+    <section class="section methodology" aria-labelledby="benchmark-methodology">
+      <h2 id="benchmark-methodology">{c.methodology}</h2>
+      <p class="muted">{c.procedure}</p>
+      <dl class="method-facts card">
+        <div><dt>{c.dataLabel}</dt><dd>{c.dataDescription}</dd></div>
+        <div><dt>{c.measured}</dt><dd><time datetime={benchmark.measured}>{measured}</time></dd></div>
+        <div><dt>{c.version}</dt><dd>{benchmark.version}</dd></div>
+        <div><dt>{c.engine}</dt><dd>{benchmark.engine}</dd></div>
+        {machine.map(([label, value]) => <div><dt>{label}</dt><dd>{value}</dd></div>)}
+      </dl>
+      <aside class="card card-soft notes">
+        <p>{c.caveat}</p>
+        <p>{c.update}</p>
+        <p><span class="chip chip-soon">{c.soon}</span> {c.optimization}</p>
+      </aside>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .benchmark-content { max-width: 1060px; }
+  .stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin: 24px 0 16px; }
+  .stat dt { color: var(--text-muted); }
+  .stat dd { margin: 12px 0 0; color: var(--primary); font-size: 2rem; font-weight: 600; line-height: 1.2; }
+  .ratio-note { margin: 0; font-size: 0.9375rem; }
+  .legend { display: flex; flex-wrap: wrap; gap: 24px; padding: 0; margin: 24px 0; list-style: none; }
+  .legend li { display: flex; align-items: center; gap: 8px; }
+  .swatch { width: 20px; height: 12px; border-radius: 3px; }
+  .sevenzip { background: var(--text-muted); }
+  .genzip { background: var(--primary); }
+  .chart { display: grid; gap: 24px; }
+  .chart-group h3 { margin-bottom: 24px; }
+  .chart-rows { padding: 0; margin: 0; list-style: none; }
+  .chart-row + .chart-row { border-top: 1px solid var(--border); padding-top: 24px; margin-top: 24px; }
+  .row-heading { display: flex; justify-content: space-between; align-items: baseline; gap: 12px 24px; flex-wrap: wrap; margin-bottom: 16px; }
+  .row-heading h4 { margin: 0; font-size: 1rem; line-height: 1.5; }
+  .row-ratio { display: flex; align-items: baseline; gap: 12px; margin: 0; font-size: 0.875rem; color: var(--text-muted); }
+  .row-ratio strong { color: var(--text); font-size: 1rem; }
+  .bars { display: grid; gap: 10px; margin: 0; }
+  .bar-row { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 12px; align-items: center; }
+  .bar-row dt { font-size: 0.875rem; }
+  .bar-row dd { display: grid; grid-template-columns: minmax(0, 1fr) 112px; gap: 16px; align-items: center; margin: 0; }
+  .bar-track { display: block; height: 16px; border-radius: 4px; background: var(--subtle); }
+  .bar-fill { display: block; height: 100%; border-radius: inherit; }
+  .bar-value { text-align: right; white-space: nowrap; font-size: 0.875rem; }
+  .unit { color: var(--text-muted); }
+  .stat dd, .bar-value, .row-ratio strong, td { font-variant-numeric: tabular-nums; }
+  .data-table { margin-top: 24px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
+  summary { padding: 16px 20px; cursor: pointer; font-weight: 600; }
+  table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 0.875rem; }
+  caption { padding: 16px; text-align: left; color: var(--text-muted); }
+  th, td { padding: 12px; border-top: 1px solid var(--border); text-align: right; overflow-wrap: anywhere; }
+  th:first-child { width: 43%; text-align: left; }
+  tbody th { font-weight: 400; }
+  thead { background: var(--subtle); }
+  .method-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 32px; margin: 24px 0; }
+  .method-facts dt { font-weight: 600; margin-bottom: 4px; }
+  .method-facts dd { margin: 0; color: var(--text-muted); overflow-wrap: anywhere; }
+  .notes p:last-child { margin-bottom: 0; }
+  .notes .chip { margin-right: 4px; }
+  @media (max-width: 700px) {
+    .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .method-facts { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  }
+  @media (max-width: 420px) {
+    .stat { padding: 16px; }
+    .stat dt { font-size: 0.875rem; }
+    .bar-row { grid-template-columns: 52px minmax(0, 1fr); gap: 8px; }
+    .bar-row dd { grid-template-columns: minmax(0, 1fr) 90px; gap: 8px; }
+    .bar-value { font-size: 0.8125rem; }
+    th, td { padding: 10px 6px; font-size: 0.8125rem; }
+  }
+</style>
