@@ -32,6 +32,6 @@ GenZip không quảng cáo, không cần tài khoản, không theo dõi. Bản M
 
 ## Khi nào có?
 
-GenZip đang chờ phát hành trên Microsoft Store. Khi có link chính thức, nút ở trang [Tải về](/download) sẽ dẫn thẳng tới Store. GenZip không có bộ cài tải tự do, nên hãy cẩn thận với các trang tự nhận là nơi tải GenZip.
+Ngày 30/10/2026, GenZip beta đã [qua kiểm duyệt Microsoft Store](/news/genzip-beta-qua-kiem-duyet-store) và đang phát hành riêng cho nhóm thử nghiệm. Khi GenZip mở công khai, nút ở trang [Tải về](/download) sẽ dẫn thẳng tới Store. GenZip không có bộ cài tải tự do, nên hãy cẩn thận với các trang tự nhận là nơi tải GenZip.
 
 Trong lúc chờ, bạn có thể xem [toàn bộ tính năng](/features) hoặc đọc [hướng dẫn sử dụng](/guide).

@@ -32,6 +32,6 @@ No ads, no account, no tracking. The Microsoft Store build never connects to the
 
 ## When can I get it?
 
-GenZip is awaiting release on the Microsoft Store. Once the official link is live, the button on the [Download](/en/download) page will take you straight to the Store. There is no free-floating GenZip installer, so be careful with sites claiming to offer one.
+On October 30, 2026, GenZip beta [passed Microsoft Store certification](/en/news/genzip-beta-qua-kiem-duyet-store) and is rolling out privately to a test group. Once GenZip goes public, the button on the [Download](/en/download) page will take you straight to the Store. There is no free-floating GenZip installer, so be careful with sites claiming to offer one.
 
 Meanwhile, see [all features](/en/features) or read the [user guide](/en/guide).

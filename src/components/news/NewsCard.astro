@@ -1,5 +1,6 @@
 ---
 import { formatNewsDate, newsPath, type NewsEntry } from './content';
+import { publicImage } from './image';
 import type { Lang } from '../../i18n/ui';
 
 interface Props {
@@ -8,12 +9,14 @@ interface Props {
 }
 
 const { entry, lang } = Astro.props;
-const { title, description, date, tags, cover, draft } = entry.data;
+const { title, description, date, tags, cover, coverAlt, images, draft } = entry.data;
+const thumbSrc = images.thumb ?? cover;
+const thumb = thumbSrc ? publicImage(thumbSrc) : undefined;
 const c = { vi: { draft: 'Bản nháp' }, en: { draft: 'Draft' } }[lang];
 ---
 
 <article class="news-card card card-raised">
-  {cover && <img class="cover" src={cover} alt={title} loading="lazy" decoding="async" />}
+  {thumb && <img class="cover" src={thumb.src} width={thumb.width} height={thumb.height} alt={coverAlt ?? title} loading="lazy" decoding="async" />}
   <div class="card-body">
     <div class="meta muted">
       <time datetime={date.toISOString()}>{formatNewsDate(date, lang)}</time>
@@ -27,7 +30,7 @@ const c = { vi: { draft: 'Bản nháp' }, en: { draft: 'Draft' } }[lang];
 
 <style>
   .news-card { height: 100%; padding: 0; overflow: hidden; border-radius: var(--radius-lg); }
-  .cover { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; background: var(--subtle); }
+  .cover { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; background: var(--subtle); }
   .card-body { padding: 24px; overflow-wrap: anywhere; }
   .meta { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 0.875rem; margin-bottom: 16px; }
   h2 { font-size: 1.375rem; line-height: 1.35; }

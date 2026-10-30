@@ -42,6 +42,19 @@ const news = defineCollection({
     tags: z.array(z.string()).default([]),
     /** Ảnh bìa trong public/, ví dụ "/news/ra-mat.png". */
     cover: z.string().optional(),
+    /** Văn bản thay thế cho ảnh bìa; mặc định là tiêu đề bài. */
+    coverAlt: z.string().optional(),
+    /** Ảnh đại diện thêm (đường dẫn trong public/). Thiếu ảnh nào thì dùng `cover`. */
+    images: z.object({
+      /** OG/Facebook/Zalo/X, 1200×630. */
+      og: z.string().optional(),
+      /** Thumbnail trên danh sách tin, 16:9 (ví dụ 800×450). */
+      thumb: z.string().optional(),
+      /** 4:3 cho schema.org. */
+      standard: z.string().optional(),
+      /** 1:1 cho schema.org và chia sẻ dạng vuông. */
+      square: z.string().optional(),
+    }).default({}),
     draft: z.boolean().default(false),
     /** Ghim lên đầu danh sách tin. */
     pinned: z.boolean().default(false),

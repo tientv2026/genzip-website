@@ -41,6 +41,8 @@ Các trường:
 | `date` | Bắt buộc. Ngày theo dạng `YYYY-MM-DD`; danh sách sắp xếp mới nhất trước. |
 | `tags` | Danh sách chủ đề; có thể dùng `[]` hoặc bỏ qua. Viết bằng ngôn ngữ tương ứng và giữ cách viết nhất quán để bộ lọc gom đúng chủ đề. |
 | `cover` | Không bắt buộc. Đường dẫn ảnh bắt đầu từ `/news/`; bỏ cả dòng nếu chưa có ảnh. Tiêu đề bài được dùng làm văn bản thay thế của ảnh bìa. |
+| `coverAlt` | Không bắt buộc. Văn bản thay thế cho ảnh bìa và ảnh chia sẻ; mặc định là tiêu đề bài. |
+| `images` | Không bắt buộc. Ảnh đại diện thêm: `og` (1200×630, dùng cho Facebook/Zalo/X), `thumb` (16:9, ví dụ 800×450, cho danh sách tin), `standard` (4:3) và `square` (1:1) cho dữ liệu schema.org. Thiếu ảnh nào thì dùng `cover`. Kích thước ảnh được đọc tự động lúc build. Ví dụ đầy đủ: bài `genzip-beta-qua-kiem-duyet-store`, ảnh sinh bằng `scripts/make-store-beta-cover.py`. |
 | `pinned` | `true` để ghim bài lên đầu danh sách (mặc định `false`). |
 | `draft` | `true` để giữ bản nháp, `false` để xuất bản. Mặc định là `false` nếu bỏ qua, vì vậy nên ghi rõ trường này. |
 

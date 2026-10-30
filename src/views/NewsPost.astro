@@ -4,6 +4,8 @@ import Base from '../layouts/Base.astro';
 import CtaCard from '../components/ui/CtaCard.astro';
 import NewsCard from '../components/news/NewsCard.astro';
 import { formatNewsDate, getNews, type NewsEntry } from '../components/news/content';
+import { publicImage } from '../components/news/image';
+import { publisher } from '../data/product';
 import { getLangFromUrl, localePath } from '../i18n/ui';
 
 interface Props {
@@ -16,12 +18,32 @@ const c = {
   vi: { back: 'Về trang tin tức', related: 'Bài viết khác', draft: 'Bản nháp' },
   en: { back: 'Back to news', related: 'More posts', draft: 'Draft' },
 }[lang];
-const { title, description, date, tags, cover, draft } = entry.data;
+const { title, description, date, tags, cover, coverAlt, images, draft } = entry.data;
+const alt = coverAlt ?? title;
+const hero = cover ? publicImage(cover) : undefined;
+const ogSrc = images.og ?? cover;
+const og = ogSrc ? { ...publicImage(ogSrc), alt } : undefined;
+const published = date.toISOString().slice(0, 10);
+const abs = (src: string) => new URL(src, Astro.site).href;
+const org = { '@type': 'Organization', name: publisher, url: abs('/'), logo: abs('/brand/genzip-512.png') };
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: title,
+  description,
+  inLanguage: lang,
+  datePublished: published,
+  dateModified: published,
+  mainEntityOfPage: new URL(Astro.url.pathname, Astro.site).href,
+  image: [cover, images.standard, images.square].filter((src): src is string => Boolean(src)).map(abs),
+  author: org,
+  publisher: org,
+};
 const { Content } = await render(entry);
 const related = (await getNews(lang)).filter((post) => post.id !== entry.id).slice(0, 3);
 ---
 
-<Base title={title} description={description}>
+<Base title={title} description={description} image={og} type="article" published={published} jsonLd={jsonLd}>
   <div class="container article-container">
     <article>
       <header class="article-header">
@@ -34,7 +56,7 @@ const related = (await getNews(lang)).filter((post) => post.id !== entry.id).sli
         <p class="lead muted">{description}</p>
         {tags.length > 0 && <ul class="tags" role="list">{tags.map((tag) => <li class="chip">{tag}</li>)}</ul>}
       </header>
-      {cover && <img class="cover" src={cover} alt={title} decoding="async" />}
+      {hero && <img class="cover" src={hero.src} width={hero.width} height={hero.height} alt={alt} decoding="async" fetchpriority="high" />}
       <div class="prose article-body"><Content /></div>
     </article>
     {related.length > 0 && (
@@ -55,9 +77,12 @@ const related = (await getNews(lang)).filter((post) => post.id !== entry.id).sli
   .meta { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; font-size: 0.875rem; }
   .lead { font-size: 1.125rem; margin: 24px 0; }
   .tags { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; margin: 0; padding: 0; }
-  .cover { width: 100%; max-width: 960px; max-height: 540px; object-fit: contain; margin: 32px auto; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--subtle); }
+  .cover { display: block; width: 100%; height: auto; max-width: 960px; max-height: 540px; object-fit: contain; margin: 32px auto; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--subtle); }
   .article-body { margin-top: 40px; }
   .article-body :global(pre) { max-width: 100%; }
+  .article-body :global(.store-links) { display: flex; flex-wrap: wrap; gap: 12px; margin: 24px 0; }
+  .article-body :global(.store-links a) { text-decoration: none; }
+  .article-body :global(.store-links .btn-primary) { color: #fff; }
   .related { margin-top: 64px; padding-top: 40px; border-top: 1px solid var(--border); }
   .related > h2 { margin-bottom: 24px; }
   .news-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; list-style: none; margin: 0; padding: 0; }
