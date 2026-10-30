@@ -3,6 +3,13 @@ title: Password-protecting archives the right way
 description: ZipCrypto or AES-256, whether to encrypt file names, and common mistakes when sending password-protected archives.
 date: 2026-10-29
 tags: [Security, How-to]
+cover: /news/dat-mat-khau-tep-nen/en-16x9.webp
+coverAlt: The GenZip icon, the words "Password-protecting archives" and the Create archive dialog with the Security section highlighted
+images:
+  og: /news/dat-mat-khau-tep-nen/en-og.jpg
+  thumb: /news/dat-mat-khau-tep-nen/en-thumb.webp
+  standard: /news/dat-mat-khau-tep-nen/en-4x3.webp
+  square: /news/dat-mat-khau-tep-nen/en-1x1.webp
 draft: false
 ---
 

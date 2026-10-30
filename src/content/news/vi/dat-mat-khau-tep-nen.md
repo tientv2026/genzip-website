@@ -3,6 +3,13 @@ title: Đặt mật khẩu cho tệp nén sao cho thật sự an toàn
 description: ZipCrypto hay AES-256, có nên ẩn tên tệp, và vài sai lầm hay gặp khi gửi tệp nén có mật khẩu.
 date: 2026-10-29
 tags: [Bảo mật, Hướng dẫn]
+cover: /news/dat-mat-khau-tep-nen/vi-16x9.webp
+coverAlt: Biểu tượng GenZip, dòng chữ "Đặt mật khẩu cho tệp nén" và hộp thoại Tạo file nén với phần Bảo mật được khoanh
+images:
+  og: /news/dat-mat-khau-tep-nen/vi-og.jpg
+  thumb: /news/dat-mat-khau-tep-nen/vi-thumb.webp
+  standard: /news/dat-mat-khau-tep-nen/vi-4x3.webp
+  square: /news/dat-mat-khau-tep-nen/vi-1x1.webp
 draft: false
 ---
 

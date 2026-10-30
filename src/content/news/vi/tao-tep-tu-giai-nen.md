@@ -3,6 +3,13 @@ title: "Tệp tự giải nén .exe: khi nào nên dùng, khi nào không"
 description: Tệp .exe tự giải nén giúp người nhận mở được dù không cài trình nén. Cách tạo bằng GenZip và những điều cần cân nhắc.
 date: 2026-10-29
 tags: [Hướng dẫn]
+cover: /news/tao-tep-tu-giai-nen/vi-16x9.webp
+coverAlt: Biểu tượng GenZip, dòng chữ "Tệp tự giải nén .exe" và hộp thoại Tạo file nén với ô Tự giải nén được khoanh
+images:
+  og: /news/tao-tep-tu-giai-nen/vi-og.jpg
+  thumb: /news/tao-tep-tu-giai-nen/vi-thumb.webp
+  standard: /news/tao-tep-tu-giai-nen/vi-4x3.webp
+  square: /news/tao-tep-tu-giai-nen/vi-1x1.webp
 draft: false
 ---
 

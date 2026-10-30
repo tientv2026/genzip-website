@@ -3,6 +3,13 @@ title: Split archives for email, USB drives or discs
 description: File too big to send or copy? Split it into 100 MB, 700 MB or 4 GB parts and join them back when extracting.
 date: 2026-10-29
 tags: [How-to, Tips]
+cover: /news/chia-nho-tep-nen/en-16x9.webp
+coverAlt: The GenZip icon, the words "Split archives" and the Create archive dialog with the Split option highlighted
+images:
+  og: /news/chia-nho-tep-nen/en-og.jpg
+  thumb: /news/chia-nho-tep-nen/en-thumb.webp
+  standard: /news/chia-nho-tep-nen/en-4x3.webp
+  square: /news/chia-nho-tep-nen/en-1x1.webp
 draft: false
 ---
 

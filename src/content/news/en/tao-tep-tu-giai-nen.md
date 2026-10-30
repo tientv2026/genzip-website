@@ -3,6 +3,13 @@ title: "Self-extracting .exe archives: when to use them and when not to"
 description: A self-extracting .exe lets recipients open your files without an archiver. How to make one in GenZip and what to consider.
 date: 2026-10-29
 tags: [How-to]
+cover: /news/tao-tep-tu-giai-nen/en-16x9.webp
+coverAlt: The GenZip icon, the words "Self-extracting .exe archives" and the Create archive dialog with the Self-extracting option highlighted
+images:
+  og: /news/tao-tep-tu-giai-nen/en-og.jpg
+  thumb: /news/tao-tep-tu-giai-nen/en-thumb.webp
+  standard: /news/tao-tep-tu-giai-nen/en-4x3.webp
+  square: /news/tao-tep-tu-giai-nen/en-1x1.webp
 draft: false
 ---
 

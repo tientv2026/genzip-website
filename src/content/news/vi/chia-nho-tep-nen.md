@@ -3,6 +3,13 @@ title: Chia nhỏ tệp nén để gửi email, chép USB hay đĩa
 description: Tệp quá lớn để gửi hoặc chép? Chia thành nhiều phần 100 MB, 700 MB hoặc 4 GB và ghép lại khi giải nén.
 date: 2026-10-29
 tags: [Hướng dẫn, Mẹo]
+cover: /news/chia-nho-tep-nen/vi-16x9.webp
+coverAlt: Biểu tượng GenZip, dòng chữ "Chia nhỏ tệp nén" và hộp thoại Tạo file nén với ô Chia phần được khoanh
+images:
+  og: /news/chia-nho-tep-nen/vi-og.jpg
+  thumb: /news/chia-nho-tep-nen/vi-thumb.webp
+  standard: /news/chia-nho-tep-nen/vi-4x3.webp
+  square: /news/chia-nho-tep-nen/vi-1x1.webp
 draft: false
 ---
 
