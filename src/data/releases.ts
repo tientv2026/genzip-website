@@ -28,8 +28,9 @@ export interface Release {
 
 export const releases: Release[] = [
   {
-    // Đã nộp Store 3/11/2026, chờ duyệt. Gộp sửa lỗi của 0.9.1–0.9.3; điền date khi Store phát hành.
+    // Công khai trên Store 4/11/2026. Gộp sửa lỗi của 0.9.1–0.9.3.
     version: '0.9.3-beta.1',
+    date: '2026-11-04',
     channel: 'beta',
   },
   {

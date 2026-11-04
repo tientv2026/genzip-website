@@ -8,7 +8,7 @@ draft: false
 pinned: true
 ---
 
-GenZip là trình nén và giải nén miễn phí cho Windows 10 và 11 (64-bit). Bản đầu tiên, **0.9.0-beta.1**, đã có trên **Microsoft Store**.
+GenZip là trình nén và giải nén miễn phí cho Windows 10 và 11 (64-bit). Bản beta mới nhất, **0.9.3-beta.1**, đã có trên **Microsoft Store**.
 
 ## Vì sao lại thêm một trình nén nữa?
 

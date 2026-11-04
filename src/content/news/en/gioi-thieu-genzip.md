@@ -8,7 +8,7 @@ draft: false
 pinned: true
 ---
 
-GenZip is a free archive manager for Windows 10 and 11 (64-bit). The first build, **0.9.0-beta.1**, is available on the **Microsoft Store**.
+GenZip is a free archive manager for Windows 10 and 11 (64-bit). The latest beta, **0.9.3-beta.1**, is available on the **Microsoft Store**.
 
 ## Why another archiver?
 
