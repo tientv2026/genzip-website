@@ -28,7 +28,12 @@ export interface Release {
 
 export const releases: Release[] = [
   {
-    // Beta trên Microsoft Store (Private audience): qua kiểm duyệt và phát hành 30/10/2026, chưa công khai.
+    // Đã nộp Store 3/11/2026, chờ duyệt. Gộp sửa lỗi của 0.9.1–0.9.3; điền date khi Store phát hành.
+    version: '0.9.3-beta.1',
+    channel: 'beta',
+  },
+  {
+    // Beta đầu tiên: qua kiểm duyệt Store và phát hành riêng tư 30/10/2026; công khai từ 4/11/2026.
     version: '0.9.0-beta.1',
     date: '2026-10-30',
     channel: 'beta',

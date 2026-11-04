@@ -10,9 +10,9 @@ export const formats = {
 };
 
 // Microsoft Store là kênh phát hành chính thức duy nhất cho người dùng (identity ThtD.GenZip, nhà phát hành "Dạ Trư").
-// Bản beta đang ở chế độ Private audience. Để trống = nút hiện "Sắp có trên Microsoft Store".
-// Khi Store duyệt: điền dạng 'https://apps.microsoft.com/detail/<ProductID>'.
-export const storeUrl = '';
+// Công khai trên Store (Public audience) từ 4/11/2026. Để trống = nút hiện "Sắp có trên Microsoft Store".
+export const storeId = '9PLW8MXQBT2Q';
+export const storeUrl = `https://apps.microsoft.com/detail/${storeId}`;
 export const publisher = 'Dạ Trư';
 
 // Khớp crates/genzip-ui/src/support_info.rs trong repo app.

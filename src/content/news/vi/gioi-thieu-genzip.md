@@ -8,7 +8,7 @@ draft: false
 pinned: true
 ---
 
-GenZip là trình nén và giải nén miễn phí cho Windows 10 và 11 (64-bit). Bản đầu tiên, **0.9.0-beta.1**, đang được thử nghiệm và sẽ phát hành chính thức qua **Microsoft Store**.
+GenZip là trình nén và giải nén miễn phí cho Windows 10 và 11 (64-bit). Bản đầu tiên, **0.9.0-beta.1**, đã có trên **Microsoft Store**.
 
 ## Vì sao lại thêm một trình nén nữa?
 
@@ -30,8 +30,8 @@ GenZip không làm lại phần nén từ đầu. Toàn bộ việc nén và gi�
 
 GenZip không quảng cáo, không cần tài khoản, không theo dõi. Bản Microsoft Store không tự kết nối mạng; cập nhật do Store lo.
 
-## Khi nào có?
+## Tải ở đâu?
 
-Ngày 30/10/2026, GenZip beta đã [qua kiểm duyệt Microsoft Store](/news/genzip-beta-qua-kiem-duyet-store) và đang phát hành riêng cho nhóm thử nghiệm. Khi GenZip mở công khai, nút ở trang [Tải về](/download) sẽ dẫn thẳng tới Store. GenZip không có bộ cài tải tự do, nên hãy cẩn thận với các trang tự nhận là nơi tải GenZip.
+GenZip beta đã [qua kiểm duyệt Microsoft Store](/news/genzip-beta-qua-kiem-duyet-store) ngày 30/10/2026 và **mở công khai từ 04/11/2026**. Bấm nút ở trang [Tải về](/download) để cài từ Microsoft Store. GenZip không có bộ cài tải tự do, nên hãy cẩn thận với các trang tự nhận là nơi tải GenZip.
 
 Trong lúc chờ, bạn có thể xem [toàn bộ tính năng](/features) hoặc đọc [hướng dẫn sử dụng](/guide).

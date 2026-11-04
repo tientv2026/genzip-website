@@ -1,6 +1,6 @@
 ---
 title: GenZip beta passed Microsoft Store certification
-description: On October 30, 2026, GenZip 0.9 beta passed Microsoft Store certification and started rolling out to a private test group. Here is how to join.
+description: On October 30, 2026, GenZip 0.9 beta passed Microsoft Store certification and rolled out to a test group; since November 4, 2026 it is open to everyone.
 date: 2026-10-30
 tags: [Announcement]
 cover: /news/store-beta/en-16x9.webp
@@ -16,26 +16,16 @@ pinned: true
 
 **GenZip 0.9.0.0 beta passed Microsoft Store certification** on October 30, 2026 and was published at 18:48 Vietnam time. This is the first step toward bringing GenZip to users through its only official channel: the Microsoft Store.
 
-## What does private beta mean?
+> **Update, November 4, 2026:** GenZip is now **public** on the Microsoft Store. Anyone can find and install it; no test list sign-up needed anymore.
 
-This release is a **private beta** on the Microsoft Store:
+## Install GenZip
 
-- Only Microsoft accounts on the **GenZip Beta** list can see and install GenZip.
-- GenZip **cannot be found publicly** in Store search yet. That is why the [Download](/en/download) page still says "Coming soon to Microsoft Store".
-- When GenZip goes public, the download button on this site will lead straight to the Store page.
-
-## Want to try it?
-
-1. Email **[info@tientv.com](mailto:info@tientv.com)** with the email address of the Microsoft account you use on your Windows PC, so it can be added to the test list.
-2. Sign in to the Microsoft Store app with **that same account**.
-3. Use the button below to open GenZip in the Microsoft Store app and install it.
+Use the button below to open GenZip in the Microsoft Store app, then select **Get**. Or open Microsoft Store and search for "GenZip".
 
 <p class="store-links">
   <a class="btn btn-primary" href="ms-windows-store://pdp/?productid=9PLW8MXQBT2Q">Open GenZip in Microsoft Store</a>
-  <a class="btn btn-outline" href="https://apps.microsoft.com/detail/9PLW8MXQBT2Q">Backup link (browser)</a>
+  <a class="btn btn-outline" href="https://apps.microsoft.com/detail/9PLW8MXQBT2Q">View on the Microsoft Store website</a>
 </p>
-
-**Private beta:** only accounts on the test list can see and install GenZip. The apps.microsoft.com web page may say "not found" even if you are on the list; open it in the Microsoft Store app instead (the first button).
 
 Requirements: **Windows 10 version 1809 or later, 64-bit (x64)**, or Windows 11.
 
@@ -61,4 +51,4 @@ GenZip uses the official 7-Zip engine, so compression and extraction speed is **
 
 GenZip is free, has no ads and collects no personal data. The publisher on the Store is **Dạ Trư**. Compression and extraction are handled by Igor Pavlov's **7-Zip** engine, under the LGPL license.
 
-If you run into a bug or have feedback while testing, send it to the same email address. Thank you for trying GenZip!
+If you run into a bug or have feedback, email **[info@tientv.com](mailto:info@tientv.com)**. Thank you for trying GenZip!

@@ -1,6 +1,6 @@
 ---
 title: GenZip beta đã qua kiểm duyệt Microsoft Store
-description: Ngày 30/10/2026, GenZip 0.9 beta qua kiểm duyệt Microsoft Store và bắt đầu phát hành cho nhóm thử nghiệm riêng. Đây là cách tham gia.
+description: Ngày 30/10/2026, GenZip 0.9 beta qua kiểm duyệt Microsoft Store phát hành cho nhóm thử nghiệm; từ 04/11/2026 đã mở công khai cho mọi người.
 date: 2026-10-30
 tags: [Thông báo]
 cover: /news/store-beta/vi-16x9.webp
@@ -16,26 +16,16 @@ pinned: true
 
 **GenZip 0.9.0.0 beta đã qua kiểm duyệt của Microsoft Store** ngày 30/10/2026 và được phát hành lúc 18:48 (giờ Việt Nam). Đây là bước đầu tiên để GenZip đến tay người dùng qua kênh chính thức duy nhất: Microsoft Store.
 
-## Bản beta riêng tư nghĩa là gì?
+> **Cập nhật 04/11/2026:** GenZip đã **mở công khai** trên Microsoft Store. Ai cũng tìm và cài được, không cần đăng ký danh sách thử như trước.
 
-Bản này đang ở chế độ **beta riêng tư** của Microsoft Store:
+## Cài GenZip
 
-- Chỉ những tài khoản Microsoft có trong danh sách **GenZip Beta** mới thấy và cài được GenZip.
-- GenZip **chưa tìm thấy công khai** khi tìm trên Store. Vì vậy trang [Tải về](/download) hiện vẫn ghi "Sắp có trên Microsoft Store".
-- Khi GenZip mở công khai, nút tải trên website sẽ dẫn thẳng tới trang Store.
-
-## Muốn dùng thử?
-
-1. Gửi email tới **[info@tientv.com](mailto:info@tientv.com)** kèm địa chỉ email tài khoản Microsoft bạn dùng trên máy Windows, để được thêm vào danh sách thử.
-2. Đăng nhập ứng dụng Microsoft Store bằng **đúng tài khoản đó**.
-3. Bấm nút dưới đây để mở trang GenZip trong ứng dụng Microsoft Store và cài đặt.
+Bấm nút dưới đây để mở trang GenZip trong ứng dụng Microsoft Store rồi bấm **Tải**. Hoặc mở Microsoft Store và tìm "GenZip".
 
 <p class="store-links">
   <a class="btn btn-primary" href="ms-windows-store://pdp/?productid=9PLW8MXQBT2Q">Mở GenZip trong Microsoft Store</a>
-  <a class="btn btn-outline" href="https://apps.microsoft.com/detail/9PLW8MXQBT2Q">Link dự phòng (trình duyệt)</a>
+  <a class="btn btn-outline" href="https://apps.microsoft.com/detail/9PLW8MXQBT2Q">Xem trên trang Microsoft Store</a>
 </p>
-
-**Bản beta riêng tư:** chỉ tài khoản trong danh sách thử mới thấy và cài được GenZip. Trang apps.microsoft.com trên trình duyệt có thể báo "không tìm thấy" kể cả khi bạn đã có trong danh sách; hãy mở bằng ứng dụng Microsoft Store (nút đầu tiên).
 
 Yêu cầu: **Windows 10 phiên bản 1809 trở lên, 64-bit (x64)**, hoặc Windows 11.
 
@@ -61,4 +51,4 @@ GenZip dùng lõi 7-Zip chính thức nên tốc độ nén và giải nén **ng
 
 GenZip miễn phí, không quảng cáo và không thu thập dữ liệu cá nhân. Nhà phát hành trên Store là **Dạ Trư**. Phần nén và giải nén do lõi **7-Zip** của Igor Pavlov đảm nhận, theo giấy phép LGPL.
 
-Nếu bạn gặp lỗi hoặc muốn góp ý trong lúc dùng thử, cứ gửi về cùng địa chỉ email trên. Cảm ơn bạn đã đồng hành cùng GenZip!
+Nếu bạn gặp lỗi hoặc muốn góp ý, gửi email về **[info@tientv.com](mailto:info@tientv.com)**. Cảm ơn bạn đã đồng hành cùng GenZip!

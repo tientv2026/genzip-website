@@ -8,7 +8,7 @@ draft: false
 pinned: true
 ---
 
-GenZip is a free archive manager for Windows 10 and 11 (64-bit). The first build, **0.9.0-beta.1**, is in testing and will be released officially through the **Microsoft Store**.
+GenZip is a free archive manager for Windows 10 and 11 (64-bit). The first build, **0.9.0-beta.1**, is available on the **Microsoft Store**.
 
 ## Why another archiver?
 
@@ -30,8 +30,8 @@ GenZip does not reinvent compression. All compression and extraction is done by 
 
 No ads, no account, no tracking. The Microsoft Store build never connects to the network by itself; the Store handles updates.
 
-## When can I get it?
+## Where do I get it?
 
-On October 30, 2026, GenZip beta [passed Microsoft Store certification](/en/news/genzip-beta-qua-kiem-duyet-store) and is rolling out privately to a test group. Once GenZip goes public, the button on the [Download](/en/download) page will take you straight to the Store. There is no free-floating GenZip installer, so be careful with sites claiming to offer one.
+On October 30, 2026, GenZip beta [passed Microsoft Store certification](/en/news/genzip-beta-qua-kiem-duyet-store) and has been **public since November 4, 2026**. Use the button on the [Download](/en/download) page to install it from the Microsoft Store. There is no free-floating GenZip installer, so be careful with sites claiming to offer one.
 
 Meanwhile, see [all features](/en/features) or read the [user guide](/en/guide).
