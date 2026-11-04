@@ -11,7 +11,6 @@ images:
   standard: /news/store-beta/vi-4x3.webp
   square: /news/store-beta/vi-1x1.webp
 draft: false
-pinned: true
 ---
 
 **GenZip 0.9.0.0 beta đã qua kiểm duyệt của Microsoft Store** ngày 30/10/2026 và được phát hành lúc 18:48 (giờ Việt Nam). Đây là bước đầu tiên để GenZip đến tay người dùng qua kênh chính thức duy nhất: Microsoft Store.

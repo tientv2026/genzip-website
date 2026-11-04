@@ -11,7 +11,6 @@ images:
   standard: /news/store-beta/en-4x3.webp
   square: /news/store-beta/en-1x1.webp
 draft: false
-pinned: true
 ---
 
 **GenZip 0.9.0.0 beta passed Microsoft Store certification** on October 30, 2026 and was published at 18:48 Vietnam time. This is the first step toward bringing GenZip to users through its only official channel: the Microsoft Store.

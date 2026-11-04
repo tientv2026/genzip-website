@@ -35,6 +35,12 @@ POSTS = {
         "vi": {"head": "Tệp tự giải nén|.exe", "sub": "Khi nào nên dùng, khi nào không", "chip": "Tạo từ 7Z"},
         "en": {"head": "Self-extracting|.exe archives", "sub": "When to use them and when not to", "chip": "Made from 7Z"},
     },
+    "store-public": {
+        "shot": "/screenshots/home-{lang}-light.png",
+        "mark": None,
+        "vi": {"head": "GenZip đã có|trên Microsoft|Store", "sub": "Miễn phí cho Windows 10 và 11", "chip": "Bản 0.9.3 beta"},
+        "en": {"head": "GenZip is now|on Microsoft|Store", "sub": "Free for Windows 10 and 11", "chip": "Version 0.9.3 beta"},
+    },
     "ra-doi": {
         "shot": "/news/ra-doi/menu-tep-nen.webp",
         "mark": (461, 427, 733, 662),
@@ -138,7 +144,8 @@ def make(post, lang, w, h, layout):
     t = post[lang]
     icon = Image.open(ICON).convert("RGBA")
     shot = Image.open(os.path.join(PUBLIC, post["shot"].format(lang=lang).lstrip("/"))).convert("RGB")
-    shot = marked(shot, post["mark"])
+    if post["mark"]:
+        shot = marked(shot, post["mark"])
     canvas = background(w, h).convert("RGBA")
     draw = ImageDraw.Draw(canvas)
     if layout == "side":
