@@ -5,7 +5,7 @@ import Icon from '../components/ui/Icon.astro';
 import SectionHeading from '../components/ui/SectionHeading.astro';
 import CtaCard from '../components/ui/CtaCard.astro';
 import { getLangFromUrl, localePath } from '../i18n/ui';
-import { formats, storeUrl } from '../data/product';
+import { formats, storeInstallerUrl, storeUrl } from '../data/product';
 
 const lang = getLangFromUrl(Astro.url);
 const p = (path: string) => localePath(path, lang);
@@ -14,7 +14,7 @@ const c = {
     badge: 'Dành cho Windows 10 / 11',
     title: 'Nén và giải nén nhanh, gọn,', highlight: 'an toàn.',
     lead: 'Mở RAR, ZIP, 7z và nhiều định dạng khác. Miễn phí, không quảng cáo, không thu thập dữ liệu.',
-    store: 'Tải từ Microsoft Store', storeSoon: 'Sắp có trên Microsoft Store', installer: 'Xem tính năng',
+    store: 'Tải xuống miễn phí', storeSoon: 'Sắp có trên Microsoft Store', installer: 'Xem tính năng',
     meta: 'Windows 10/11 · Miễn phí', shotAlt: 'GenZip đang duyệt nội dung một tệp nén',
     opens: 'Mở tệp', creates: 'Tạo tệp', moreFormats: 'Xem tất cả định dạng',
     rarNote: 'Đọc và giải nén RAR · Không tạo tệp RAR',
@@ -56,7 +56,7 @@ const c = {
   en: {
     badge: 'For Windows 10 / 11', title: 'Compress and extract. Fast, clean,', highlight: 'safe.',
     lead: 'Open RAR, ZIP, 7z and many other formats. Free, with no ads and no data collection.',
-    store: 'Get it from Microsoft Store', storeSoon: 'Coming soon to Microsoft Store', installer: 'Explore features',
+    store: 'Free download', storeSoon: 'Coming soon to Microsoft Store', installer: 'Explore features',
     meta: 'Windows 10/11 · Free', shotAlt: 'GenZip browsing the contents of an archive',
     opens: 'Open', creates: 'Create', moreFormats: 'See all formats', rarNote: 'Read and extract RAR · No RAR creation',
     benefitsTitle: 'Everything you need. Simply uncluttered.',
@@ -105,7 +105,7 @@ const accentTokens = ['blue', 'indigo', 'purple', 'pink', 'red', 'orange', 'ambe
         <h1>{c.title} <span>{c.highlight}</span></h1>
         <p class="lead muted">{c.lead}</p>
         <div class="hero-actions">
-          <a class="btn btn-primary btn-lg" href={storeUrl || p('/download')}><Icon name="windows" />{storeUrl ? c.store : c.storeSoon}</a>
+          <a class="btn btn-primary btn-lg" href={storeUrl ? storeInstallerUrl : p('/download')}><Icon name="windows" />{storeUrl ? c.store : c.storeSoon}</a>
           <a class="btn btn-outline btn-lg" href={p('/features')}>{c.installer}<Icon name="arrow-right" /></a>
         </div>
         <p class="meta muted">{c.meta}</p>

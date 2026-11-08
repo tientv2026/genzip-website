@@ -13,6 +13,9 @@ export const formats = {
 // Công khai trên Store (Public audience) từ 4/11/2026. Để trống = nút hiện "Sắp có trên Microsoft Store".
 export const storeId = '9PLW8MXQBT2Q';
 export const storeUrl = `https://apps.microsoft.com/detail/${storeId}`;
+// Tệp cài nhỏ (Store Web Installer) do Microsoft tạo: tải và cài GenZip từ Store mà không cần mở ứng dụng Store.
+// cid để xem lượt cài từ website trong Partner Center.
+export const storeInstallerUrl = `https://get.microsoft.com/installer/download/${storeId}?cid=genzip_net`;
 export const publisher = 'Dạ Trư';
 
 // Khớp crates/genzip-ui/src/support_info.rs trong repo app.

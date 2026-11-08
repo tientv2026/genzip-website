@@ -5,7 +5,7 @@ import PageHero from '../components/ui/PageHero.astro';
 import Icon from '../components/ui/Icon.astro';
 import { formatReleaseDate } from '../components/download/releases';
 import { getLangFromUrl, localePath } from '../i18n/ui';
-import { publisher, storeUrl } from '../data/product';
+import { publisher, storeInstallerUrl, storeUrl } from '../data/product';
 import { getCurrentRelease, getLatestRelease, isReleased } from '../data/releases';
 
 const lang = getLangFromUrl(Astro.url);
@@ -15,7 +15,8 @@ const c = {
     title: 'Tải GenZip', lead: 'Miễn phí cho Windows 10 và 11 (64-bit), phát hành chính thức trên Microsoft Store.',
     version: 'Phiên bản', pending: 'Sắp phát hành',
     store: 'Bản chính thức của GenZip. Cài, cập nhật và gỡ đều qua Microsoft Store.',
-    storeButton: 'Tải từ Microsoft Store', storeSoon: 'Sắp có trên Microsoft Store',
+    storeButton: 'Tải xuống', storeView: 'Xem trong Microsoft Store', storeSoon: 'Sắp có trên Microsoft Store',
+    installerNote: 'Tệp cài nhỏ của Microsoft, tự tải và cài GenZip từ Microsoft Store.',
     publisher: 'Nhà phát hành',
     whyTitle: 'Vì sao chỉ phát hành qua Microsoft Store?',
     why: [
@@ -24,14 +25,15 @@ const c = {
       'Cài và gỡ sạch sẽ, kể cả menu chuột phải và liên kết định dạng tệp.',
       'Không cần quyền quản trị, không cần tài khoản GenZip.',
     ],
-    requirements: 'Yêu cầu hệ thống', requirementItems: ['Windows 10 hoặc Windows 11, 64-bit (x64)', 'Có ứng dụng Microsoft Store'],
+    requirements: 'Yêu cầu hệ thống', requirementItems: ['Windows 10 hoặc Windows 11, 64-bit (x64)', 'Có kết nối Internet khi cài'],
     other: 'macOS và Linux', otherText: 'Đang phát triển.', notes: 'Xem lịch sử phiên bản',
   },
   en: {
     title: 'Download GenZip', lead: 'Free for Windows 10 and 11 (64-bit), officially published on Microsoft Store.',
     version: 'Version', pending: 'Coming soon',
     store: 'The official GenZip release. Install, update and uninstall through Microsoft Store.',
-    storeButton: 'Get it from Microsoft Store', storeSoon: 'Coming soon to Microsoft Store',
+    storeButton: 'Download', storeView: 'View in Microsoft Store', storeSoon: 'Coming soon to Microsoft Store',
+    installerNote: 'A small installer from Microsoft that downloads and installs GenZip from Microsoft Store.',
     publisher: 'Publisher',
     whyTitle: 'Why only Microsoft Store?',
     why: [
@@ -40,7 +42,7 @@ const c = {
       'Clean install and uninstall, including the right-click menu and file associations.',
       'No admin rights and no GenZip account needed.',
     ],
-    requirements: 'System requirements', requirementItems: ['Windows 10 or Windows 11, 64-bit (x64)', 'Microsoft Store app'],
+    requirements: 'System requirements', requirementItems: ['Windows 10 or Windows 11, 64-bit (x64)', 'Internet connection during installation'],
     other: 'macOS and Linux', otherText: 'In development.', notes: 'See release notes',
   },
 }[lang];
@@ -65,7 +67,11 @@ const c = {
             <dt>{c.publisher}</dt><dd>{publisher}</dd>
           </dl>
           {storeUrl ? (
-            <a class="btn btn-primary btn-lg" href={storeUrl} rel="noopener"><Icon name="windows" size={20} />{c.storeButton}</a>
+            <div class="store-actions">
+              <a class="btn btn-primary btn-lg" href={storeInstallerUrl} rel="noopener"><Icon name="windows" size={20} />{c.storeButton}</a>
+              <a class="btn btn-outline btn-lg" href={storeUrl} rel="noopener">{c.storeView}</a>
+              <p class="installer-note muted">{c.installerNote}</p>
+            </div>
           ) : (
             <button class="btn btn-primary btn-lg" disabled><Icon name="windows" size={20} />{c.storeSoon}</button>
           )}
@@ -97,6 +103,8 @@ const c = {
   .store-card h2 { font-size: 1.5rem; margin: 0; }
   .store-card p { margin: 0; }
   .store-card > .btn { margin-top: auto; align-self: flex-start; }
+  .store-actions { margin-top: auto; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+  .store-card .installer-note { flex-basis: 100%; font-size: 0.85rem; }
   .card-heading { color: var(--primary); }
   .facts { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 16px; margin: 0; font-size: 0.9rem; }
   dt { color: var(--text-muted); }
