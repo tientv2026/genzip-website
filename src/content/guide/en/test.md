@@ -24,4 +24,4 @@ Use **View details** to inspect the test information, or **Export report…** to
 
 In the **Create archive** dialog, enable **Verify after compressing** to test the newly created archive using the same password.
 
-<div class="callout callout-note"><strong>Coming soon</strong>Repairing damaged archives is not available in GenZip 0.9.3-beta.1.</div>
+<div class="callout callout-note"><strong>Coming soon</strong>Repairing damaged archives is not available in GenZip 0.9.5-beta.1.</div>

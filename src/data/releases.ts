@@ -28,6 +28,12 @@ export interface Release {
 
 export const releases: Release[] = [
   {
+    // Gửi lên Store 13/11/2026: giao diện mới, tệp nén lồng, bảo mật, sửa lỗi Google Drive.
+    version: '0.9.5-beta.1',
+    date: '2026-11-13',
+    channel: 'beta',
+  },
+  {
     // Công khai trên Store 4/11/2026. Gộp sửa lỗi của 0.9.1–0.9.3.
     version: '0.9.3-beta.1',
     date: '2026-11-04',

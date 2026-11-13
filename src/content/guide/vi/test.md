@@ -24,4 +24,4 @@ Dùng **Xem chi tiết** để xem thông tin kiểm tra hoặc **Xuất báo c�
 
 Trong hộp thoại **Tạo file nén**, bật **Xác minh sau khi nén** để kiểm tra lại tệp vừa tạo bằng cùng mật khẩu.
 
-<div class="callout callout-note"><strong>Sắp có</strong>Sửa chữa tệp nén hỏng chưa có trong GenZip 0.9.3-beta.1.</div>
+<div class="callout callout-note"><strong>Sắp có</strong>Sửa chữa tệp nén hỏng chưa có trong GenZip 0.9.5-beta.1.</div>
